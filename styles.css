@@ -1,0 +1,2238 @@
+/* =========================================================
+   Astratex — desktop 1920px_2  (Figma node 244:4380)
+   1:1 reproduction of the Figma frame (1920 × 1853)
+   ========================================================= */
+
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: "Google Sans";
+  src: url("fonts/GoogleSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("fonts/GoogleSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("fonts/GoogleSans-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("fonts/GoogleSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Design tokens (Figma variables) ---------- */
+:root {
+  --white: #ffffff;          /* White            */
+  --neutral-n0: #ffffff;     /* Neutral/N0       */
+  --neutral-n800: #2a2a2a;   /* Neutral/N800     */
+  --neutral-n900: #151515;   /* Neutral/N900     */
+  --sale-red: #d2003f;       /* Category tag     */
+  --happy-purple: #6f3292;   /* Šťastná stovka   */
+  --neutral-n200: #e3e3e4;   /* Neutral/N200     */
+  --neutral-n300: #d9d9db;   /* Neutral/N300     */
+  --menu-stroke: #d0d0d2;    /* header ⟂ open menu */
+  --menu-label: #6d6d6d;     /* menu group labels */
+  --neutral-n50: #f6f6f6;    /* Neutral/N50      */
+  --neutral-n100: #eeeef0;   /* Neutral/N100     */
+  --neutral-n600: #7e7e7f;   /* Neutral/N600     */
+  --neutral-n700: #545455;   /* Neutral/N700     */
+  --coupon-purple: #6300c6;
+  --coupon-blue: #1b59cd;
+  --coupon-active-bg: #ddf2cd;
+  --coupon-active-ink: #365d18;
+  --story-grey: #d2d2d2;     /* Story placeholder*/
+
+  --slide-fade: 900ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* The ink waits out the first third of the cross-fade, so the type never
+     turns dark while the dark photo is still the one you can see. */
+  --ink-swap: 640ms cubic-bezier(0.4, 0, 0.2, 1) 160ms;
+  --dot-morph: 420ms cubic-bezier(0.4, 0, 0.2, 1);   /* click feedback: no delay */
+  /* Copy is sequenced, not cross-faded: two headlines dissolving through
+     each other in the same spot turns the letterforms to mush. The old one
+     leaves first, the new one arrives once the space is clear. */
+  --copy-out: 300ms ease;
+  --copy-in: 380ms cubic-bezier(0.2, 0.7, 0.3, 1) 430ms;
+  --topbar-in: 720ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  /* jemné „vyskočení" tooltipu — lehký přesah na konci */
+  --tip-in: 640ms cubic-bezier(0.34, 1.46, 0.64, 1);
+  --tip-out: 180ms cubic-bezier(0.4, 0, 1, 1);
+  --hero-morph: 560ms cubic-bezier(0.4, 0, 0.2, 1);  /* full-bleed ⇄ inset hero */
+  --hint-in: 520ms cubic-bezier(0.2, 0.7, 0.3, 1);   /* scroll hint přijíždí */
+  --hint-out-ms: 320ms;
+  --bar-swap: 360ms cubic-bezier(0.4, 0, 0.2, 1);   /* header going solid / clear */
+  --link-line: 220ms cubic-bezier(0.2, 0.7, 0.3, 1); /* nav hover underline draws in */
+  --menu-underline-drop: -3px;  /* menu list underline, below the 26px line box */
+
+  /* Mega menu. The sheet unrolls downward from under the bar, the dimmer
+     fades in behind it, and the columns follow left to right a beat later.
+     Closing is quicker and all at once — nobody waits to watch a menu leave. */
+  --menu-ease-in: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --menu-ease-out: cubic-bezier(0.4, 0, 1, 1);
+  --menu-in: 440ms;
+  --menu-out: 240ms;
+  --menu-col-in: 380ms;
+  --menu-col-delay: 110ms;      /* first column waits for the sheet to open */
+  --menu-col-stagger: 55ms;     /* then each next column */
+
+  /* Coupon drawer. Slides in from the right on the menu's easing; its
+     contents follow a beat later, top to bottom, drifting in 16px. */
+  --drawer-width: 460px;
+  --drawer-dim: 0.5;            /* 0 = no dimmer, the Figma shadow alone */
+  --drawer-in: 480ms;
+  --drawer-out: 280ms;
+  --drawer-item-in: 420ms;
+  --drawer-item-delay: 140ms;
+  --drawer-item-stagger: 45ms;
+
+  --font-sans: "Google Sans", "Google Sans Text", -apple-system,
+               "Helvetica Neue", Arial, sans-serif;
+  --font-inter: "Inter", -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- Ink: set by the carousel from the current slide ----------
+   244:4380 rides the dark photo, so its type and icons are white.
+   209:15132 rides the ivory photo, so they go near-black and the CTA
+   inverts to a solid white pill. Everything else — the sale tag, the
+   pagination dots, the arrow pill — is identical in both frames. */
+.page {
+  --ink: var(--neutral-n0);          /* nav, search, icons  */
+  --ink-title: var(--white);         /* headline + subtitle */
+  /* 342:2112 — tlačítko je bílé s tmavým textem nad oběma fotkami */
+  --cta-bg: var(--white);
+  --cta-ink: var(--neutral-n900);
+  --cta-bg-hover: rgba(255, 255, 255, 0.86);
+  --cta-ink-hover: var(--neutral-n900);
+}
+.page[data-ink="dark"] {
+  --ink: var(--neutral-n900);
+  --ink-title: #000000;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { background: #ffffff; }
+
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img { display: block; border: 0; }
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* =========================================================
+   Page canvas — desktop 1920px_2 · 244:4380
+   Fluid across desktop widths: full-bleed up to --canvas-max (2560px),
+   then centred. Every type size and icon size stays at its Figma value —
+   only the hero photo re-crops. Hero + USP bar together are exactly one
+   viewport tall, so the USP bar never falls below the fold.
+   Top bar is fixed to the top of the viewport, over the hero at y = 0.
+   ========================================================= */
+:root {
+  --canvas-max: 2560px;   /* carousel is full-screen up to this width */
+  --canvas-min: 1280px;   /* smallest supported desktop width         */
+  /* The floor as the element can actually use it. "1280" is a window width,
+     and the window's width includes a vertical scrollbar wherever scrollbars
+     take up room (a mouse on macOS, Windows): 100vw counts it, 100% doesn't,
+     so their difference is exactly that scrollbar — 15px, 17px, or 0 where
+     scrollbars float over the page (trackpads, phones, tablets). Taking it
+     off keeps a 1280px window free of a horizontal scrollbar. Resolved where
+     it is used, so 100% is always that element's own containing block. */
+  --canvas-min-fit: calc(var(--canvas-min) - (100vw - 100%));
+  --bar-height: 72px;     /* top bar: 16 + 40px řádek + 16             */
+  --hero-offset: 64px;    /* 1025 − 961 · gap above the hero content   */
+  /* USP bar, built like an auto layout: 16px of padding around a row
+     whose height comes from its items. The hero needs that height up front
+     to leave room for the bar, so it is derived from the same values the
+     bar is built from — change any of them and both follow. */
+  --usp-badge: 260ms cubic-bezier(0.22, 0.61, 0.36, 1);  /* hover kruhů */
+  --usp-fog-a: 14s;       /* dvě vrstvy mlhy, každá svým tempem */
+  --usp-fog-b: 19s;
+  --usp-in: 560ms cubic-bezier(0.16, 1, 0.3, 1);         /* nájezd sekce */
+  --usp-in-step: 90ms;                                   /* posun mezi sloupci */
+  --usp-liquid: 22s;                                     /* přelévání skla */
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  min-width: var(--canvas-min-fit);
+  max-width: var(--canvas-max);
+  height: auto;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* =========================================================
+   HERO — Frame 947 · 244:4381   (1920 × 1025 in Figma)
+   flex-col · items-center · justify-end · gap 10
+   Responsive: full width of the canvas, full viewport height.
+   ========================================================= */
+/* Two layouts, switched by the logo (hero-layout.js):
+   full  — the primary one, edge to edge, square corners;
+   inset — a card 16px in from the top and both sides, 16px corners.
+   The inset card gives its 16px top back out of its height, so its bottom
+   edge — and the USP bar under it — never move. The margin, height and
+   corners transition only while the logo is switching (.is-hero-morphing,
+   set by hero-layout.js): the hero's height also follows the window, and a
+   standing transition would make it trail behind every resize. The
+   clip-path keeps the rounding crisp over the scaled photos. */
+.page { --hero-inset: 0px; --hero-radius: 0px; }
+.page[data-hero="inset"] { --hero-inset: 16px; --hero-radius: 16px; }
+.page.is-hero-morphing .hero {
+  transition:
+    margin var(--hero-morph),
+    height var(--hero-morph),
+    border-radius var(--hero-morph),
+    clip-path var(--hero-morph);
+}
+/* The bar and its menu stay edge to edge; their padding and height ride
+   along with the card, keeping their own ink and reveal transitions. */
+.page.is-hero-morphing .topbar {
+  transition:
+    background-color var(--ink-swap),
+    box-shadow var(--ink-swap),
+    height var(--hero-morph),
+    padding var(--hero-morph);
+}
+.page.is-hero-morphing .megamenu {
+  transition:
+    clip-path var(--menu-out) var(--menu-ease-out),
+    visibility 0s linear var(--menu-out),
+    top var(--hero-morph),
+    max-height var(--hero-morph);
+}
+.page.is-hero-morphing .megamenu.is-open {
+  transition:
+    clip-path var(--menu-in) var(--menu-ease-in),
+    visibility 0s,
+    top var(--hero-morph),
+    max-height var(--hero-morph);
+}
+.page.is-hero-morphing .megamenu__inner {
+  transition: padding var(--hero-morph);
+}
+
+.hero {
+  position: relative;
+  width: auto;
+  margin: var(--hero-inset) var(--hero-inset) 0;
+  border-radius: var(--hero-radius);
+  clip-path: inset(0 round var(--hero-radius));
+  /* 342:2097 is annotated "full viewport": the hero takes the whole window
+     height and the USP bar moves below the fold. The scroll hint at the
+     bottom (.scrollHint) is what tells people there is more. */
+  height: calc(100vh - var(--hero-inset));
+  height: calc(100dvh - var(--hero-inset));
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  overflow: hidden;
+}
+
+/* Slide stack — the photos cross-fade in place. */
+.hero__slides {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity var(--slide-fade);
+}
+.hero__slide.is-active { opacity: 1; }
+
+/* Each photo starts from a guaranteed cover fit — so it can never letterbox
+   or squash at any window size — and is then nudged onto the exact crop its
+   Figma frame uses. --zoom is Figma's scale over the cover scale; --tx/--ty
+   shift the result, as a share of the hero box. They land after the scale,
+   so a crop offset of d image-pixels costs d x --zoom here — and each is
+   capped at (--zoom - 1) / 2, the slack the zoom actually creates.
+   Solved against the 1920 × 1025 reference frame:
+
+   244:4382   photo 4096 × 2521, drawn 2150 × 1323.279 at (-93, -199)
+   296:9612   photo 4096 × 2439, drawn 2666 × 1587.494 at (-547, -412), zrcadlená
+   209:15510  photo 4096 × 2508, drawn 2644 × 1618.934 at (-400, -456)  */
+.hero__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* crop — never squash, never letterbox */
+  object-position: 50% 50%;
+  /* --flip: -1 obrátí fotku vodorovně (296:9612 je ve Figmě zrcadlená);
+     zrcadlení je uvnitř, takže na --tx/--ty nemá vliv. */
+  transform:
+    translate(var(--tx, 0), var(--ty, 0))
+    scale(var(--zoom, 1))
+    scaleX(var(--flip, 1));
+  transform-origin: center center;
+}
+
+/* 244:4382 is shown at plain centred cover rather than at Figma's 1.12×
+   crop: that crop rides the model's head up under the logo and cuts the
+   foot off. Cover is as far out as this photo can go without letterboxing,
+   and at the 1025px reference it clears the top bar by 69px and leaves the
+   whole foot in frame. At cover the photo exactly spans the hero width, so
+   --tx must stay 0 — any sideways nudge would expose the edge. */
+.hero__slide[data-slide="0"] { --zoom: 1;        --tx:  0;      --ty:   0;       }
+/* 296:9612 — Figma kreslí fotku 2666 širokou (1.3885x přes cover) se středem
+   174px vlevo a 130.75px nad středem rámu; obrázek je navíc překlopený.
+   Odsazení zůstávají uvnitř (zoom - 1) / 2 = 19.4 % vůle. */
+.hero__slide[data-slide="1"] { --zoom: 1.3885;   --tx: -9.06%;  --ty: -12.76%;  --flip: -1; }
+/* 209:15510 is pulled back from Figma's 1.377x crop to 1.28x: at Figma's
+   scale the model reads noticeably larger than on slide 0 and her legs run
+   off the bottom edge. 1.28x matches the two models' on-screen height and
+   brings the feet ~50px clear of the fold. --ty leans on the crop's lower
+   half; the offsets stay inside the (zoom - 1) / 2 = 14% of slack the zoom
+   creates, so no edge is ever exposed. */
+.hero__slide[data-slide="2"] { --zoom: 1.28;     --tx: -1.83%;  --ty: -13.5%;    }
+
+/* 244:4383 — h 961 · w full · row · items-end · justify-between
+   padding: 96px top / 40px sides / 40px bottom · radius 16 */
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  width: 100%;
+  height: calc(100% - var(--hero-offset));
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 96px 40px 40px;
+  border-radius: 16px;
+}
+
+/* 244:4384 — col · h-full · items-start · justify-end */
+.hero__left {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: flex-start;
+  justify-content: flex-end;
+  border-radius: 16px;
+  flex: 0 0 auto;
+}
+
+/* 244:4385 / 342:2103 — texty, CTA a pod nimi pagination, rozestup 48 */
+.hero__left > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 48px;
+}
+/* One grid cell holding both slides' copy — the container still sizes to
+   its content (no absolute positioning, so the bottom edge stays where the
+   design puts it) and the two sets overlap for the cross-fade. */
+.hero__stack {
+  display: grid;
+}
+.hero__set {
+  grid-area: 1 / 1;
+  align-self: end;
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;          /* 360:8622 — text → tlačítko */
+  opacity: 0;
+  transition: opacity var(--copy-out);
+}
+.hero__set.is-active { opacity: 1; }
+.hero__set:not(.is-active) { pointer-events: none; }
+
+/* The rise only plays on a real change of slide — .has-switched is set by
+   the carousel the first time it moves, so the copy is simply there on load
+   instead of arriving half a second late. */
+@keyframes heroCopyIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero.has-switched .hero__set.is-active {
+  animation: heroCopyIn var(--copy-in) backwards;
+}
+
+/* 244:4387 — col · gap 16 · white */
+.hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  color: var(--ink-title);
+  transition: color var(--ink-swap);
+  word-break: break-word;
+}
+
+/* 342:2105 — Google Sans/Heading/H3/SemiBold · 64/68 · w 500
+   Figma nově sází Google Sans Flex; ten v systému není a veřejně se nedá
+   stáhnout, takže zůstává statický Google Sans ve stejném řezu. */
+.hero__title {
+  margin: 0;
+  width: 500px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 68px;
+}
+
+/* 342:2106 — Google Sans/Body/24/Regular · 24/32 · w 500 */
+.hero__subtitle {
+  margin: 0;
+  width: 500px;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+/* kód+cta · 244:4390 */
+.hero__ctaRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* cta · 244:4395 — bg rgba(0,0,0,.16) · 2px white border · 32/12 · r24 */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  background: var(--cta-bg);
+  box-shadow: inset 0 0 0 2px var(--white);
+  border-radius: 24px;
+  transition: background-color var(--ink-swap);
+}
+/* 342:2113 — Google Sans/Body/17/Medium · 17/21 · N900 · bez prostrkání */
+.cta__label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 21px;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--cta-ink);
+  transition: color var(--ink-swap);
+}
+.cta:hover { background: var(--cta-bg-hover); }
+.cta:hover .cta__label { color: var(--cta-ink-hover); }
+
+/* Button / Sharp&Round · 344:3152 — 48 × 72 · r148.5 · bg rgba(0,0,0,.16)
+   · 1.5px bílý okraj · ikona 36px. Ve Figmě sedí 81px nad spodní hranou
+   hero, vodorovně na středu — tedy nad tečkami.
+   Objeví se až po --hint-delay, aby si jí člověk všiml, a šipka uvnitř
+   pomalu ukazuje dolů. Jakmile se scrolluje, uhne. */
+.scrollHint {
+  position: absolute;
+  left: 50%;
+  bottom: 48px;   /* 344:3152 — top 849 v 961 vysokém bloku */
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 40px;
+  height: 64px;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.16);
+  box-shadow: inset 0 0 0 1.5px var(--white);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -10px);
+  transition:
+    opacity var(--hint-in),
+    transform var(--hint-in),
+    background-color 180ms ease,
+    visibility 0s linear var(--hint-out-ms);
+}
+.scrollHint.is-in {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition:
+    opacity var(--hint-in),
+    transform var(--hint-in),
+    background-color 180ms ease,
+    visibility 0s;
+}
+@media (hover: hover) {
+  .scrollHint:hover { background: rgba(0, 0, 0, 0.32); }
+}
+.scrollHint:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 4px;
+}
+/* Ellipse 22 · r4, střed 20px od horní hrany — sjíždí dolů jako by
+   naznačovala pohyb kolečkem myši. */
+.scrollHint__dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin-top: 16px;
+  border-radius: 50%;
+  background: var(--white);
+  animation: scrollHintDot 2000ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes scrollHintDot {
+  0%   { transform: translateY(0);    opacity: 0; }
+  18%  { transform: translateY(2px);  opacity: 1; }
+  72%  { transform: translateY(24px); opacity: 1; }
+  100% { transform: translateY(24px); opacity: 0; }
+}
+
+/* Pagination dots · 342:2116 — gap 6.4, pod tlačítkem v levém sloupci */
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6.4px;
+  flex: 0 0 auto;
+}
+.dots__dot {
+  position: relative;
+  display: block;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 40px;
+  background: var(--white);
+  opacity: 0.5;
+  /* the dot stretches into a 32px bar as its slide comes up */
+  transition: width var(--dot-morph), opacity var(--dot-morph);
+}
+/* a finger-sized hit area that costs no layout */
+.dots__dot::before {
+  content: "";
+  position: absolute;
+  inset: -12px -6px;
+}
+.dots__dot:hover { opacity: 0.8; }
+.dots__dot--active,
+.dots__dot--active:hover {
+  width: 32px;
+  opacity: 1;
+}
+
+/* 244:4404 — w 500 · col · items-end · justify-center */
+.hero__nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  width: 500px;
+  flex: 0 0 auto;
+}
+
+/* 244:4405 — bg rgba(0,0,0,.16) · 1px white · r4 · py4 · gap 8 · items-end */
+.arrows {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 4px 0;
+  background: rgba(0, 0, 0, 0.16);
+  box-shadow: inset 0 0 0 1px var(--white);
+  border-radius: 4px;
+  transition: background-color 180ms ease;
+}
+
+/* circle icon · 244:4406 — 24 × 16 · r4 · icon 16 centered */
+.arrows__btn {
+  position: relative;
+  width: 24px;
+  height: 16px;
+  border-radius: 4px;
+  flex: 0 0 auto;
+}
+.arrows__icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%);
+  transition: transform 200ms var(--menu-ease-in);
+}
+.arrows__icon img { width: 100%; height: 100%; }
+
+/* 244:4408 — rotate(180deg) scaleY(-1) */
+.arrows__btn--flip { transform: rotate(180deg) scaleY(-1); }
+
+/* Hover: the pill deepens from 16% to 32% black, and the arrow under the
+   pointer leans 2px the way it points. Both buttons share the one "lean
+   left" rule — the next button is mirrored, so its lean reads as right. */
+@media (hover: hover) {
+  .arrows:hover { background-color: rgba(0, 0, 0, 0.32); }
+  .arrows__btn:hover .arrows__icon { transform: translate(calc(-50% - 2px), -50%); }
+}
+.arrows__btn:active .arrows__icon { transform: translate(calc(-50% - 3px), -50%); }
+
+/* The top bar drops in on first load. It is held hidden by data-intro on
+   the page itself — an attribute in the markup, not something script has to
+   apply, so there is no frame where it flashes in place first. The carousel
+   releases it once the hero photo has actually decoded; see carousel.js. */
+@keyframes topbarIn {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: none; }
+}
+.page[data-intro="hold"] .topbar { opacity: 0; }
+.page[data-intro="play"] .topbar { animation: topbarIn var(--topbar-in); }
+
+@media (prefers-reduced-motion: reduce) {
+  .page[data-intro="hold"] .topbar { opacity: 1; }
+  .page[data-intro="play"] .topbar { animation: none; }
+}
+
+/* =========================================================
+   TOP BAR — Header / Top Bar / XL-XXL · 244:4434
+   1920 × 80 · fixed over the page · py24 px32 · gap 32 · items-center
+   Fixed rather than sticky: .page clips its overflow, and sticky cannot
+   stick inside a clipping ancestor. left/right 0 + auto margins keep it
+   on the same centred 2560px canvas as the page, without a transform the
+   intro animation would fight with.
+   ========================================================= */
+.topbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  width: auto;
+  min-width: var(--canvas-min-fit);
+  max-width: var(--canvas-max);
+  /* The box always runs edge to edge with square corners, so once the bar
+     turns white it reaches the window edges in both layouts. In the inset
+     layout the hero card's 16px (--hero-inset, 0 when full-bleed) goes into
+     the bar's height and padding instead: its content lines up with the
+     card, and its bottom edge lands where the card-aligned bar's would. */
+  height: calc(var(--bar-height) + var(--hero-inset));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding:
+    calc(16px + var(--hero-inset))
+    calc(32px + var(--hero-inset))
+    16px;
+  background-color: rgba(255, 255, 255, 0);
+  box-shadow: 0 1px 0 rgba(21, 21, 21, 0);
+  transition: background-color var(--ink-swap), box-shadow var(--ink-swap);
+}
+
+/* Solid header, set by header.js once the page has been scrolled for a
+   moment. White ground, near-black ink and icons whatever slide is up.
+   The ink tokens are re-pointed on the bar itself, so the hero copy below
+   keeps following the photo. --ink-swap is re-pointed too: the incoming
+   state's timing drives every transition, so ground, type and icons move
+   in lockstep in both directions. */
+.topbar.is-solid {
+  --ink: var(--neutral-n900);
+  --ink-swap: var(--bar-swap);
+  background-color: var(--white);
+  box-shadow: 0 1px 0 rgba(21, 21, 21, 0.08);
+}
+
+/* Header while a mega menu is open: the same white ground and near-black
+   ink as the scrolled state, on the menu's timing, plus a 1px D0D0D2 rule
+   along the whole bottom edge separating bar from sheet. The rule is drawn
+   inside the bar, so opening the menu never changes its 80px height. Listed
+   after .is-solid so it wins where both apply. */
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--menu-stroke);
+  opacity: 0;
+  transition: opacity var(--ink-swap);
+  pointer-events: none;
+}
+.topbar.is-menu-open {
+  --ink: var(--neutral-n900);
+  --ink-swap: var(--bar-swap);
+  background-color: var(--white);
+  box-shadow: 0 1px 0 rgba(21, 21, 21, 0);
+}
+.topbar.is-menu-open::after { opacity: 1; }
+
+/* Frame 848 · 244:4435 / Frame 1422 · 244:4455 — flex-1 · min-w-0 */
+.topbar__side {
+  display: flex;
+  align-items: center;
+  flex: 1 0 0;
+  min-width: 1px;
+}
+.topbar__side--end { justify-content: flex-end; }
+
+/* Frame 26080071 · 244:4436 — gap 48 */
+.topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex: 0 0 auto;
+}
+
+/* Frame 260801354 · 244:4440 — gap 24 */
+.topbar__links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 0 0 auto;
+}
+
+/* 244:4441 / 244:4442 / 244:4444 — 18px · Google Sans Medium · lh 20 · N0 */
+.topbar__link {
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 23px;
+  color: var(--ink);
+  transition: color var(--ink-swap);
+  white-space: nowrap;
+  word-break: break-word;
+  flex: 0 0 auto;
+}
+
+/* The label itself — sized to its text, so the hover rule is exactly as
+   wide as the word, never the link's reserved box. */
+.topbar__linkText {
+  position: relative;
+  display: block;
+  align-self: flex-start;
+}
+
+/* Hover: a 1px rule in the link's own ink draws in from the left. It sits
+   6px under the 20px label — on exactly the line the "Hledat" underline
+   occupies (bar y 55–56) — so every rule in the bar shares one baseline.
+   currentColor, so it turns with the ink over the photo, when solid and
+   while a menu is open. */
+.topbar__linkText::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--link-line);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .topbar__link:hover .topbar__linkText::after { transform: scaleX(1); }
+}
+
+/* Open menu: its trigger goes from 500 to 700 while the sheet is out.
+   The bold word would be 1.9px wider and shove everything after it along,
+   so the link reserves the bold width up front with an invisible, zero-
+   height copy of its label. The row never moves when the menu toggles. */
+.topbar__link[data-text]::before {
+  content: attr(data-text);
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+  pointer-events: none;
+}
+.topbar__link[aria-expanded="true"] { font-weight: 700; }
+
+/* Frame 26080109 · 244:4443 — gap 6 */
+.topbar__linkGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+/* Category Tag · 244:4445 — 68 × 20 */
+.tag {
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+/* Vecotr_tag · 244:4446 — 9 × 20 */
+.tag__arrow {
+  position: relative;
+  width: 12px;
+  align-self: stretch;
+  overflow: clip;
+  flex: 0 0 auto;
+}
+.tag__arrow img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+/* Text · 244:4448 — bg #D2003F · pr 4 · py 2 · radius right 4 */
+.tag__body {
+  display: flex;
+  align-items: flex-start;
+  padding: 2px 4px 2px 0;
+  background: var(--sale-red);
+  border-radius: 0 4px 4px 0;
+  flex: 0 0 auto;
+}
+/* 244:4449 — 14px · SemiBold · uppercase · lh 16 · white */
+.tag__text {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--white);
+  white-space: nowrap;
+  word-break: break-word;
+}
+
+/* Two-tone icons. The white (244:*) and near-black (209:*) SVGs each carry
+   their own baked-in fill, so both ship and cross-fade — the mark is never
+   recoloured by CSS, it is always the exported artwork. */
+.inkSwap { position: relative; display: block; }
+.inkSwap .ink {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity var(--ink-swap);
+}
+.inkSwap .ink--dark { opacity: 0; }
+.page[data-ink="dark"] .inkSwap .ink--light,
+.topbar.is-solid .inkSwap .ink--light,
+.topbar.is-menu-open .inkSwap .ink--light { opacity: 0; }
+.page[data-ink="dark"] .inkSwap .ink--dark,
+.topbar.is-solid .inkSwap .ink--dark,
+.topbar.is-menu-open .inkSwap .ink--dark { opacity: 1; }
+
+/* Frame 26080101 · 244:4453 — logo 140 × 21 */
+.topbar__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.logo {
+  position: relative;
+  display: block;
+  width: 140px;
+  height: 21px;
+  flex: 0 0 auto;
+}
+.logo img { width: 100%; height: 100%; }
+
+/* Frame 1346 · 244:4456 — gap 8 */
+.topbar__actions {
+  position: relative;   /* kotva pro tooltip u kupónů */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+/* Top Bar Item · 244:4458 / 4462 / 4463 / 4464 — 32 × 32 · icon 19.2 */
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 10px;       /* Top Bar Item · 342:2174 */
+  background-color: transparent;
+  transition: background-color 180ms ease;
+}
+.action--rounded {
+  gap: 8px;
+}
+.action__icon {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  transition: transform 160ms var(--menu-ease-in);
+}
+
+/* Hover: a soft 32px tile behind the icon, mixed from the bar's own ink.
+   Over a white bar that is 12% near-black, landing exactly on N200
+   (255 − 234 × 0.12 = 227), the drawer's close-button ground. White ink
+   over the dark photo needs more to register against the busy image, so
+   while the bar is still clear over that photo the tile is 24% white.
+   Pressing sinks the icon. */
+.topbar { --action-hover: 12%; }
+.page[data-ink="light"] .topbar:not(.is-solid):not(.is-menu-open) {
+  --action-hover: 24%;
+}
+@media (hover: hover) {
+  .action:hover {
+    background-color: color-mix(in srgb, var(--ink) var(--action-hover), transparent);
+  }
+}
+.action:active .action__icon { transform: scale(0.9); }
+.action__icon img { width: 100%; height: 100%; }
+
+/* =========================================================
+   TOOLTIP KUPÓNY — 309:10360
+   Bílá karta 341 × 78 (px 32 · py 16 · r8), zarovnaná pravou hranou
+   k ikonce kupónů a posazená 11px pod lištu ikon. Sedí uvnitř hlavičky,
+   takže se veze s ní (fixed) i při přepnutí na odsazenou variantu.
+   ========================================================= */
+.action[data-nudge="on"] {
+  background-color: color-mix(in srgb, var(--ink) var(--action-hover), transparent);
+}
+
+.tip {
+  position: absolute;
+  top: calc(100% + 11px);
+  right: 144px;          /* pravá hrana lícuje s ikonkou kupónů */
+  width: 341px;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.92) translateY(-6px);
+  transform-origin: 100% 0;
+  transition:
+    opacity var(--tip-out),
+    transform var(--tip-out),
+    visibility 0s linear 180ms;
+}
+.tip.is-in {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity var(--tip-in),
+    transform var(--tip-in),
+    visibility 0s;
+}
+
+/* 309:10362 — bílá karta, text vlevo */
+.tip__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 16px 32px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--white);
+  /* Návrh stín nemá — počítá s fotkou za kartou. Níž na stránce ale karta
+     stojí nad bílými sekcemi, tak ať má aspoň náznak hrany. */
+  box-shadow:
+    0 1px 2px rgba(21, 21, 21, 0.05),
+    0 6px 20px rgba(21, 21, 21, 0.08);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* 309:10363 — 18px Medium N800 */
+.tip__title {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: normal;
+  color: var(--neutral-n800);
+  white-space: nowrap;
+  word-break: break-word;
+}
+
+/* 309:10364 — 16px Regular N800 */
+.tip__text {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: normal;
+  color: var(--neutral-n800);
+  word-break: break-word;
+}
+
+/* Slovo „kupóny" vypadá jako odkaz. Klikací je stejně celá karta, tohle
+   je jen vizuální ukotvení, kam klik vede. */
+.tip__link {
+  font-weight: 500;
+  color: var(--neutral-n900);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: text-decoration-thickness 160ms ease;
+}
+@media (hover: hover) {
+  .tip__card:hover .tip__link { text-decoration-thickness: 2px; }
+}
+
+/* 309:10365 — kolečko N200 (p4) s křížkem 10 × 10, vpravo nahoře */
+.tip__close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border: 0;
+  border-radius: 99px;
+  background: var(--neutral-n200, #e3e3e4);
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+@media (hover: hover) {
+  .tip__close:hover { background: #d0d0d2; }
+}
+.tip__close:active { transform: scale(0.94); }
+.tip__closeIcon {
+  position: relative;
+  display: block;
+  width: 10px;
+  height: 10px;
+}
+.tip__closeIcon img { width: 100%; height: 100%; }
+
+/* Keyboard focus — invisible to the mouse, unmissable to the keyboard. */
+.logo:focus-visible,
+.arrows__btn:focus-visible,
+.dots__dot:focus-visible,
+.cta:focus-visible,
+.action:focus-visible,
+.usp__badge:focus-visible,
+.topbar__link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.tip__card:focus-visible,
+.tip__close:focus-visible {
+  outline: 2px solid var(--neutral-n800);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .usp__fog i,
+  .uspCoin,
+  .usp__icon,
+  .usp__air::before,
+  .usp__measure::before,
+  .usp__measure::after { animation: none; }
+  :root {
+    --ink-swap: 1ms;
+    --bar-swap: 1ms;
+    --hero-morph: 1ms;
+    --hint-in: 1ms;
+    --hint-out-ms: 1ms;
+    --link-line: 1ms;
+    --menu-in: 1ms;
+    --menu-out: 1ms;
+    --menu-col-in: 1ms;
+    --menu-col-delay: 0ms;
+    --menu-col-stagger: 0ms;
+    --drawer-in: 1ms;
+    --drawer-out: 1ms;
+    --drawer-item-in: 1ms;
+    --drawer-item-delay: 0ms;
+    --drawer-item-stagger: 0ms;
+    --usp-badge: 1ms;
+    --usp-fog-a: 0s;
+    --usp-fog-b: 0s;
+    --usp-in: 1ms;
+    --usp-in-step: 0ms;
+    --usp-liquid: 0s;
+    --tip-in: 1ms;
+    --tip-out: 1ms;
+    --slide-fade: 1ms;
+    --dot-morph: 1ms;
+    --copy-out: 1ms;
+    --copy-in: 1ms;
+  }
+}
+
+/* =========================================================
+   MEGA MENU — Dámské · Frame 26080143 · 184:13463
+   1920 × 730 · white · p40 · gap 64 · items-start
+   ========================================================= */
+
+/* The page is held still while a menu is open by menu.js stopping the
+   inputs that would scroll it — not by hiding overflow. Hiding overflow
+   takes the scrollbar away, and wherever scrollbars take up room that
+   leaves an empty strip down the right edge that nothing covers. */
+
+/* Dimmer — 50% black over everything below the bar. */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--menu-out) var(--menu-ease-out),
+    visibility 0s linear var(--menu-out);
+}
+.menu-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--menu-in) var(--menu-ease-in),
+    visibility 0s;
+}
+
+/* The sheet — fixed under the bar on the same centred canvas. It unrolls
+   with clip-path, so the white edge travels down while every link inside
+   stays exactly where the design puts it; nothing is squashed or slid. */
+.megamenu {
+  position: fixed;
+  /* hangs off the bar's bottom edge — see .topbar */
+  top: calc(var(--bar-height) + var(--hero-inset));
+  left: 0;
+  right: 0;
+  z-index: 9;
+  width: auto;
+  min-width: var(--canvas-min-fit);
+  max-width: var(--canvas-max);
+  margin: 0 auto;
+  max-height: calc(100vh - var(--bar-height) - var(--hero-inset));
+  max-height: calc(100dvh - var(--bar-height) - var(--hero-inset));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--white);
+  visibility: hidden;
+  clip-path: inset(0 0 100% 0);
+  transition:
+    clip-path var(--menu-out) var(--menu-ease-out),
+    visibility 0s linear var(--menu-out);
+}
+.megamenu.is-open {
+  visibility: visible;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path var(--menu-in) var(--menu-ease-in),
+    visibility 0s;
+}
+
+/* 184:13463 — row · gap 64 · p40 */
+.megamenu__inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 64px;
+  /* edge-to-edge sheet; in the inset layout the columns line up with the
+     hero card, 16px further in */
+  padding: 40px calc(40px + var(--hero-inset));
+}
+
+/* Columns drift down 8px into place, left to right. */
+.megamenu__reveal {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity var(--menu-out) var(--menu-ease-out),
+    transform var(--menu-out) var(--menu-ease-out);
+}
+.megamenu.is-open .megamenu__reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--menu-col-in) var(--menu-ease-in)
+      calc(var(--menu-col-delay) + var(--i, 0) * var(--menu-col-stagger)),
+    transform var(--menu-col-in) var(--menu-ease-in)
+      calc(var(--menu-col-delay) + var(--i, 0) * var(--menu-col-stagger));
+}
+
+.megamenu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.megamenu p { margin: 0; }
+
+/* Frame 26080142 · 184:13464 — w 260 · col · gap 32 */
+.megamenu__primary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  flex: 0 0 260px;
+  width: 260px;
+}
+
+/* 184:13466–13474 — 22px · lh 1.2 · Regular · N800, gap 32 */
+.megamenu__cats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+}
+.megamenu__cat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 22px;
+  /* Figma sets 120%, but lays each 22px row out at a whole 26px — the rule
+     lands on exactly 406 + 26 + 32 = 464. 1.2 in CSS gives 26.4 and drifts
+     0.4px per row, so the row height is pinned. */
+  line-height: 26px;
+  color: var(--neutral-n800);
+  white-space: nowrap;
+}
+/* 184:13465 — current category: SemiBold · black · arrow */
+.megamenu__cat--current {
+  font-weight: 600;
+  color: #000000;
+}
+.megamenu__catArrow {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+.megamenu__cat--sale { color: var(--sale-red); }       /* 184:13473 */
+.megamenu__cat--happy { color: var(--happy-purple); }  /* 184:13474 */
+
+/* Hover: the categories under the current one borrow its arrow — same 24px
+   glyph, same 6px gap — sliding out 8px from the word, weight unchanged.
+   It is the exported arrow used as a mask over currentColor, so it takes
+   each row's own ink: near-black, sale red, Šťastná stovka purple. Its
+   slot is always there, so nothing in the column moves when it shows. */
+.megamenu__catHover {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  background-color: currentColor;
+  -webkit-mask: url("assets/menu/icon-arrow-right.svg") center / 24px 24px no-repeat;
+          mask: url("assets/menu/icon-arrow-right.svg") center / 24px 24px no-repeat;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity var(--link-line), transform var(--link-line);
+}
+.megamenu__cat:focus-visible .megamenu__catHover {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: hover) {
+  .megamenu__cat:hover .megamenu__catHover {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Vector 1 · 208:14437 — takes no height; the 1px rule straddles its line,
+   exactly as Figma draws a zero-height vector. */
+.megamenu__divider {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0;
+}
+.megamenu__divider img {
+  position: absolute;
+  left: 0;
+  top: -0.5px;
+  width: 100%;
+  height: 1px;
+}
+
+/* Frame 26080139 · 184:13475 — takes the free width · gap 80.
+   On narrower desktops "Lidé často hledají" wraps under the two lists
+   instead of the type or the spacing shrinking. */
+.megamenu__lists {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  column-gap: 80px;
+  row-gap: 40px;
+  flex: 1 1 0;
+  min-width: 560px;          /* 240 + 80 + 240: the two lists side by side */
+}
+
+/* Podle výztuže / Podle střihu · 184:13476 — w 240 · col · gap 20 */
+.megamenu__group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  flex: 0 0 240px;
+  width: 240px;
+}
+/* Pro zákazníky · 208:14438 sits in the primary column, which runs
+   vertically — there a 240px flex-basis would set its height, not its
+   width. Size it by content like Figma's 154px hug. */
+.megamenu__primary .megamenu__group {
+  flex: none;
+}
+
+/* Frame 26080115 · 184:13521 — w 272 */
+.megamenu__group--search {
+  flex-basis: 272px;
+  width: 272px;
+}
+
+/* 184:13477 — 16px · lh 24 · Medium · #6D6D6D */
+.megamenu__label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--menu-label);
+  white-space: nowrap;
+}
+
+/* 184:13478 — col · gap 16 · 18px · lh 26 · Medium · N900 */
+.megamenu__links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.megamenu__links a {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+}
+
+/* Hover in Typ and Styl a funkce: the top bar's underline — 1px of the
+   link's ink drawing in from the left, exactly the word's width. */
+.megamenu__lists .megamenu__links a {
+  position: relative;
+}
+.megamenu__lists .megamenu__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--menu-underline-drop);
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--link-line);
+  pointer-events: none;
+}
+.megamenu__lists .megamenu__links a:focus-visible::after { transform: scaleX(1); }
+@media (hover: hover) {
+  .megamenu__lists .megamenu__links a:hover::after { transform: scaleX(1); }
+}
+
+/* Frame 26080149 · 184:13523 — wrap · gap 16 */
+.megamenu__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Kategory · 184:13524 — px16 · py10 · r8 · gap 8 · 1px N200 inside.
+   The stroke is an inset shadow: Figma's stroke sits inside the 44px box,
+   a CSS border would make every chip 2px larger. */
+.megamenu__chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px var(--neutral-n200);
+  transition: box-shadow var(--link-line);
+  overflow: clip;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+}
+.megamenu__chip img {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+/* Hover: the chip's hairline firms up from N200 to the text's own N900.
+   Still the same inset 1px, so the chip keeps its 44px box. */
+@media (hover: hover) {
+  .megamenu__chip:hover { box-shadow: inset 0 0 0 1px var(--neutral-n900); }
+}
+
+/* Frame 26080146 · 184:13536 — col · gap 32 · two 400 × 225 r8 tiles.
+   The tiles are the one flexible thing in the sheet: on tighter desktops
+   they give up width (keeping 16:9) before any type or spacing does. */
+.megamenu__promos {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  flex: 0 1 400px;
+  min-width: 200px;
+}
+.megamenu__promo {
+  width: 100%;
+  aspect-ratio: 400 / 225;
+  border-radius: 8px;
+  background: var(--story-grey);
+}
+
+.megamenu a:focus-visible {
+  outline: 2px solid var(--neutral-n900);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* =========================================================
+   DRAWER — Dostupné kupóny · Frame 4686 · 227:2570
+   460 × viewport · white · r8 left · shadow −12 0 16 rgba(0,0,0,.25)
+   ========================================================= */
+
+/* Dimmer — over the whole page, top bar included: the drawer floats above
+   everything, unlike the mega menu, which hangs from the bar. */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  background: rgba(0, 0, 0, var(--drawer-dim));
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--drawer-out) var(--menu-ease-out),
+    visibility 0s linear var(--drawer-out);
+}
+.drawer-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--drawer-in) var(--menu-ease-in),
+    visibility 0s;
+}
+
+/* 227:2570 — always the full height of the window. Parked 32px past the
+   right edge while closed, so not even its shadow peeks in. */
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 20;
+  width: var(--drawer-width);
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border-radius: 8px 0 0 8px;
+  box-shadow: -12px 0 16px 0 rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  visibility: hidden;
+  transform: translateX(calc(100% + 32px));
+  transition:
+    transform var(--drawer-out) var(--menu-ease-out),
+    visibility 0s linear var(--drawer-out);
+}
+.drawer.is-open {
+  visibility: visible;
+  transform: none;
+  transition:
+    transform var(--drawer-in) var(--menu-ease-in),
+    visibility 0s;
+}
+
+/* Close button, title and coupons drift in from the right, top to bottom. */
+.drawer__reveal {
+  opacity: 0;
+  transform: translateX(16px);
+  transition:
+    opacity var(--drawer-out) var(--menu-ease-out),
+    transform var(--drawer-out) var(--menu-ease-out);
+}
+.drawer.is-open .drawer__reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--drawer-item-in) var(--menu-ease-in)
+      calc(var(--drawer-item-delay) + var(--i, 0) * var(--drawer-item-stagger)),
+    transform var(--drawer-item-in) var(--menu-ease-in)
+      calc(var(--drawer-item-delay) + var(--i, 0) * var(--drawer-item-stagger));
+}
+
+/* Frame 260801335 · 227:2571 — pt24 · px24 · end · 56px tall */
+.drawer__top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex: none;
+  padding: 24px 24px 0;
+}
+
+/* Button / Round · 227:2572 — 32 · N200 · pill · 14px cross.
+   Hover inverts to a near-black disc with a white cross — the drawer's own
+   primary colour. The cross is the exported glyph as a mask, so it can
+   change ink with the button. */
+.drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--neutral-n200);
+  color: var(--neutral-n900);
+  transition: background-color 180ms ease, color 180ms ease;
+}
+.drawer__closeIcon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask: url("assets/drawer/icon-cross.svg") center / 14px 14px no-repeat;
+          mask: url("assets/drawer/icon-cross.svg") center / 14px 14px no-repeat;
+  transition: transform 220ms var(--menu-ease-in);
+}
+@media (hover: hover) {
+  .drawer.is-open .drawer__close:hover {
+    background: var(--neutral-n900);
+    color: var(--white);
+  }
+  .drawer__close:hover .drawer__closeIcon { transform: rotate(90deg); }
+}
+.drawer__close:active .drawer__closeIcon { transform: rotate(90deg) scale(0.86); }
+.drawer__close:focus-visible {
+  outline: 2px solid var(--neutral-n900);
+  outline-offset: 3px;
+}
+
+/* The scrolling column. Its native scrollbar is hidden in favour of the
+   design's slim thumb (.drawer__thumb, driven by drawer.js). */
+.drawer__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.drawer__scroll::-webkit-scrollbar { display: none; }
+
+/* Frame 4652 · 227:2573 — col · center · gap 27 · px32. The bottom padding
+   lets the last coupon clear the edge once the fade has stepped aside. */
+.drawer__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 27px;
+  padding: 0 32px 32px;
+}
+
+/* 227:2575 — Google Sans Bold 24 · lh 1.05 · −0.48 · N900 */
+.drawer__title {
+  align-self: stretch;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: -0.48px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+}
+
+/* Rectangle 2625 · 227:2627 — 283px, transparent → white. Steps aside at
+   the end of the list, where there is nothing more to hint at. */
+.drawer__fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 283px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff);
+  pointer-events: none;
+  transition: opacity 240ms ease;
+}
+.drawer.is-at-end .drawer__fade { opacity: 0; }
+
+/* Rectangle 8 · 227:2626 — 4 × 64 · rgba(42,42,42,.72) · pill · 6px from
+   the right. At the top of the list it sits at y 117, as in the frame. */
+.drawer__track {
+  position: absolute;
+  top: 117px;
+  bottom: 24px;
+  right: 6px;
+  z-index: 2;
+  width: 4px;
+  pointer-events: none;
+}
+.drawer__thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 64px;
+  border-radius: 99px;
+  background: rgba(42, 42, 42, 0.72);
+  pointer-events: auto;
+  touch-action: none;
+  cursor: grab;
+  transition: background-color 160ms ease;
+}
+/* a grabbable target wider than the 4px bar */
+.drawer__thumb::before {
+  content: "";
+  position: absolute;
+  inset: -4px -6px;
+}
+.drawer__thumb:hover,
+.drawer.is-dragging .drawer__thumb { background: rgba(42, 42, 42, 0.9); }
+.drawer.is-dragging .drawer__thumb { cursor: grabbing; }
+.drawer.is-static .drawer__track { display: none; }
+
+/* ---------- Coupon card · 227:2578 ---------- */
+.coupon {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--neutral-n50);
+  border: 1px solid var(--neutral-n300);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* 227:2579 — col · gap 24 · pt16 · px16 · pb24 */
+.coupon__body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 16px 24px;
+}
+
+/* 227:2589 — row · center · gap 2 */
+.coupon__meta {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.coupon__lead {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1 1 0;
+  min-width: 1px;
+}
+
+/* 227:2591 — Google Sans SemiBold 12 · lh 1.3 · −0.24 · N700 · underlined */
+.coupon__category {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: -0.24px;
+  color: var(--neutral-n700);
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  text-underline-position: from-font;
+  text-decoration-thickness: from-font;
+  white-space: nowrap;
+}
+
+/* Property Tag · 233:2678 — sale red · r4 · px8 py4 · gap 4 · Bold 12/14 */
+.coupon__tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--sale-red);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--white);
+  white-space: nowrap;
+}
+.coupon__tag img {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+/* 233:2693 — Inter Regular 12 · lh 1.3 · −0.24 · N700 · right */
+.coupon__validity {
+  flex: 1 1 0;
+  min-width: 1px;
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: -0.24px;
+  color: var(--neutral-n700);
+  text-align: right;
+}
+
+/* 227:2586 — col · gap 8 */
+.coupon__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* 227:2587 — Google Sans Bold 20 · lh 1.05 · −0.4 · N900 */
+.coupon__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.05;
+  letter-spacing: -0.4px;
+  color: var(--neutral-n900);
+}
+/* 227:2588 — Inter Regular 14 · lh 1.3 · −0.28 · N700 */
+.coupon__desc {
+  margin: 0;
+  font-family: var(--font-inter);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: -0.28px;
+  color: var(--neutral-n700);
+}
+
+/* 227:2593 — white · p16 · row · gap 12 */
+.coupon__actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: var(--white);
+}
+
+/* Button / Sharp&Round · 227:2595 — code. White · r4 · px20 py10 · Bold
+   14/20 · 2px dashed. Figma's dash is 4 on, 4 off; CSS "dashed" draws it
+   near twice as long, so the dashes come from an SVG mask over the ink —
+   inside the 40px box, as Figma strokes it. */
+.coupon__code {
+  --code-ink: var(--neutral-n900);
+  --code-line: var(--code-ink);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 1px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  background: var(--white);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--code-ink);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.coupon__code::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: var(--code-line);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' rx='4' ry='4' fill='none' stroke='%23000' stroke-width='4' stroke-dasharray='4 4'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' rx='4' ry='4' fill='none' stroke='%23000' stroke-width='4' stroke-dasharray='4 4'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+  pointer-events: none;
+}
+.coupon__code--purple { --code-ink: var(--coupon-purple); }   /* 227:2595 */
+.coupon__code--blue { --code-ink: var(--coupon-blue); }       /* 227:2611 */
+.coupon__code--neutral {                                     /* 227:2623 */
+  --code-ink: var(--neutral-n900);
+  --code-line: var(--neutral-n600);
+}
+
+/* Button / Sharp&Round · 227:2596 — N900 · r4 · px20 py10 · Inter Semi 14/20 */
+.coupon__activate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  background: var(--neutral-n900);
+  font-family: var(--font-inter);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--white);
+  white-space: nowrap;
+}
+/* 227:2624 — already active: pale green with a check */
+.coupon__activate--active {
+  background: var(--coupon-active-bg);
+  color: var(--coupon-active-ink);
+  cursor: default;
+}
+.coupon__activate img {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.drawer a:focus-visible,
+.drawer button:not(.drawer__close):focus-visible {
+  outline: 2px solid var(--neutral-n900);
+  outline-offset: 2px;
+}
+
+/* Kontejner pro inline SVG filtry — sám nic nevykresluje. */
+.svgDefs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* =========================================================
+   USP — desktop 1920px · 375:3177   (1920 × 327)
+   bílá · py 80 · čtyři sloupce flex-1 · rozestup 32 (řádky 24)
+   Sloupec: kruh 80 + 12 + dvouřádkový text, vše na střed.
+   ========================================================= */
+.usp {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: center;
+  gap: 24px 32px;
+  padding: 80px 0;
+  background: #ffffff;
+}
+
+/* Nájezd (usp-motion.js): text přijede shora, kruh za ním zespodu — jako
+   by se z textu vynořil. Sloupce jdou po sobě. Jednorázově, nic se pak
+   neopakuje. */
+.usp[data-motion] .usp__text,
+.usp[data-motion] .usp__badge { opacity: 0; }
+.usp[data-motion="in"] .usp__text {
+  animation: uspTextIn var(--usp-in) calc(var(--i) * var(--usp-in-step)) both;
+}
+.usp[data-motion="in"] .usp__badge {
+  animation: uspIconIn var(--usp-in)
+             calc(var(--i) * var(--usp-in-step) + 110ms) both;
+}
+@keyframes uspTextIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes uspIconIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* tags · 375:3180 … — flex-1 · px 16 · py 8 · gap 12 */
+.usp__item {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  overflow: clip;
+}
+
+/* Button / Round · 375:3181 — 72 × 72 · N100 · kruh
+   Anotace v návrhu žádá decentní animaci: kruh ztmavne a ikona se
+   nadechne. Nic víc — je to doprovodný prvek, ne poutač. */
+.usp__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--neutral-n100, #eeeef0);
+  cursor: pointer;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;      /* drží mlhu i vzduch uvnitř kruhu */
+  /* Okraj kruhu není ostrý: barva se v posledních pár pixelech vytrácí,
+     takže kotouč splývá s bílou a nevypadá jako vyleštěný knoflík. */
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 78%,
+    rgba(0, 0, 0, 0.62) 92%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 78%,
+    rgba(0, 0, 0, 0.62) 92%,
+    transparent 100%
+  );
+  transition:
+    background-color var(--usp-badge),
+    transform var(--usp-badge);
+}
+
+/* Mlha — místo hladkého gradientu jemný oblačný šum z `feTurbulence`
+   (filtry `#uspFogA` / `#uspFogB` v index.html). Dvě vrstvy s jiným zrnem
+   se přes sebe pomalu posouvají a otáčejí; tím vzniká struktura, kterou
+   žádný gradient neudělá. Animuje se jen `transform`, takže si prohlížeč
+   drží jednou vykreslený šum a jen s ním hýbe. */
+.usp__fog {
+  position: absolute;
+  inset: -40%;
+  z-index: 0;
+  opacity: 1;
+  transition: opacity var(--usp-badge);
+  pointer-events: none;
+}
+.usp__fog i {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+.usp__fog i:nth-child(1) {
+  filter: url(#uspFogA);
+  /* Záporné zpoždění posune každý sloupec jinam do cyklu, takže čtyři
+     kruhy vedle sebe nejsou čtyři stejné snímky. */
+  animation: uspFogA var(--usp-fog-a) linear calc(var(--i) * -3.1s) infinite;
+}
+.usp__fog i:nth-child(2) {
+  filter: url(#uspFogB);
+  opacity: 0.78;
+  animation: uspFogB var(--usp-fog-b) linear calc(var(--i) * -4.7s) infinite;
+}
+/* Uzavřená smyčka: 0 % a 100 % se shodují ve všem a rotace jde 0 → 360°,
+   takže na konci cyklu není co dohánět. Časování je `linear` — `ease-in-out`
+   navíc u každého klíče pohyb na okamžik zastavilo, a to bylo to škubání. */
+@keyframes uspFogA {
+  0%   { transform: translate(-12%, -7%) scale(1.18) rotate(0deg); }
+  25%  { transform: translate(9%, -9%)   scale(1.28) rotate(90deg); }
+  50%  { transform: translate(12%, 8%)   scale(1.18) rotate(180deg); }
+  75%  { transform: translate(-9%, 10%)  scale(1.08) rotate(270deg); }
+  100% { transform: translate(-12%, -7%) scale(1.18) rotate(360deg); }
+}
+@keyframes uspFogB {
+  0%   { transform: translate(11%, 9%)   scale(1.24) rotate(0deg); }
+  25%  { transform: translate(-10%, 11%) scale(1.14) rotate(-90deg); }
+  50%  { transform: translate(-13%, -8%) scale(1.24) rotate(-180deg); }
+  75%  { transform: translate(10%, -10%) scale(1.34) rotate(-270deg); }
+  100% { transform: translate(11%, 9%)   scale(1.24) rotate(-360deg); }
+}
+
+/* Žádný lesklý lem ani horní světlo — ty z kruhu dělaly kov. Hranu drží
+   jen samotná barva a ta se ke kraji vytrácí (maska výš). */
+
+/* Hedvábný přelesk — měkké světlo, které kruhem projde šikmo přes.
+   Žádný WebGL: jeden posouvaný gradient dělá stejnou službu za zlomek
+   výkonu. Proběhne jednou při nájezdu a pak vždy na hover. */
+.usp__badge::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.9) 50%,
+    transparent 62%
+  );
+  transform: translateX(-130%);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  /* Zvýraznění: podklad ztmavne a mlha v něm zesílí. */
+  .usp__item:hover .usp__badge { background: var(--neutral-n200, #e3e3e4); }
+  .usp__item:hover .usp__fog { filter: contrast(1.22) brightness(1.03); }
+
+  /* Pohyb běží sám dokola, ale pod kurzorem se nečeká na další kolo —
+     přehraje se hned a rychleji. Všechny tyhle animace končí v té samé
+     poloze, ve které ikona odpočívá (korunka i šipky se otočí o celých
+     360°), takže po odjetí myši není co dorovnávat. */
+  .usp__item--club:hover .uspCoin {
+    animation: uspCoinOnce 1100ms cubic-bezier(0.45, 0, 0.25, 1) both;
+  }
+  .usp__item--exchange:hover .usp__icon {
+    animation: uspFlipOnce 900ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  }
+  .usp__item--delivery:hover .usp__icon {
+    animation: uspBob 2600ms ease-in-out infinite;
+  }
+  .usp__item--delivery:hover .usp__air--back::before {
+    animation: uspAirBack 2200ms linear infinite;
+  }
+  .usp__item--delivery:hover .usp__air--front::before {
+    animation: uspAirFront 2200ms linear infinite;
+  }
+  .usp__item--guide:hover .usp__measure::before {
+    animation: uspMeasureLine 2600ms ease-in-out infinite;
+  }
+  .usp__item--guide:hover .usp__measure::after {
+    animation: uspMeasureTicks 2600ms ease-in-out infinite;
+  }
+}
+
+/* Podpisové animace běží samy dokola. Pauza je schovaná přímo v klíčových
+   snímcích: pohyb zabere prvních pár procent cyklu a zbytek prvek stojí.
+   Díky tomu se nemusí nic spouštět ani zastavovat a každý cyklus končí
+   přesně tam, kde začal. Délky jsou nesoudělné, takže se čtyři ikony
+   nikdy nesejdou do stejného rytmu. */
+
+/* Korunka se protočí kolem svislé osy jako mince; kroužek kolem ní
+   zůstává stát, proto se točí jen ta jedna cesta v SVG.
+   Otočka 1,2 s, pak 8 s klid. */
+@keyframes uspCoin {
+  0%        { transform: rotateY(0deg); }
+  13%, 100% { transform: rotateY(360deg); }
+}
+.uspCoin {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: uspCoin 9.2s cubic-bezier(0.45, 0, 0.25, 1) 1.2s infinite;
+}
+
+/* Míra: čára se natáhne přes košíček, na koncích cvaknou zarážky
+   a celé to zase zmizí. Kreslí ji CSS, ikona z Figmy je nedotčená. */
+.usp__measure {
+  position: absolute;
+  left: 50%;
+  width: 31.5px;  /* přesně šířka ikony */
+  margin-left: -15.75px;
+  top: 54px;      /* pod kresbou — ikona zůstává čitelná */
+  height: 7px;
+  z-index: 2;
+  pointer-events: none;
+}
+.usp__measure::before,
+.usp__measure::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+}
+.usp__measure::before {
+  left: 0;
+  right: 0;
+  top: 2.75px;
+  height: 1.5px;
+  background: rgba(21, 21, 21, 0.62);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: uspMeasureLine 8.6s ease-in-out 2.4s infinite;
+}
+.usp__measure::after {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 7px;
+  border-left: 1.5px solid rgba(21, 21, 21, 0.62);
+  border-right: 1.5px solid rgba(21, 21, 21, 0.62);
+  animation: uspMeasureTicks 8.6s ease-in-out 2.4s infinite;
+}
+/* Míra: natáhne se, cvaknou zarážky, chvíli drží a zmizí — pak 7 s klid. */
+@keyframes uspMeasureLine {
+  0%        { transform: scaleX(0); opacity: 0; }
+  2%        { opacity: 1; }
+  10%, 24%  { transform: scaleX(1); opacity: 1; }
+  30%, 100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes uspMeasureTicks {
+  0%, 8%    { opacity: 0; }
+  12%, 24%  { opacity: 1; }
+  30%, 100% { opacity: 0; }
+}
+/* Varianty pro hover: jedno rychlé přehrání celého pohybu. Obě končí
+   na 360°, tedy opticky ve výchozí poloze. */
+@keyframes uspCoinOnce {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+@keyframes uspFlipOnce {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Výměna: půlotáčka, klid, druhá půlotáčka — cyklus končí na 360°, tedy
+   tam, kde začal. */
+@keyframes uspFlip {
+  0%        { transform: rotate(0deg); }
+  8%, 50%   { transform: rotate(180deg); }
+  58%, 100% { transform: rotate(360deg); }
+}
+.usp__item--exchange .usp__icon {
+  animation: uspFlip 10.4s cubic-bezier(0.65, 0, 0.35, 1) 1.8s infinite;
+}
+.usp__item--delivery .usp__icon {
+  animation: uspBob 6.5s ease-in-out 0.6s infinite;
+}
+
+/* Auto se pohoupe pětkrát a pak stojí. */
+@keyframes uspBob {
+  0%, 44%, 100% { transform: translateY(0); }
+  5.5%, 27.5%   { transform: translateY(-1.5px); }
+  16.5%, 38.5%  { transform: translateY(1.5px); }
+}
+/* Vzduch: čára proletí kruhem zprava doleva a na obou koncích se vytratí;
+   pak čeká, až se auto rozjede znovu. Zadní plán má delší průlet. */
+@keyframes uspAirBack {
+  0%        { transform: translateX(46px); opacity: 0; }
+  4%        { opacity: 1; }
+  24%       { opacity: 1; }
+  30%       { transform: translateX(-46px); opacity: 0; }
+  100%      { transform: translateX(-46px); opacity: 0; }
+}
+@keyframes uspAirFront {
+  0%, 8%    { transform: translateX(46px); opacity: 0; }
+  12%       { opacity: 1; }
+  30%       { opacity: 1; }
+  36%       { transform: translateX(-46px); opacity: 0; }
+  100%      { transform: translateX(-46px); opacity: 0; }
+}
+
+/* Proužky vzduchu kolem auta. Zadní plán je světlejší a pomalejší,
+   přední tmavší a rychlejší — ten rozdíl dělá hloubku. Ikona z Figmy
+   zůstává nedotčená, tohle je čistě CSS dekorace. */
+.usp__air {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.usp__air::before,
+.usp__air::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  height: 1.5px;
+  border-radius: 1px;
+  opacity: 0;
+}
+.usp__air--back { z-index: 0; }
+.usp__air--front { z-index: 2; }
+/* Jedna čára vzadu, jedna vpředu — na 72px kruhu víc jen dělá hustotu. */
+.usp__air--back::after,
+.usp__air--front::after { display: none; }
+.usp__air--back::before {
+  top: 24px; width: 16px; margin-left: -28px;
+  background: rgba(84, 84, 85, 0.34);
+  animation: uspAirBack 6.5s linear 0.6s infinite;
+}
+.usp__air--front::before {
+  top: 44px; width: 13px; margin-left: 2px;
+  background: rgba(21, 21, 21, 0.42);
+  animation: uspAirFront 6.5s linear 0.6s infinite;
+}
+.usp__badge:active { transform: scale(0.96); }
+
+/* Icon · 375:3182 — 31.5 × 31.5 (kresba je 35, v kruhu 72 se zmenšila) */
+.usp__icon {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 31.5px;
+  height: 31.5px;
+  flex: 0 0 auto;
+  transition: transform var(--usp-badge);
+}
+.usp__icon img { display: block; width: 100%; height: 100%; }
+
+/* 375:3183 … — gap 2 · text na střed */
+.usp__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  text-align: center;
+}
+
+/* 375:3184 … — 24 / 32 · SemiBold · N900 */
+.usp__title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--neutral-n900);
+  word-break: break-word;
+}
+
+/* 375:3185 … — 21 / 25 · Regular · N700 */
+.usp__sub {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 25px;
+  color: var(--neutral-n700, #545455);
+  word-break: break-word;
+}
+
+/* =========================================================
+   INSTAGRAM STORIES — Frame 1352 · 244:4428   (1920 × 728)
+   gap 24 · pl 40 · pt 64 · pb 64 · items-start
+   ========================================================= */
+.stories {
+  position: relative;
+  width: 100%;
+  height: 728px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 64px 0 64px 40px;
+}
+
+/* Instagram story - n · 244:4429 … — 400 × 600 · r 32 · #D2D2D2 */
+.story {
+  width: 400px;
+  height: 600px;
+  border-radius: 32px;
+  background: var(--story-grey);
+  flex: 0 0 auto;
+}

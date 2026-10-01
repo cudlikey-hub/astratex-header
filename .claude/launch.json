@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "astratex-header",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["/Users/jiricondl/Desktop/PROJEKTY/UX:UI/Header/serve.py"],
+      "port": 5173
+    }
+  ]
+}

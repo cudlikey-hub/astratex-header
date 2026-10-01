@@ -1,0 +1,4 @@
+# Rozpracovaný prototyp — nemá se objevovat ve vyhledávačích.
+# Dostupný je jen pro toho, komu pošleme odkaz.
+User-agent: *
+Disallow: /

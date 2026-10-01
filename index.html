@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Rozpracovaný prototyp: dostupný přes odkaz, ale ne přes vyhledávače. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Astratex — Valentýnská kolekce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<noscript><style>
+  /* The top bar is held hidden for its entrance, which the carousel script
+     releases. With no script to release it, there is no entrance. */
+  .page[data-intro="hold"] .topbar { opacity: 1; }
+</style></noscript>
+</head>
+<body>
+
+<!-- desktop 1920px_2 · 244:4380 (slide 1) / 209:15132 (slide 2)
+     data-ink says which ink the current slide's photo calls for:
+     "light" = white type over the dark photo, "dark" = near-black type
+     over the ivory photo. The JS carousel flips it with the slide. -->
+<div class="page" data-ink="light" data-intro="hold" data-hero="full" data-node-id="244:4380">
+
+  <!-- ============ Frame 947 — HERO CAROUSEL · 244:4381 / 209:15134 ============ -->
+  <section class="hero" data-node-id="244:4381" aria-roledescription="carousel" aria-label="Kampaně">
+
+    <!-- Slides. Each one carries its own Figma crop (--zoom / --tx / --ty,
+         see styles.css) so the photo sits exactly where the design puts it. -->
+    <div class="hero__slides">
+      <div class="hero__slide is-active" data-slide="0" data-ink="light"
+           data-node-id="244:4382" data-name="d17221a_bezova_0837_Edit 1"
+           role="group" aria-roledescription="slide" aria-label="1 z 3">
+        <img src="assets/hero-1.png" alt="">
+      </div>
+      <div class="hero__slide" data-slide="1" data-ink="light"
+           data-node-id="296:9612" data-name="6035_1_cernoruzova+6080_cernoruzova-19385_edit 2"
+           role="group" aria-roledescription="slide" aria-label="2 z 3">
+        <img src="assets/hero-3.jpg" alt="">
+      </div>
+      <div class="hero__slide" data-slide="2" data-ink="dark"
+           data-node-id="209:15510" data-name="10910_slonovakost+10901_kal_slonovakost_0406_edit 1"
+           role="group" aria-roledescription="slide" aria-label="3 z 3">
+        <img src="assets/hero-2.png" alt="">
+      </div>
+    </div>
+
+    <!-- 244:4383 / 209:15136 -->
+    <div class="hero__inner" data-node-id="244:4383">
+
+      <!-- 244:4384 / 209:15137
+           Both slides' copy lives here, stacked in one grid cell and
+           cross-faded with the photo. Each set is two title lines, one
+           subtitle line and a CTA, so the block keeps the same height and
+           its baseline stays put through the transition. Pagination sedí
+           pod stackem, takže se nehýbe. -->
+      <div class="hero__left" data-node-id="244:4384">
+        <div data-node-id="244:4385">
+          <!-- 244:4386 -->
+          <div class="hero__stack" data-node-id="244:4386">
+
+            <div class="hero__set is-active" data-for-slide="0">
+              <!-- 244:4387 -->
+              <div class="hero__copy" data-node-id="244:4387">
+                <p class="hero__title" data-node-id="244:4388">Valentýnská kolekce</p>
+                <p class="hero__subtitle" data-node-id="244:4389">Unikátní prádlo které svádí</p>
+              </div>
+              <!-- kód+cta · 244:4390 -->
+              <div class="hero__ctaRow" data-node-id="244:4390">
+                <a class="cta" href="#" data-node-id="244:4395">
+                  <span class="cta__label" data-node-id="244:4396">Buď svůdná</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="hero__set" data-for-slide="1">
+              <!-- 296:9512 -->
+              <div class="hero__copy" data-node-id="296:9512">
+                <p class="hero__title" data-node-id="296:9513">Krajka,<br>která padne</p>
+                <p class="hero__subtitle" data-node-id="296:9514">Sladěné sety podprsenek a kalhotek</p>
+              </div>
+              <!-- kód+cta · 296:9515 -->
+              <div class="hero__ctaRow" data-node-id="296:9515">
+                <a class="cta" href="#" data-node-id="296:9520">
+                  <span class="cta__label" data-node-id="296:9521">Vybrat set</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="hero__set" data-for-slide="2">
+              <!-- 209:15140 -->
+              <div class="hero__copy" data-node-id="209:15140">
+                <p class="hero__title" data-node-id="209:15141">Nákupní dny<br>Astratex -25 %</p>
+                <p class="hero__subtitle" data-node-id="209:15142">Vaše oblíbené kousky teď výhodněji</p>
+              </div>
+              <!-- kód+cta · 209:15143 -->
+              <div class="hero__ctaRow" data-node-id="209:15143">
+                <a class="cta" href="#" data-node-id="209:15148">
+                  <span class="cta__label" data-node-id="209:15149">Nakupovat</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Pagination dots · 342:2116 — nově pod tlačítkem, 40px od CTA.
+               Jedna tečka na slide; aktivní se roztáhne z 8px tečky na 32px. -->
+          <div class="dots" data-node-id="342:2116" role="tablist" aria-label="Slidy">
+            <button class="dots__dot dots__dot--active" type="button" role="tab"
+                    data-goto="0" aria-selected="true" aria-label="Slide 1" data-node-id="342:2117"></button>
+            <button class="dots__dot" type="button" role="tab"
+                    data-goto="1" aria-selected="false" aria-label="Slide 2" data-node-id="342:2118"></button>
+            <button class="dots__dot" type="button" role="tab"
+                    data-goto="2" aria-selected="false" aria-label="Slide 3" data-node-id="342:2119"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button / Sharp&Round · 344:3152 — 40 × 64 · pilulka · 1.5px bílý
+           okraj · uvnitř tečka r4, která sjíždí dolů. Naznačuje, že se dá
+           scrollovat; objeví se po pár sekundách a mizí, jakmile
+           uživatel scrollne. -->
+      <button class="scrollHint" type="button" data-scroll-hint
+              aria-label="Posunout na obsah níže" data-node-id="344:3152">
+        <span class="scrollHint__dot" aria-hidden="true"></span>
+      </button>
+
+      <!-- 244:4404 / 209:15157 -->
+      <div class="hero__nav" data-node-id="244:4404">
+        <!-- Pagination dots · 244:4405 / 209:15158 -->
+        <div class="arrows" data-node-id="244:4405">
+          <button class="arrows__btn" type="button" data-dir="-1" aria-label="Předchozí slide" data-node-id="244:4406">
+            <span class="arrows__icon" data-node-id="244:4407"><img src="assets/icon-arrow-left-2.svg" alt=""></span>
+          </button>
+          <button class="arrows__btn arrows__btn--flip" type="button" data-dir="1" aria-label="Další slide" data-node-id="244:4408">
+            <span class="arrows__icon" data-node-id="244:4409"><img src="assets/icon-arrow-left-2.svg" alt=""></span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ Header / Top Bar / XL-XXL · 244:4434 / 209:15189 ============
+       Icons ship as two exported sets — white (244:*) and near-black (209:*) —
+       stacked and cross-faded, since each SVG carries its own baked-in fill. -->
+  <header class="topbar" data-node-id="244:4434" data-name="Header / Top Bar / XL-XXL">
+
+    <!-- Frame 848 · 244:4435 -->
+    <div class="topbar__side" data-node-id="244:4435">
+      <!-- Frame 26080071 · 244:4436 -->
+      <nav class="topbar__nav" data-node-id="244:4436">
+        <!-- Frame 260801354 · 244:4440 -->
+        <div class="topbar__links" data-node-id="244:4440">
+          <button class="topbar__link" type="button" data-menu-trigger data-text="Dámské"
+                  aria-expanded="false" aria-controls="megamenu-damske"
+                  data-node-id="244:4441"><span class="topbar__linkText">Dámské</span></button>
+          <a class="topbar__link" href="#" data-node-id="244:4442"><span class="topbar__linkText">Pánské</span></a>
+          <!-- Frame 26080109 · 244:4443 -->
+          <div class="topbar__linkGroup" data-node-id="244:4443">
+            <a class="topbar__link" href="#" data-node-id="244:4444"><span class="topbar__linkText">Výprodej</span></a>
+            <!-- Category Tag · 244:4445 — same in both inks -->
+            <div class="tag" data-node-id="244:4445" data-name="Category Tag">
+              <div class="tag__arrow" data-node-id="244:4446" data-name="Vecotr_tag">
+                <img src="assets/tag-arrow.svg" alt="">
+              </div>
+              <div class="tag__body" data-node-id="244:4448">
+                <span class="tag__text" data-node-id="244:4449">až 60 %</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </nav>
+    </div>
+
+    <!-- Frame 26080101 · 244:4453 -->
+    <div class="topbar__logo" data-node-id="244:4453">
+      <button type="button" class="logo inkSwap" data-node-id="244:4454" data-name="Logo"
+              data-hero-toggle aria-pressed="false" aria-label="Astratex – přepnout rozložení hero">
+        <img class="ink ink--light" src="assets/ink-light/logo.svg" alt="Astratex">
+        <img class="ink ink--dark" src="assets/ink-dark/logo.svg" alt="">
+      </button>
+    </div>
+
+    <!-- Frame 1422 · 244:4455 -->
+    <div class="topbar__side topbar__side--end" data-node-id="244:4455">
+      <!-- Frame 1346 · 244:4456 -->
+      <div class="topbar__actions" data-node-id="244:4456">
+        <!-- Top Bar Item · 342:2174 — hledání je nově jen ikona vpravo -->
+        <button class="action action--rounded" type="button" aria-label="Hledat" data-node-id="342:2174">
+          <span class="action__icon inkSwap" data-node-id="342:2175">
+            <img class="ink ink--light" src="assets/ink-light/icon-search.svg" alt="">
+            <img class="ink ink--dark" src="assets/ink-dark/icon-search.svg" alt="">
+          </span>
+        </button>
+        <button class="action action--rounded" type="button" aria-label="Kupóny" data-node-id="244:4458"
+                data-drawer-trigger aria-haspopup="dialog" aria-expanded="false" aria-controls="drawer-coupons">
+          <span class="action__icon inkSwap" data-node-id="244:4459">
+            <img class="ink ink--light" src="assets/ink-light/icon-coupon.svg" alt="">
+            <img class="ink ink--dark" src="assets/ink-dark/icon-coupon.svg" alt="">
+          </span>
+        </button>
+        <button class="action" type="button" aria-label="Oblíbené" data-node-id="244:4463">
+          <span class="action__icon inkSwap" data-node-id="I244:4463;2152:10684">
+            <img class="ink ink--light" src="assets/ink-light/icon-heart.svg" alt="">
+            <img class="ink ink--dark" src="assets/ink-dark/icon-heart.svg" alt="">
+          </span>
+        </button>
+        <button class="action" type="button" aria-label="Účet" data-node-id="244:4462">
+          <span class="action__icon inkSwap" data-node-id="I244:4462;2152:10684">
+            <img class="ink ink--light" src="assets/ink-light/icon-user.svg" alt="">
+            <img class="ink ink--dark" src="assets/ink-dark/icon-user.svg" alt="">
+          </span>
+        </button>
+        <button class="action" type="button" aria-label="Košík" data-node-id="244:4464">
+          <span class="action__icon inkSwap" data-node-id="I244:4464;2152:10684">
+            <img class="ink ink--light" src="assets/ink-light/icon-bag.svg" alt="">
+            <img class="ink ink--dark" src="assets/ink-dark/icon-bag.svg" alt="">
+          </span>
+        </button>
+
+        <!-- Tooltip ke kupónům · 309:10360 — vyjede sám po dojetí hlavičky,
+             ikonka pod ním přitom drží svůj hover stav. Karta je klikací
+             (otevře stejný šuplík jako ikonka), křížek ji jen zavře. -->
+        <div class="tip" data-coupon-tip data-node-id="309:10360">
+          <button class="tip__card" type="button" data-tip-open
+                  aria-label="Otevřít kupónové centrum" data-node-id="309:10362">
+            <span class="tip__title" data-node-id="309:10363">Kupónové centrum</span>
+            <span class="tip__text" data-node-id="309:10364">Všechny <span class="tip__link">kupóny</span> na jednom místě.</span>
+          </button>
+          <button class="tip__close" type="button" data-tip-close
+                  aria-label="Zavřít" data-node-id="309:10365">
+            <span class="tip__closeIcon" data-node-id="309:10366">
+              <img src="assets/icon-cross-16.svg" alt="">
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ Mega menu — Dámské · 184:13463 ============
+       Fixed under the top bar, on the same centred canvas. The overlay dims
+       everything beneath it while the menu is open; header, sheet and overlay
+       are driven together by menu.js. -->
+  <div class="menu-overlay" data-menu-overlay aria-hidden="true"></div>
+
+  <div class="megamenu" id="megamenu-damske" role="region" aria-label="Dámské"
+       aria-hidden="true" data-node-id="184:13463">
+    <div class="megamenu__inner">
+
+      <!-- Frame 26080142 · 184:13464 — w 260 · col · gap 32 -->
+      <div class="megamenu__primary megamenu__reveal" style="--i: 0" data-node-id="184:13464">
+        <ul class="megamenu__cats">
+          <li>
+            <!-- Frame 26080148 · 184:13465 — gap 6 -->
+            <a class="megamenu__cat megamenu__cat--current" href="#" data-node-id="184:13465">
+              <span data-node-id="184:13466">Podprsenky</span>
+              <img class="megamenu__catArrow" src="assets/menu/icon-arrow-right.svg" alt=""
+                   data-node-id="184:13467" data-name="Icons / 24 / Arrow Right">
+            </a>
+          </li>
+          <li><a class="megamenu__cat" href="#" data-node-id="184:13468"><span>Kalhotky</span><span class="megamenu__catHover" aria-hidden="true"></span></a></li>
+          <li><a class="megamenu__cat" href="#" data-node-id="184:13469"><span>Plavky</span><span class="megamenu__catHover" aria-hidden="true"></span></a></li>
+          <li><a class="megamenu__cat" href="#" data-node-id="184:13470"><span>Noční prádlo</span><span class="megamenu__catHover" aria-hidden="true"></span></a></li>
+          <li><a class="megamenu__cat" href="#" data-node-id="184:13471"><span>Spodní prádlo</span><span class="megamenu__catHover" aria-hidden="true"></span></a></li>
+          <li><a class="megamenu__cat" href="#" data-node-id="184:13472"><span>Oblečení</span><span class="megamenu__catHover" aria-hidden="true"></span></a></li>
+          <li><a class="megamenu__cat megamenu__cat--sale" href="#" data-node-id="184:13473"><span>Výprodej</span><span class="megamenu__catHover" aria-hidden="true"></span></a></li>
+          <li><a class="megamenu__cat megamenu__cat--happy" href="#" data-node-id="184:13474"><span>Šťastná stovka</span><span class="megamenu__catHover" aria-hidden="true"></span></a></li>
+        </ul>
+
+        <!-- Vector 1 · 208:14437 — 260 × 0, 1px N300 -->
+        <span class="megamenu__divider" data-node-id="208:14437" aria-hidden="true">
+          <img src="assets/menu/divider.svg" alt="">
+        </span>
+
+        <!-- Podle výztuže · 208:14438 — w 240 · gap 20 -->
+        <div class="megamenu__group" data-node-id="208:14438">
+          <p class="megamenu__label" data-node-id="208:14439">Pro zákazníky</p>
+          <ul class="megamenu__links" data-node-id="208:14440">
+            <li><a href="#" data-node-id="208:14441">Výměna a vrácení</a></li>
+            <li><a href="#" data-node-id="208:14444">Kontakt</a></li>
+            <li><a href="#" data-node-id="208:14447">Magazín</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Frame 26080139 · 184:13475 — flex 1 · gap 80 -->
+      <div class="megamenu__lists" data-node-id="184:13475">
+
+        <!-- Podle výztuže · 184:13476 — w 240 · gap 20 -->
+        <div class="megamenu__group megamenu__reveal" style="--i: 1" data-node-id="184:13476">
+          <p class="megamenu__label" data-node-id="184:13477">Typ</p>
+          <ul class="megamenu__links" data-node-id="184:13478">
+            <li><a href="#" data-node-id="184:13479">Klasické</a></li>
+            <li><a href="#" data-node-id="184:13482">Push-up</a></li>
+            <li><a href="#" data-node-id="184:13485">Plunge</a></li>
+            <li><a href="#" data-node-id="184:13488">Balconette &amp; Bardot</a></li>
+            <li><a href="#" data-node-id="184:13491">Bralette</a></li>
+            <li><a href="#" data-node-id="184:13494">Bez ramínek</a></li>
+            <li><a href="#" data-node-id="184:13497">Doplňky</a></li>
+          </ul>
+        </div>
+
+        <!-- Podle střihu · 184:13500 — w 240 · gap 20 -->
+        <div class="megamenu__group megamenu__reveal" style="--i: 2" data-node-id="184:13500">
+          <p class="megamenu__label" data-node-id="184:13501">Styl a funkce</p>
+          <ul class="megamenu__links" data-node-id="184:13502">
+            <li><a href="#" data-node-id="184:13503">Sportovní</a></li>
+            <li><a href="#" data-node-id="184:13506">Kojicí</a></li>
+            <li><a href="#" data-node-id="184:13509">Po ablaci</a></li>
+            <li><a href="#" data-node-id="184:13512">Svůdné</a></li>
+            <li><a href="#" data-node-id="184:13515">Zmenšující</a></li>
+            <li><a href="#" data-node-id="184:13518">Nalepovací</a></li>
+          </ul>
+        </div>
+
+        <!-- Frame 26080115 · 184:13521 — w 272 · gap 20 -->
+        <div class="megamenu__group megamenu__group--search megamenu__reveal" style="--i: 3" data-node-id="184:13521">
+          <p class="megamenu__label" data-node-id="184:13522">Lidé často hledají</p>
+          <!-- Frame 26080149 · 184:13523 — wrap · gap 16 -->
+          <ul class="megamenu__chips" data-node-id="184:13523">
+            <li><a class="megamenu__chip" href="#" data-node-id="184:13524" data-name="Kategory">
+              <img src="assets/menu/icon-search.svg" alt="" data-node-id="184:13525">
+              <span data-node-id="184:13526">Bez kostic</span></a></li>
+            <li><a class="megamenu__chip" href="#" data-node-id="184:13527" data-name="Kategory">
+              <img src="assets/menu/icon-search.svg" alt="" data-node-id="184:13528">
+              <span data-node-id="184:13529">Krajkové</span></a></li>
+            <li><a class="megamenu__chip" href="#" data-node-id="184:13530" data-name="Kategory">
+              <img src="assets/menu/icon-search.svg" alt="" data-node-id="184:13531">
+              <span data-node-id="184:13532">Bezešvé</span></a></li>
+            <li><a class="megamenu__chip" href="#" data-node-id="184:13533" data-name="Kategory">
+              <img src="assets/menu/icon-search.svg" alt="" data-node-id="184:13534">
+              <span data-node-id="184:13535">Nevyztužené krajkové</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Frame 26080146 · 184:13536 — col · gap 32 · 400 × 225 tiles -->
+      <div class="megamenu__promos megamenu__reveal" style="--i: 4" data-node-id="184:13536" aria-hidden="true">
+        <div class="megamenu__promo" data-node-id="184:13537"></div>
+        <div class="megamenu__promo" data-node-id="184:13538"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ Drawer — Dostupné kupóny · Frame 4686 · 227:2570 ============
+       460 × viewport height, fixed to the right edge. Opened by the coupon
+       icon in the top bar; slides in from the right over a dimmer. Driven
+       by drawer.js. -->
+  <div class="drawer-overlay" data-drawer-overlay aria-hidden="true"></div>
+
+  <aside class="drawer" id="drawer-coupons" role="dialog" aria-modal="true"
+         aria-labelledby="drawer-coupons-title" aria-hidden="true" data-node-id="227:2570">
+
+    <!-- Frame 260801335 · 227:2571 — pt24 · px24 · close right -->
+    <div class="drawer__top drawer__reveal" style="--i: 0" data-node-id="227:2571">
+      <button class="drawer__close" type="button" data-drawer-close
+              aria-label="Zavřít" data-node-id="227:2572" data-name="Button / Round">
+        <span class="drawer__closeIcon" aria-hidden="true" data-node-id="I227:2572;1980:392"></span>
+      </button>
+    </div>
+
+    <!-- Frame 4652 · 227:2573 — scrolls · px32 · gap 27 -->
+    <div class="drawer__scroll">
+      <div class="drawer__content" data-node-id="227:2573">
+        <h2 class="drawer__title drawer__reveal" style="--i: 0" id="drawer-coupons-title" data-node-id="227:2575">Dostupné kupóny</h2>
+
+        <!-- 227:2578 — 396 · N50 · 1px N300 · r16 -->
+        <article class="coupon drawer__reveal" style="--i: 1" data-node-id="227:2578">
+          <div class="coupon__body" data-node-id="227:2579">
+            <div class="coupon__meta" data-node-id="227:2589">
+              <div class="coupon__lead" data-node-id="227:2590">
+                <a class="coupon__category" href="#" data-node-id="227:2591">PODPRSENKY</a>
+              </div>
+              <span class="coupon__tag" data-node-id="233:2678" data-name="Property Tag">
+                <img src="assets/drawer/icon-clock.svg" alt="" data-node-id="233:2679">
+                <span data-node-id="233:2680">Končí za 2&nbsp;dny</span>
+              </span>
+            </div>
+            <div class="coupon__text" data-node-id="227:2586">
+              <h3 class="coupon__title" data-node-id="227:2587">25&nbsp;% na podprsenky</h3>
+              <p class="coupon__desc" data-node-id="227:2588">Platí při nákupu nad 1&nbsp;499&nbsp;Kč. Nevztahuje se na slevy a produkty s označením PREMIUM nebo BESTSELLER.</p>
+            </div>
+          </div>
+          <div class="coupon__actions" data-node-id="227:2593">
+            <button class="coupon__code coupon__code--purple" type="button" data-node-id="227:2595">PODPRSENKY25</button>
+            <button class="coupon__activate" type="button" data-node-id="227:2596">Aktivovat kupon</button>
+          </div>
+        </article>
+        <!-- 227:2597 — 396 · N50 · 1px N300 · r16 -->
+        <article class="coupon drawer__reveal" style="--i: 2" data-node-id="227:2597">
+          <div class="coupon__body" data-node-id="227:2598">
+            <div class="coupon__meta" data-node-id="233:2685">
+              <div class="coupon__lead" data-node-id="233:2686">
+                <a class="coupon__category" href="#" data-node-id="233:2687">PLAVKY</a>
+              </div>
+              <span class="coupon__validity" data-node-id="233:2693">do 30.9.</span>
+            </div>
+            <div class="coupon__text" data-node-id="227:2601">
+              <h3 class="coupon__title" data-node-id="227:2603">50&nbsp;% na dvojdílné plavky</h3>
+              <p class="coupon__desc" data-node-id="227:2604">Platí při nákupu nad 1&nbsp;499&nbsp;Kč.</p>
+            </div>
+          </div>
+          <div class="coupon__actions" data-node-id="227:2609">
+            <button class="coupon__code coupon__code--blue" type="button" data-node-id="227:2611">PLAVKY50</button>
+            <button class="coupon__activate" type="button" data-node-id="227:2612">Aktivovat kupon</button>
+          </div>
+        </article>
+        <!-- 227:2613 — 396 · N50 · 1px N300 · r16 -->
+        <article class="coupon drawer__reveal" style="--i: 3" data-node-id="227:2613">
+          <div class="coupon__body" data-node-id="227:2614">
+            <div class="coupon__meta" data-node-id="233:2699">
+              <div class="coupon__lead" data-node-id="233:2700">
+                <a class="coupon__category" href="#" data-node-id="233:2701">DOPRAVA</a>
+              </div>
+              <span class="coupon__validity" data-node-id="233:2707">Bez omezení</span>
+            </div>
+            <div class="coupon__text" data-node-id="227:2617">
+              <h3 class="coupon__title" data-node-id="227:2619">Doprava zdarma</h3>
+              <p class="coupon__desc" data-node-id="227:2620">Platí při nákupu nad 500&nbsp;Kč.</p>
+            </div>
+          </div>
+          <div class="coupon__actions" data-node-id="227:2621">
+            <button class="coupon__code coupon__code--neutral" type="button" data-node-id="227:2623">DOPRAVAZDARMA</button>
+            <span class="coupon__activate coupon__activate--active" data-node-id="227:2624">
+              <img src="assets/drawer/icon-check.svg" alt="" data-node-id="227:2624-icon">Aktivní
+            </span>
+          </div>
+        </article>
+        <!-- 233:2713 — 396 · N50 · 1px N300 · r16 -->
+        <article class="coupon drawer__reveal" style="--i: 4" data-node-id="233:2713">
+          <div class="coupon__body" data-node-id="233:2714">
+            <div class="coupon__meta" data-node-id="233:2715">
+              <div class="coupon__lead" data-node-id="233:2716">
+                <a class="coupon__category" href="#" data-node-id="233:2717">PLAVKY</a>
+              </div>
+              <span class="coupon__validity" data-node-id="233:2723">do 30.9.</span>
+            </div>
+            <div class="coupon__text" data-node-id="233:2724">
+              <h3 class="coupon__title" data-node-id="233:2726">50&nbsp;% na dvojdílné plavky</h3>
+              <p class="coupon__desc" data-node-id="233:2727">Platí při nákupu nad 1&nbsp;499&nbsp;Kč.</p>
+            </div>
+          </div>
+          <div class="coupon__actions" data-node-id="233:2728">
+            <button class="coupon__code coupon__code--blue" type="button" data-node-id="233:2730">PLAVKY50</button>
+            <button class="coupon__activate" type="button" data-node-id="233:2731">Aktivovat kupon</button>
+          </div>
+        </article>
+        <!-- 233:2740 — 396 · N50 · 1px N300 · r16 -->
+        <article class="coupon drawer__reveal" style="--i: 5" data-node-id="233:2740">
+          <div class="coupon__body" data-node-id="233:2741">
+            <div class="coupon__meta" data-node-id="233:2742">
+              <div class="coupon__lead" data-node-id="233:2743">
+                <a class="coupon__category" href="#" data-node-id="233:2744">DOPRAVA</a>
+              </div>
+              <span class="coupon__validity" data-node-id="233:2746">do 30.9.</span>
+            </div>
+            <div class="coupon__text" data-node-id="233:2747">
+              <h3 class="coupon__title" data-node-id="233:2749">Doprava zdarma</h3>
+              <p class="coupon__desc" data-node-id="233:2750">Platí při nákupu nad 500&nbsp;Kč.</p>
+            </div>
+          </div>
+          <div class="coupon__actions" data-node-id="233:2751">
+            <button class="coupon__code coupon__code--neutral" type="button" data-node-id="233:2753">DOPRAVAZDARMA</button>
+            <span class="coupon__activate coupon__activate--active" data-node-id="233:2754">
+              <img src="assets/drawer/icon-check.svg" alt="" data-node-id="233:2754-icon">Aktivní
+            </span>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Rectangle 2625 · 227:2627 — 283px white fade: more below -->
+    <div class="drawer__fade" aria-hidden="true" data-node-id="227:2627"></div>
+
+    <!-- Rectangle 8 · 227:2626 — 4 × 64 thumb, 6px from the edge -->
+    <div class="drawer__track" aria-hidden="true">
+      <div class="drawer__thumb" data-node-id="227:2626"></div>
+    </div>
+  </aside>
+
+  <!-- ============ desktop 1920px — USP · 375:3177 ============
+       1920 × 327, bílá, py 80. Čtyři sloupce (flex 1) s kruhovým
+       tlačítkem 80 px nad textem; rozestup sloupců 32, uvnitř 12.
+       Kruhy mají na hover decentní pohyb (anotace v návrhu). -->
+  <section class="usp" data-node-id="375:3177">
+      <div class="usp__item usp__item--club" style="--i: 0" data-node-id="375:3180" data-name="tags">
+        <button class="usp__badge" type="button" aria-label="Astratex Klub" data-node-id="375:3181">
+          <span class="usp__fog" aria-hidden="true"><i></i><i></i></span>
+          <!-- Kresba je 1:1 soubor z Figmy, jen vložená inline, aby šlo
+               samotnou korunkou otočit uvnitř kroužku. -->
+          <span class="usp__icon" data-node-id="375:3182">
+            <svg aria-hidden="true" focusable="false" preserveAspectRatio="none" overflow="visible" width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="Icon">
+            <g clip-path="url(#clip0_387_4011)">
+            <g id="Vector">
+            <path class="uspCoin" fill-rule="evenodd" clip-rule="evenodd" d="M23.2806 25.0833H11.7186C11.6351 25.0833 11.5537 25.0544 11.4862 25.0009C11.4187 24.9474 11.3685 24.8719 11.343 24.7854L8.03981 13.64C8.01406 13.553 8.01446 13.4593 8.04098 13.3725C8.06749 13.2858 8.11873 13.2105 8.18725 13.1576C8.25578 13.1047 8.33803 13.0769 8.42205 13.0783C8.50608 13.0797 8.58751 13.1102 8.65453 13.1653L14.0409 17.6161L17.1398 10.1468C17.1755 10.077 17.2278 10.0189 17.2911 9.97842C17.3544 9.93796 17.4265 9.91663 17.5 9.91663C17.5734 9.91663 17.6455 9.93796 17.7088 9.97842C17.7721 10.0189 17.8244 10.077 17.8601 10.1468L20.959 17.6161L26.3454 13.1653C26.4124 13.1102 26.4938 13.0797 26.5779 13.0783C26.6619 13.0769 26.7441 13.1047 26.8127 13.1576C26.8812 13.2105 26.9324 13.2858 26.9589 13.3725C26.9854 13.4593 26.9859 13.553 26.9601 13.64L23.6557 24.7841C23.6304 24.8707 23.5804 24.9464 23.513 25.0002C23.4456 25.0539 23.3642 25.0831 23.2806 25.0833Z" fill="#151515"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.91667 17.5C2.91667 25.5542 9.44585 32.0833 17.5 32.0833C25.5542 32.0833 32.0833 25.5542 32.0833 17.5C32.0833 9.44585 25.5542 2.91667 17.5 2.91667C9.44585 2.91667 2.91667 9.44585 2.91667 17.5ZM17.5 0C7.83502 0 0 7.83502 0 17.5C0 27.165 7.83502 35 17.5 35C27.165 35 35 27.165 35 17.5C35 7.83502 27.165 0 17.5 0Z" fill="#151515"/>
+            </g>
+            </g>
+            </g>
+            <defs>
+            <clipPath id="clip0_387_4011">
+            <rect width="35" height="35" rx="17.5" fill="white"/>
+            </clipPath>
+            </defs>
+            </svg>
+          </span>
+        </button>
+        <span class="usp__text" data-node-id="375:3183">
+          <span class="usp__title" data-node-id="375:3184">8&nbsp;% z nákupu zpět</span>
+          <span class="usp__sub" data-node-id="375:3185">Pro členy Astratex Klubu</span>
+        </span>
+      </div>
+
+      <div class="usp__item usp__item--exchange" style="--i: 1" data-node-id="375:3186" data-name="tags">
+        <button class="usp__badge" type="button" aria-label="Výměna a vrácení" data-node-id="375:3187">
+          <span class="usp__fog" aria-hidden="true"><i></i><i></i></span>
+          <span class="usp__icon" data-node-id="375:3188">
+            <img src="assets/usp/icon-exchange.svg" width="35" height="35" alt="">
+          </span>
+        </button>
+        <span class="usp__text" data-node-id="375:3189">
+          <span class="usp__title" data-node-id="375:3190">Výměna a vrácení zdarma</span>
+          <span class="usp__sub" data-node-id="375:3191">Online, rychle a jednoduše</span>
+        </span>
+      </div>
+
+      <div class="usp__item usp__item--delivery" style="--i: 2" data-node-id="375:3192" data-name="tags">
+        <button class="usp__badge" type="button" aria-label="Doručení" data-node-id="375:3193">
+          <span class="usp__fog" aria-hidden="true"><i></i><i></i></span>
+          <span class="usp__air usp__air--back" aria-hidden="true"></span>
+          <span class="usp__icon" data-node-id="375:3194">
+            <img src="assets/usp/icon-delivery.svg" width="35" height="35" alt="">
+          </span>
+          <span class="usp__air usp__air--front" aria-hidden="true"></span>
+        </button>
+        <span class="usp__text" data-node-id="375:3195">
+          <span class="usp__title" data-node-id="375:3196">Doručení druhý den</span>
+          <span class="usp__sub" data-node-id="375:3197">Možnost dopravy zdarma</span>
+        </span>
+      </div>
+
+      <div class="usp__item usp__item--guide" style="--i: 3" data-node-id="375:3198" data-name="tags">
+        <button class="usp__badge" type="button" aria-label="Chytrý průvodce" data-node-id="375:3199">
+          <span class="usp__fog" aria-hidden="true"><i></i><i></i></span>
+          <span class="usp__icon" data-node-id="375:3200">
+            <img src="assets/usp/icon-guide.svg" width="35" height="35" alt="">
+          </span>
+          <span class="usp__measure" aria-hidden="true"></span>
+        </button>
+        <span class="usp__text" data-node-id="375:3201">
+          <span class="usp__title" data-node-id="375:3202">Chytrý průvodce</span>
+          <span class="usp__sub" data-node-id="375:3203">Velikost, která vám vždy padne</span>
+        </span>
+      </div>
+  </section>
+
+  <!-- ============ Frame 1352 — Instagram stories · 244:4428 ============ -->
+  <section class="stories" data-node-id="244:4428">
+    <div class="story" data-node-id="244:4429" data-name="Instagram story - 1"></div>
+    <div class="story" data-node-id="244:4430" data-name="Instagram story - 3"></div>
+    <div class="story" data-node-id="244:4431" data-name="Instagram story - 4"></div>
+    <div class="story" data-node-id="244:4432" data-name="Instagram story - 5"></div>
+    <div class="story" data-node-id="244:4433" data-name="Instagram story - 6"></div>
+  </section>
+
+</div>
+
+<!-- Mlha v kruzích USP. feTurbulence dělá jemný oblačný šum, feColorMatrix
+     z něj vezme jen jeden kanál jako průhlednost a obarví ho na světlou
+     šedou — proto to má strukturu, kterou gradient neumí. Dvě varianty
+     s jiným zrnem a hustotou se přes sebe posouvají. -->
+<svg class="svgDefs" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="uspFogA" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="2" seed="3" stitchTiles="stitch" result="n"/>
+    <feGaussianBlur in="n" stdDeviation="5" result="soft"/>
+    <feColorMatrix in="soft" type="matrix"
+      values="0 0 0 0 1
+              0 0 0 0 1
+              0 0 0 0 1
+              2.3 0 0 0 -0.52"/>
+  </filter>
+  <filter id="uspFogB" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="17" stitchTiles="stitch" result="n"/>
+    <feGaussianBlur in="n" stdDeviation="6.5" result="soft"/>
+    <feColorMatrix in="soft" type="matrix"
+      values="0 0 0 0 0.765
+              0 0 0 0 0.765
+              0 0 0 0 0.79
+              2.0 0 0 0 -0.62"/>
+  </filter>
+</svg>
+
+<script src="carousel.js"></script>
+<script src="header.js"></script>
+<script src="menu.js"></script>
+<script src="drawer.js"></script>
+<script src="hero-layout.js"></script>
+<script src="scroll-hint.js"></script>
+<script src="coupon-tip.js"></script>
+<script src="usp-motion.js"></script>
+</body>
+</html>
