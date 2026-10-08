@@ -61,6 +61,9 @@
   document.addEventListener("megamenu:toggle", function (e) {
     if (e.detail && e.detail.open) setOpen(false, false);
   });
+  document.addEventListener("search:toggle", function (e) {
+    if (e.detail && e.detail.open) setOpen(false, false);
+  });
 
   /* ------------------------------------------------------ keyboard */
   function focusables() {

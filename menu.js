@@ -94,4 +94,9 @@
   document.addEventListener("drawer:toggle", function (e) {
     if (e.detail && e.detail.open) setOpen(false);
   });
+
+  // Ani s vyhledáváním se menu nepřekrývá.
+  document.addEventListener("search:toggle", function (e) {
+    if (e.detail && e.detail.open) setOpen(false);
+  });
 })();

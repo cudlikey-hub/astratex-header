@@ -190,7 +190,9 @@
       <!-- Frame 1346 · 244:4456 -->
       <div class="topbar__actions" data-node-id="244:4456">
         <!-- Top Bar Item · 342:2174 — hledání je nově jen ikona vpravo -->
-        <button class="action action--rounded" type="button" aria-label="Hledat" data-node-id="342:2174">
+        <button class="action action--rounded" type="button" aria-label="Hledat"
+                data-search-trigger aria-haspopup="dialog" aria-expanded="false"
+                aria-controls="search-panel" data-node-id="342:2174">
           <span class="action__icon inkSwap" data-node-id="342:2175">
             <img class="ink ink--light" src="assets/ink-light/icon-search.svg" alt="">
             <img class="ink ink--dark" src="assets/ink-dark/icon-search.svg" alt="">
@@ -484,6 +486,499 @@
     </div>
   </aside>
 
+
+  <!-- ============ Vyhledávání · 411:12701 ============
+       Otevírá lupa v hlavičce, stejným odkrytím shora jako mega menu.
+       Linka pod polem se „načte" zleva doprava, zbytek obsahu naskáče
+       po sloupcích také zleva. -->
+  <div class="searchPanel" id="search-panel" data-search-panel data-query="0" role="dialog"
+       aria-label="Vyhledávání" aria-hidden="true" data-node-id="411:12701">
+
+    <!-- Search Bar · 411:12702 -->
+    <div class="searchBar" data-node-id="411:12702">
+      <div class="searchBar__row" data-node-id="411:12703">
+        <span class="searchBar__icon" data-node-id="411:12704">
+          <img src="assets/search/icon-search-24.svg" alt="">
+        </span>
+        <input class="searchBar__input" type="text" placeholder="hledat produkt"
+               aria-label="Hledat produkt" data-search-input data-node-id="411:12707">
+        <button class="searchBar__close" type="button" aria-label="Zavřít vyhledávání"
+                data-search-close data-node-id="411:12709">
+          <span class="searchBar__closeIcon"><img src="assets/search/icon-cross-24.svg" alt=""></span>
+        </button>
+      </div>
+      <!-- 411:12702 má spodní linku 1px N900; ta se při otevření natáhne -->
+      <span class="searchBar__line" aria-hidden="true"></span>
+    </div>
+
+    <div class="searchPanel__body" data-node-id="438:2815">
+      <div class="searchPanel__main" data-node-id="438:2814">
+
+        <!-- Výchozí stav: historie, oblíbené dotazy a doporučené produkty -->
+        <div class="searchState" data-state="idle">
+          <div class="searchRows" data-node-id="438:2844">
+            <div class="searchRow" style="--row: 0" data-node-id="438:2656">
+              <span class="searchRow__label">Naposledy hledané</span>
+              <div class="searchRow__items" data-node-id="438:2658">
+              <button class="searchChip" type="button">
+                <span class="searchChip__icon"><img src="assets/search/icon-search-20.svg" alt=""></span>
+                <span class="searchChip__text">podprsenka push up</span>
+              </button>
+              <button class="searchChip" type="button">
+                <span class="searchChip__icon"><img src="assets/search/icon-search-20.svg" alt=""></span>
+                <span class="searchChip__text">plavky</span>
+              </button>
+                <button class="searchClear" type="button" data-search-clear
+                        aria-label="Vymazat historii hledání" data-node-id="438:2845">
+                  <span>Vymazat historii</span>
+                  <span class="searchClear__icon"><img src="assets/search/icon-cross-12.svg" alt=""></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="searchRecs" data-node-id="411:12713">
+            <span class="searchRecs__label" data-node-id="411:12743">Doporučené</span>
+
+            <!-- Pásek produktů se posouvá do stran; šipky jsou nad ním
+                 vycentrované na fotkách (444:3690 / 444:3691). -->
+            <div class="searchStrip" data-strip>
+              <div class="searchGrid" data-strip-track data-node-id="411:12744">
+              <article class="searchCard" style="--i: 0" data-node-id="411:12761">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/lady-belle-brazilky-04.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/lady-belle-brazilky-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajkové kalhotky lady Belle</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 1" data-node-id="438:2730">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/iris-lace-rose-podprsenka-01.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/iris-lace-rose-podprsenka-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajková podprsenka Iris Lace</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 2" data-node-id="438:2746">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/fantastic-double-push-up-03.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/fantastic-double-push-up-video-2.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajková podprsenka Doble push-up</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 3" data-node-id="438:2763">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/evolution-podprsenka-01.jpg" alt="" loading="lazy">
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajková podprsenka evolution</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 4" data-node-id="438:2780">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/diva-body-lace-bandeau-10.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/diva-body-lace-bandeau-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajkové body Diva by Iva</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 5" data-node-id="444:3697">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/body-perfect-lace-01.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/body-perfect-lace-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajkové body perfect Lace</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 6" data-node-id="411:12761">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/lady-belle-brazilky-04.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/lady-belle-brazilky-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajkové kalhotky lady Belle</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 7" data-node-id="438:2730">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/iris-lace-rose-podprsenka-01.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/iris-lace-rose-podprsenka-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajková podprsenka Iris Lace</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 8" data-node-id="438:2746">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/fantastic-double-push-up-03.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/fantastic-double-push-up-video-2.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajková podprsenka Doble push-up</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 9" data-node-id="438:2763">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/evolution-podprsenka-01.jpg" alt="" loading="lazy">
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajková podprsenka evolution</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 10" data-node-id="438:2780">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/diva-body-lace-bandeau-10.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/diva-body-lace-bandeau-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajkové body Diva by Iva</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 11" data-node-id="444:3697">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/body-perfect-lace-01.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/body-perfect-lace-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name">Krajkové body perfect Lace</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              </div>
+
+              <button class="stripNav stripNav--prev" type="button" data-strip-prev
+                      aria-label="Předchozí produkty" data-node-id="444:3691" hidden>
+                <span class="stripNav__icon"><img src="assets/search/icon-arrow-right-14.svg" alt=""></span>
+              </button>
+              <button class="stripNav stripNav--next" type="button" data-strip-next
+                      aria-label="Další produkty" data-node-id="444:3690">
+                <span class="stripNav__icon"><img src="assets/search/icon-arrow-right-14.svg" alt=""></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stav s dotazem · 455:2556 — nahoře dva řádky odkazů, pod nimi
+             nalezené produkty; vpravo bannery k dotazu -->
+        <div class="searchState" data-state="results">
+          <div class="searchState__main">
+          <div class="searchRecs" data-node-id="455:2581">
+            <div class="searchResultsHead" data-node-id="455:2582">
+              <span class="searchResultsHead__count" data-node-id="455:2583">Nalezené produkty (32)</span>
+              <a class="searchResultsHead__all" href="#" data-node-id="455:2584">zobrazit vše</a>
+            </div>
+
+            <!-- 455:2585 — pět karet v záběru, zbytek odjíždí do strany -->
+            <div class="searchStrip searchStrip--five" data-strip>
+              <div class="searchGrid" data-strip-track data-node-id="455:2585">
+              <article class="searchCard" style="--i: 0" data-node-id="455:2586">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/lady-belle-brazilky-04.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/lady-belle-brazilky-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name"><b>Krajkov</b>é kalhotky lady Belle</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 1" data-node-id="455:2603">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/iris-lace-rose-podprsenka-01.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/iris-lace-rose-podprsenka-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name"><b>Krajkov</b>á podprsenka Iris Lace</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 2" data-node-id="455:2620">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/fantastic-double-push-up-03.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/fantastic-double-push-up-video-2.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name"><b>Krajkov</b>á podprsenka Doble push-up</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 3" data-node-id="455:2637">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/evolution-podprsenka-01.jpg" alt="" loading="lazy">
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name"><b>Krajkov</b>á podprsenka evolution</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 4" data-node-id="455:2654">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/diva-body-lace-bandeau-10.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/diva-body-lace-bandeau-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name"><b>Krajkov</b>é body Diva by Iva</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              <article class="searchCard" style="--i: 5" data-node-id="444:3697">
+                <span class="searchCard__media">
+                  <img class="searchCard__photo" src="assets/products/body-perfect-lace-01.jpg" alt="" loading="lazy">
+                  <video class="searchCard__video" src="assets/products/body-perfect-lace-video.mp4"
+                         muted playsinline preload="none"></video>
+                </span>
+                <div class="searchCard__meta">
+                  <span class="searchCard__name"><b>Krajkov</b>é body perfect Lace</span>
+                  <span class="searchCard__variant">Klasické kalhotky</span>
+                  <div class="searchCard__price">
+                    <span class="searchCard__now">490&nbsp;Kč</span>
+                    <span class="searchCard__old">
+                      <span class="searchCard__was">645&nbsp;Kč</span>
+                      <span class="searchCard__off">-40&nbsp;%</span>
+                    </span>
+                  </div>
+                </div>
+              </article>
+              </div>
+
+              <button class="stripNav stripNav--prev" type="button" data-strip-prev
+                      aria-label="Předchozí produkty" data-node-id="455:2672" hidden>
+                <span class="stripNav__icon"><img src="assets/search/icon-arrow-right-14.svg" alt=""></span>
+              </button>
+              <button class="stripNav stripNav--next" type="button" data-strip-next
+                      aria-label="Další produkty" data-node-id="455:2671">
+                <span class="stripNav__icon"><img src="assets/search/icon-arrow-right-14.svg" alt=""></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="searchRows" data-node-id="455:2569">
+            <div class="searchRow" style="--row: 0" data-node-id="455:2571">
+              <span class="searchRow__label">Doporučené kategorie</span>
+              <div class="searchRow__items" data-node-id="455:2573">
+                <button class="searchChip" type="button" data-node-id="455:2574">
+                  <span class="searchChip__icon"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span class="searchChip__text"><b>Krajkov</b>é podprsenky</span>
+                </button>
+                <button class="searchChip" type="button" data-node-id="455:2577">
+                  <span class="searchChip__icon"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span class="searchChip__text"><b>Krajkov</b>é body</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="searchRow" style="--row: 1" data-node-id="459:2768">
+              <span class="searchRow__label">Astratex magazín</span>
+              <div class="searchRow__items" data-node-id="459:2770">
+                <button class="searchChip" type="button" data-node-id="459:2771">
+                  <span class="searchChip__icon"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span class="searchChip__text">Jak vyprat <b>krajkov</b>é spodní prádlo</span>
+                </button>
+                <button class="searchChip" type="button" data-node-id="459:2774">
+                  <span class="searchChip__icon"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span class="searchChip__text">Top 3 <b>krajkov</b>é podprsenky</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <!-- 455:2673 — bannery se vážou k hledanému dotazu, proto jsou
+               jen tady a ne ve výchozím stavu -->
+          <aside class="searchBanners" data-node-id="455:2673">
+            <a class="searchBanner searchBanner--lace" style="--i: 0" href="#" data-node-id="455:2724">
+              <!-- 455:2729 — fotka scény a nad ní vyříznutá modelka, obojí
+                   skrz rozostřenou masku z návrhu. Obal má rozměr banneru,
+                   takže se na hover zvětší celá grafika i s výřezem. -->
+              <span class="searchBanner__layers" aria-hidden="true">
+                <span class="searchBanner__art searchBanner__art--lace" data-node-id="455:2729">
+                  <img src="assets/banners/banner-lace-scene.png" alt="">
+                  <img src="assets/banners/banner-lace-model.png" alt="">
+                </span>
+              </span>
+              <span class="searchBanner__text" data-node-id="455:2725">
+                <span class="searchBanner__title" data-node-id="455:2726">Sleva 20 %</span>
+                <span class="searchBanner__sub" data-node-id="455:2727">na krajkové<br>spodní prádlo</span>
+              </span>
+              <span class="searchBanner__go" aria-hidden="true" data-node-id="455:2730">
+                <img src="assets/search/icon-arrow-right-20.svg" alt="">
+              </span>
+            </a>
+
+            <a class="searchBanner searchBanner--sale" style="--i: 1" href="#" data-node-id="455:2734">
+              <span class="searchBanner__layers" aria-hidden="true">
+                <span class="searchBanner__art searchBanner__art--chair" data-node-id="455:2752">
+                  <img src="assets/banners/banner-sale-chair.png" alt="">
+                </span>
+                <span class="searchBanner__art searchBanner__art--model" data-node-id="455:2749">
+                  <img src="assets/banners/banner-sale-model.png" alt="">
+                </span>
+              </span>
+              <span class="searchBanner__text searchBanner__text--wide" data-node-id="455:2735">
+                <span class="searchBanner__title" data-node-id="455:2736">Sleva až 30 %</span>
+                <span class="searchBanner__sub" data-node-id="455:2737">na nezlevněné</span>
+              </span>
+              <span class="searchBanner__go" aria-hidden="true" data-node-id="455:2740">
+                <img src="assets/search/icon-arrow-right-20.svg" alt="">
+              </span>
+            </a>
+          </aside>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ============ desktop 1920px — USP · 375:3177 ============
        1920 × 327, bílá, py 80. Čtyři sloupce (flex 1) s kruhovým
        tlačítkem 80 px nad textem; rozestup sloupců 32, uvnitř 12.
@@ -590,10 +1085,10 @@
     <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="17" stitchTiles="stitch" result="n"/>
     <feGaussianBlur in="n" stdDeviation="6.5" result="soft"/>
     <feColorMatrix in="soft" type="matrix"
-      values="0 0 0 0 0.765
-              0 0 0 0 0.765
-              0 0 0 0 0.79
-              2.0 0 0 0 -0.62"/>
+      values="0 0 0 0 0.825
+              0 0 0 0 0.825
+              0 0 0 0 0.845
+              1.9 0 0 0 -0.60"/>
   </filter>
 </svg>
 
@@ -605,5 +1100,6 @@
 <script src="scroll-hint.js"></script>
 <script src="coupon-tip.js"></script>
 <script src="usp-motion.js"></script>
+<script src="search.js"></script>
 </body>
 </html>

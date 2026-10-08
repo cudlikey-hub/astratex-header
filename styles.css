@@ -179,8 +179,17 @@ a { text-decoration: none; color: inherit; }
   --usp-badge: 260ms cubic-bezier(0.22, 0.61, 0.36, 1);  /* hover kruhů */
   --usp-fog-a: 14s;       /* dvě vrstvy mlhy, každá svým tempem */
   --usp-fog-b: 19s;
-  --usp-in: 560ms cubic-bezier(0.16, 1, 0.3, 1);         /* nájezd sekce */
-  --usp-in-step: 90ms;                                   /* posun mezi sloupci */
+  /* vyhledávání: linka se natáhne, obsah pak naskáče zleva */
+  --search-line: 620ms cubic-bezier(0.33, 0, 0.2, 1);
+  --search-line-delay: 120ms;
+  --card-video: 240ms ease;                              /* prolnutí na video */
+  --card-zoom: 480ms cubic-bezier(0.22, 0.61, 0.36, 1);  /* přiblížení fotky */
+  --card-zoom-scale: 1.06;
+  --search-in: 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  --search-base: 220ms;
+  --search-step: 70ms;
+  --usp-in: 780ms cubic-bezier(0.16, 1, 0.3, 1);         /* nájezd sekce */
+  --usp-in-step: 300ms;                                  /* sloupce jdou po sobě */
   --usp-liquid: 22s;                                     /* přelévání skla */
 }
 
@@ -688,13 +697,15 @@ a { text-decoration: none; color: inherit; }
   transition: opacity var(--ink-swap);
   pointer-events: none;
 }
-.topbar.is-menu-open {
+.topbar.is-menu-open,
+.topbar.is-search-open {
   --ink: var(--neutral-n900);
   --ink-swap: var(--bar-swap);
   background-color: var(--white);
   box-shadow: 0 1px 0 rgba(21, 21, 21, 0);
 }
-.topbar.is-menu-open::after { opacity: 1; }
+.topbar.is-menu-open::after,
+.topbar.is-search-open::after { opacity: 1; }
 
 /* Frame 848 · 244:4435 / Frame 1422 · 244:4455 — flex-1 · min-w-0 */
 .topbar__side {
@@ -844,10 +855,12 @@ a { text-decoration: none; color: inherit; }
 .inkSwap .ink--dark { opacity: 0; }
 .page[data-ink="dark"] .inkSwap .ink--light,
 .topbar.is-solid .inkSwap .ink--light,
-.topbar.is-menu-open .inkSwap .ink--light { opacity: 0; }
+.topbar.is-menu-open .inkSwap .ink--light,
+.topbar.is-search-open .inkSwap .ink--light { opacity: 0; }
 .page[data-ink="dark"] .inkSwap .ink--dark,
 .topbar.is-solid .inkSwap .ink--dark,
-.topbar.is-menu-open .inkSwap .ink--dark { opacity: 1; }
+.topbar.is-menu-open .inkSwap .ink--dark,
+.topbar.is-search-open .inkSwap .ink--dark { opacity: 1; }
 
 /* Frame 26080101 · 244:4453 — logo 140 × 21 */
 .topbar__logo {
@@ -906,7 +919,7 @@ a { text-decoration: none; color: inherit; }
    while the bar is still clear over that photo the tile is 24% white.
    Pressing sinks the icon. */
 .topbar { --action-hover: 12%; }
-.page[data-ink="light"] .topbar:not(.is-solid):not(.is-menu-open) {
+.page[data-ink="light"] .topbar:not(.is-solid):not(.is-menu-open):not(.is-search-open) {
   --action-hover: 24%;
 }
 @media (hover: hover) {
@@ -926,6 +939,10 @@ a { text-decoration: none; color: inherit; }
 .action[data-nudge="on"] {
   background-color: color-mix(in srgb, var(--ink) var(--action-hover), transparent);
 }
+/* Tooltip pod otevřeným vyhledáváním zůstává, ale zvýraznění ikonky ne —
+   patří k němu, a dokud není vidět, nemá co zdůrazňovat. Po zavření
+   panelu se vrátí obojí. */
+.topbar.is-search-open .action[data-nudge="on"] { background-color: transparent; }
 
 .tip {
   position: absolute;
@@ -1040,6 +1057,10 @@ a { text-decoration: none; color: inherit; }
 .cta:focus-visible,
 .action:focus-visible,
 .usp__badge:focus-visible,
+.searchChip:focus-visible,
+.stripNav:focus-visible,
+.searchClear:focus-visible,
+.searchBar__close:focus-visible,
 .topbar__link:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 4px;
@@ -1078,6 +1099,14 @@ a { text-decoration: none; color: inherit; }
     --usp-badge: 1ms;
     --usp-fog-a: 0s;
     --usp-fog-b: 0s;
+    --search-line: 1ms;
+    --search-line-delay: 0ms;
+    --card-video: 1ms;
+    --card-zoom: 1ms;
+    --card-zoom-scale: 1;
+    --search-in: 1ms;
+    --search-base: 0ms;
+    --search-step: 0ms;
     --usp-in: 1ms;
     --usp-in-step: 0ms;
     --usp-liquid: 0s;
@@ -1112,7 +1141,8 @@ a { text-decoration: none; color: inherit; }
     opacity var(--menu-out) var(--menu-ease-out),
     visibility 0s linear var(--menu-out);
 }
-.menu-overlay.is-open {
+.menu-overlay.is-open,
+.menu-overlay.is-search-open {
   opacity: 1;
   visibility: visible;
   transition:
@@ -1833,6 +1863,696 @@ a { text-decoration: none; color: inherit; }
   width: 0;
   height: 0;
   overflow: hidden;
+}
+
+/* =========================================================
+   VYHLEDÁVÁNÍ — Frame 26080143 · 411:12701   (1920 × 834)
+   Panel pod hlavičkou, odkrývá se shora stejně jako mega menu.
+   p40 · mezera 40 mezi polem a obsahem · obsah 1360 + 80 + 400
+   ========================================================= */
+.searchPanel {
+  position: fixed;
+  top: calc(var(--bar-height) + var(--hero-inset));
+  left: 0;
+  right: 0;
+  /* Nad hlavičkou (ta má 10), aby panel překryl tooltip u kupónů, který
+     z lišty visí dolů. Lišty samotné se to netýká — panel začíná až pod
+     ní, takže ji nikdy nepřekrývá. */
+  z-index: 11;
+  width: auto;
+  min-width: var(--canvas-min-fit);
+  max-width: var(--canvas-max);
+  margin: 0 auto;
+  max-height: calc(100vh - var(--bar-height) - var(--hero-inset));
+  max-height: calc(100dvh - var(--bar-height) - var(--hero-inset));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 40px;
+  background: var(--white);
+  visibility: hidden;
+  clip-path: inset(0 0 100% 0);
+  transition:
+    clip-path var(--menu-out) var(--menu-ease-out),
+    visibility 0s linear var(--menu-out);
+}
+.searchPanel.is-open {
+  visibility: visible;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path var(--menu-in) var(--menu-ease-in),
+    visibility 0s;
+}
+
+/* Search Bar · 411:12702 — py 8, dole linka 1px N900 */
+.searchBar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  flex: 0 0 auto;
+}
+.searchBar__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+}
+.searchBar__icon {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+.searchBar__icon img { width: 100%; height: 100%; }
+
+/* 411:12707 — 19 / 23 Regular N900 */
+.searchBar__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 23px;
+  color: var(--neutral-n900);
+}
+.searchBar__input::placeholder { color: var(--neutral-n900); opacity: 1; }
+.searchBar__input:focus { outline: none; }
+
+/* 411:12709 — Top Bar Item 40 × 40 · r10 */
+.searchBar__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 180ms ease;
+}
+@media (hover: hover) {
+  .searchBar__close:hover {
+    background-color: color-mix(in srgb, var(--neutral-n900) 8%, transparent);
+  }
+}
+.searchBar__closeIcon { display: block; width: 24px; height: 24px; }
+.searchBar__closeIcon img { width: 100%; height: 100%; }
+
+/* Linka se při otevření „načte" zleva doprava. */
+.searchBar__line {
+  display: block;
+  height: 1px;
+  background: var(--neutral-n900);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.searchPanel.is-open .searchBar__line {
+  animation: searchLine var(--search-line) var(--search-line-delay) forwards;
+}
+@keyframes searchLine {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* 438:2815 — obsah: 1360 + 80 + sloupec bannerů */
+.searchPanel__body {
+  display: flex;
+  align-items: flex-start;
+  gap: 80px;
+  flex: 1 1 auto;
+}
+.searchPanel__main {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Dva stavy panelu: bez dotazu historie a doporučené, s dotazem nalezené
+   produkty. Přepíná se `display`, takže se nájezd zleva přehraje znovu —
+   prohlížeč animace u znovuzobrazeného prvku spustí od začátku. */
+.searchState {
+  display: none;
+  flex-direction: column;
+  gap: 40px;
+}
+.searchPanel[data-query="0"] .searchState[data-state="idle"],
+.searchPanel[data-query="1"] .searchState[data-state="results"] { display: flex; }
+
+/* Stav s výsledky má vedle obsahu ještě bannery (442:3270) — ty se vážou
+   k hledanému dotazu, takže ve výchozím stavu nejsou. */
+.searchState[data-state="results"] {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 80px;
+}
+.searchState__main {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 442:3186 — „Nalezené produkty (32)" vlevo, „zobrazit vše" vpravo */
+.searchResultsHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  padding-bottom: 16px;
+}
+.searchResultsHead__count {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--menu-label);
+}
+.searchResultsHead__all {
+  flex: 0 0 auto;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--menu-label);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .searchResultsHead__all:hover { color: var(--neutral-n900); }
+}
+
+/* 438:2844 — řádky s chipy, mezi sebou 40 */
+.searchRows {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+/* Po vymazání historie zůstane ve výchozím stavu prázdný obal — ten by
+   pořád zabíral mezeru 40 nad „Doporučené", proto zmizí celý. */
+.searchRows:not(:has(.searchRow)) { display: none; }
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+/* 438:2657 — 17 / 21 Medium, šedý popisek */
+.searchRow__label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--menu-label);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.searchRow__items {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Kategory · 438:2659 — rámeček N200 · r8 · px16 py10 · gap 8 */
+.searchChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  /* Obrys je v návrhu dovnitř (rámeček 41 = 10 + 21 + 10), proto stín
+     místo `border` — ten by chip o dva pixely nafoukl. */
+  box-shadow: inset 0 0 0 1px var(--neutral-n200);
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: box-shadow 160ms ease, background-color 160ms ease;
+}
+@media (hover: hover) {
+  .searchChip:hover {
+    box-shadow: inset 0 0 0 1px var(--neutral-n900);
+    background-color: var(--neutral-n50);
+  }
+}
+.searchChip__icon { display: block; width: 20px; height: 20px; flex: 0 0 auto; }
+.searchChip__icon img { width: 100%; height: 100%; }
+/* Dotaz se v odkazech i názvech zvýrazní tučně · 455:2576 */
+.searchChip__text b,
+.searchCard__name b { font-weight: 700; }
+.searchChip__text {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+}
+
+/* 438:2845 — „Vymazat historii" + křížek 12 */
+.searchClear {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--menu-label);
+}
+.searchClear__icon { display: block; width: 12px; height: 12px; }
+.searchClear__icon img { width: 100%; height: 100%; }
+@media (hover: hover) {
+  .searchClear:hover { color: var(--neutral-n900); }
+}
+
+/* Řádek po vymazání historie odejde doleva, než ho skript sundá z DOMu. */
+.searchPanel .searchRow.is-gone {
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  animation: none;
+  pointer-events: none;
+}
+
+/* 411:12713 — „Doporučené" + mřížka pěti karet */
+.searchRecs { display: flex; flex-direction: column; }
+.searchRecs__label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--menu-label);
+  padding-bottom: 16px;
+}
+.searchGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  column-gap: 28px;
+  row-gap: 16px;
+}
+
+/* Pásek doporučených · 411:12744 — šest karet v záběru (1840 = 6 × 283,33
+   + 5 × 28), zbytek se odjíždí do strany. Posuvník je schovaný, posun
+   obstarají šipky. */
+.searchStrip { position: relative; }
+.searchStrip .searchGrid {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 5 * 28px) / 6);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.searchStrip .searchGrid::-webkit-scrollbar { display: none; }
+/* Ve výsledcích je v záběru pět karet · 455:2585 */
+.searchStrip--five .searchGrid { grid-auto-columns: calc((100% - 4 * 28px) / 5); }
+.searchStrip--five .stripNav { margin-top: calc(0.75 * ((100% - 4 * 28px) / 5)); }
+.searchStrip .searchCard { scroll-snap-align: start; }
+
+/* Button / Sharp&Round · 444:3690 — 40 kolečko nad fotkami, uvnitř
+   šipka 14. Levá se ukáže, až se pásek posune.
+
+   Svisle sedí na polovině fotky, a to spočítané ze **šířky** pásku: fotka
+   má poměr 20/30, takže její půlka je 0,75 × šířka karty. Procenta v `top`
+   by se počítala z výšky, kdežto v `margin-top` ze šířky — proto ten
+   obrat. Na textu pod fotkou tím pádem vůbec nezáleží; dřív stačilo, aby
+   se na užší obrazovce zalomila cena, a šipka spadla o 12 px pod střed. */
+.stripNav {
+  position: absolute;
+  top: 0;
+  margin-top: calc(0.75 * ((100% - 5 * 28px) / 6));
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 100px;
+  background: rgba(42, 42, 42, 0.16);
+  box-shadow: inset 0 0 0 1px var(--white);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background-color 160ms ease, opacity 180ms ease;
+}
+.stripNav[hidden] { display: none; }
+ /* Kolečko sedí středem přesně na hraně fotky — půlka uvnitř, půlka venku. */
+.stripNav--prev { left: -20px; }
+.stripNav--next { right: -20px; }
+@media (hover: hover) {
+  .stripNav:hover { background: rgba(42, 42, 42, 0.32); }
+}
+.stripNav:active .stripNav__icon { transform: scale(0.9); }
+.stripNav--prev:active .stripNav__icon { transform: scaleX(-1) scale(0.9); }
+.stripNav__icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+  transition: transform 160ms ease;
+}
+.stripNav--prev .stripNav__icon { transform: scaleX(-1); }
+.stripNav__icon img { width: 100%; height: 100%; }
+
+/* Search item · 411:12761 */
+.searchCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 320px;
+  background: var(--white);
+  cursor: pointer;
+}
+/* 411:12762 — poměr 20/30, r6. Pruhovaná plocha z návrhu zůstala jako
+   podklad, než se fotka načte. Video leží přes fotku a vyjede při najetí. */
+.searchCard__media {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 20 / 30;
+  border-radius: 6px;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    131.63deg,
+    #f0f0f0 0 7.2154%,
+    #e9e9e9 7.2154% 14.431%
+  );
+}
+.searchCard__photo,
+.searchCard__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.searchCard__photo { transition: transform var(--card-zoom); }
+.searchCard__video {
+  opacity: 0;
+  transition: opacity var(--card-video);
+}
+/* `is-on` zapíná skript (ukázka, která se spustí sama), hover si bere
+   přednost — vidět je vždycky nejvýš jedno video. */
+.searchCard__video.is-on { opacity: 1; }
+@media (hover: hover) {
+  .searchCard:hover .searchCard__video { opacity: 1; }
+  /* Karta bez videa nemá co přehrát, tak se aspoň fotka lehce přiblíží. */
+  .searchCard:not(:has(.searchCard__video)):hover .searchCard__photo {
+    transform: scale(var(--card-zoom-scale));
+  }
+}
+.searchCard__meta { display: flex; flex-direction: column; gap: 4px; }
+/* Název smí mít dva řádky, delší se uřízne třemi tečkami. Místo na druhý
+   řádek se **nedrží** — krátký název zabere jen jeden a text pod ním
+   vyjede nahoru; cena pak u karet s různě dlouhým názvem nestojí na
+   stejné lince, což je vědomá volba (prázdná mezera byla horší). */
+.searchCard__name {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--neutral-n900);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+          line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.searchCard__variant {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--menu-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Cena se smí zalomit, ale jen mezi aktuální cenou a zbytkem: číslo s „Kč"
+   drží pohromadě nezlomitelnou mezerou a původní cena se slevou tvoří jeden
+   celek, takže spadnou na druhý řádek obě najednou. */
+.searchCard__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.searchCard__now {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 21px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.searchCard__old {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.searchCard__was {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--menu-label);
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+/* 411:12770 — Pink/P500 */
+.searchCard__off {
+  padding: 4px;
+  border-radius: 4px;
+  background: #dd2859;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--white);
+  white-space: nowrap;
+}
+
+/* 438:2816 — sloupec bannerů; funguje pro dva, jeden i žádný.
+
+   Sloupec není napevno 400 px, ale drží svůj podíl z šířky panelu
+   (400 / 1840 = 21,739 %). Na 1920 vyjde přesně 400 jako v návrhu, na užších
+   obrazovkách se zmenší — jinak by při 1280 ukrajoval produktům skoro
+   třetinu místa. Dolní mez je kvůli čitelnosti textu v banneru. */
+.searchBanners {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: clamp(220px, 21.739%, 400px);
+  flex: 0 0 auto;
+}
+/* Když bannery nejsou, sloupec i mezera 80 zmizí — `:empty` by selhalo
+   kvůli bílým znakům v markupu, proto `:has`. */
+.searchBanners:empty,
+.searchBanners:not(:has(.searchBanner)) { display: none; }
+
+/* 455:2724 / 455:2734 — 400 × 225, r8. Text leží vlevo, fotky jsou
+   absolutně umístěné přesně podle návrhu a přetečení ořízne banner.
+
+   Uvnitř se měří v `cqw` — procentech šířky banneru (banner je sám sobě
+   `container`), takže se celý obsah zmenšuje poměrově zároveň s ním.
+   1 cqw = 4 px při šířce 400, čísla z Figmy jsou tedy dělená čtyřmi:
+   42 px → 10,5 cqw, 28 px → 7 cqw a tak dál. Výšku drží poměr stran,
+   proto se nemusí počítat zvlášť. */
+.searchBanner {
+  container-type: inline-size;
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 400 / 225;
+  border-radius: 6px;          /* sjednoceno s kartami; návrh má u bannerů 8 */
+  overflow: hidden;
+  color: #000;                 /* v návrhu doslova černá, ne N900 */
+  text-decoration: none;
+  cursor: pointer;
+}
+.searchBanner--lace { background: #f7f3f2; }
+.searchBanner--sale { background: linear-gradient(to left, #e7d8d4, #f7f3f2); }
+
+/* Obal přes celý banner. Zvětšuje se na něm celá grafika najednou —
+   kdyby se hýbalo jen fotkou uvnitř, zvětšil by se obsah výřezu, ale
+   výřez (maska, hrany vrstev) by zůstal stát. */
+.searchBanner__layers {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  transition: transform var(--card-zoom);
+}
+.searchBanner__art {
+  position: absolute;
+  display: block;
+}
+.searchBanner__art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* 455:2729 — scéna i vyříznutá modelka přes sebe, obojí skrz rozostřenou
+   masku z návrhu (455:2728), takže fotka vlevo měkce končí. */
+.searchBanner__art--lace {
+  left: 10.5cqw;             /* 42 */
+  top: -67.75cqw;            /* -271 */
+  width: 118.4575cqw;        /* 473,83 */
+  height: 127.5225cqw;       /* 510,09 */
+  -webkit-mask-image: url("assets/banners/banner-lace-mask.svg");
+          mask-image: url("assets/banners/banner-lace-mask.svg");
+  -webkit-mask-size: 58.4cqw 60.9cqw;              /* 233,6 × 243,6 */
+          mask-size: 58.4cqw 60.9cqw;
+  -webkit-mask-position: 33.67475cqw 67.175cqw;    /* 134,699 / 268,7 */
+          mask-position: 33.67475cqw 67.175cqw;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+/* 60 / 17,51 / 422 × 281,47 */
+.searchBanner__art--chair {
+  left: 15cqw;
+  top: 4.3775cqw;
+  width: 105.5cqw;
+  height: 70.3675cqw;
+}
+/* -12,5 / -25,04 / 249,5 × 286,35 */
+.searchBanner__art--model {
+  right: -3.125cqw;
+  top: -6.26cqw;
+  width: 62.375cqw;
+  height: 71.5875cqw;
+}
+
+.searchBanner__text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2cqw;                 /* 8 */
+  width: 52.75cqw;           /* 211 */
+  height: 100%;
+  padding: 0 6cqw;           /* 24 */
+}
+.searchBanner__text--wide { width: 58.5cqw; }   /* 234 */
+.searchBanner__title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 7cqw;           /* 28 */
+  line-height: 8cqw;         /* 32 */
+}
+.searchBanner__sub {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 4.25cqw;        /* 17 */
+  line-height: 5.25cqw;      /* 21 */
+}
+
+/* 455:2730 — stejné kolečko jako u šipek pásku, jen tmavší sklo */
+.searchBanner__go {
+  position: absolute;
+  right: 4cqw;               /* 16 */
+  bottom: 4cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10cqw;              /* 40 */
+  height: 10cqw;
+  border-radius: 50%;
+  background: rgba(42, 42, 42, 0.48);
+  box-shadow: inset 0 0 0 0.25cqw rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1cqw);
+  -webkit-backdrop-filter: blur(1cqw);
+  transition: background-color 180ms ease;
+}
+.searchBanner__go img {
+  display: block;
+  width: 5cqw;               /* 20 */
+  height: 5cqw;
+  transform: rotate(-45deg);
+  transition: transform 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+/* Najetí: celá grafika se jemně přiblíží a šipka popojede svým směrem. */
+@media (hover: hover) {
+  .searchBanner:hover .searchBanner__layers { transform: scale(1.05); }
+  .searchBanner:hover .searchBanner__go { background: rgba(42, 42, 42, 0.68); }
+  .searchBanner:hover .searchBanner__go img { transform: rotate(-45deg) translateX(0.75cqw); }
+}
+
+/* --- nájezd obsahu: všechno přijíždí zleva, po sobě ------------------- */
+.searchPanel .searchRow,
+.searchPanel .searchCard,
+.searchPanel .searchRecs__label,
+.searchPanel .searchResultsHead,
+.searchPanel .searchBanner {
+  opacity: 0;
+  transform: translateX(-18px);
+}
+/* Výchozí stav shora dolů: řádek historie (0), popisek Doporučené (1),
+   karty (2+). */
+.searchPanel.is-open .searchRow {
+  animation: searchIn var(--search-in)
+             calc(var(--search-base) + var(--row) * var(--search-step)) forwards;
+}
+.searchPanel.is-open .searchRecs__label {
+  animation: searchIn var(--search-in)
+             calc(var(--search-base) + 1 * var(--search-step)) forwards;
+}
+.searchPanel.is-open .searchCard {
+  animation: searchIn var(--search-in)
+             calc(var(--search-base) + (2 + var(--i)) * var(--search-step)) forwards;
+}
+.searchPanel.is-open .searchBanner {
+  animation: searchIn var(--search-in)
+             calc(var(--search-base) + (8 + var(--i)) * var(--search-step)) forwards;
+}
+
+/* Stav s výsledky má jiné pořadí prvků: nejdřív hlavička (0) a karty (1+),
+   teprve pod nimi řádky odkazů (7, 8). */
+.searchPanel.is-open .searchResultsHead {
+  animation: searchIn var(--search-in) var(--search-base) forwards;
+}
+.searchPanel.is-open[data-query="1"] .searchCard {
+  animation-delay: calc(var(--search-base) + (1 + var(--i)) * var(--search-step));
+}
+.searchPanel.is-open[data-query="1"] .searchRow {
+  animation-delay: calc(var(--search-base) + (7 + var(--row)) * var(--search-step));
+}
+@keyframes searchIn {
+  to { opacity: 1; transform: none; }
 }
 
 /* =========================================================

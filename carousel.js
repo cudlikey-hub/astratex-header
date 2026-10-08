@@ -171,6 +171,9 @@
   document.addEventListener("drawer:toggle", function (e) {
     hold("drawer", Boolean(e.detail && e.detail.open));
   });
+  document.addEventListener("search:toggle", function (e) {
+    hold("search", Boolean(e.detail && e.detail.open));
+  });
 
   if (reduced.addEventListener) {
     reduced.addEventListener("change", function () { schedule(AUTOPLAY_MS); });

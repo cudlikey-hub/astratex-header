@@ -74,6 +74,8 @@
   document.addEventListener("drawer:toggle", function (e) {
     if (e.detail && e.detail.open) setOpen(false);
   });
+  /* Vyhledávací panel tooltip nezavírá — jen ho překryje (má vyšší vrstvu),
+     takže po zavření panelu je tooltip pořád na svém místě. */
   document.addEventListener("megamenu:toggle", function (e) {
     if (e.detail && e.detail.open) setOpen(false);
   });

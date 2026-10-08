@@ -31,6 +31,9 @@ Soubor: `LAkfV5lfb3ASyFinSbpyYu` (Header)
 | `227:2570` | drawer Dostupné kupóny |
 | `296:9506` | hero s černou krajkou (slide 2) |
 | `375:3177` | USP sekce v3 (kruhové ikony) — platná |
+| `411:12701` | vyhledávání v hlavičce (výchozí) |
+| `442:3142` | vyhledávání s dotazem — starší verze |
+| `455:2556` | vyhledávání s dotazem (výsledky) v2 — platná |
 | `309:10328` | tooltip u ikonky kupónů |
 | `342:2095` | poslední verze celé stránky |
 
@@ -108,6 +111,114 @@ Zpoždění brání reakci na cuknutí kolečkem.
 odshora, sloupce najíždějí se zpožděním. Overlay 50 %, linka `#D0D0D2` pod
 hlavičkou. Stránka pod menu se drží blokováním vstupů, **ne** `overflow:
 hidden` — to bralo scrollbar a vznikl bílý pruh vpravo.
+
+**Vyhledávání** (`search.js`, node `411:12701`) — otevírá lupa v hlavičce,
+odkrývá se shora stejným `clip-path` jako mega menu a sdílí s ním overlay,
+bílou hlavičku i držení stránky. Panel má p40, pole 1840 × 56 se spodní
+linkou 1px N900. Panel leží na `z-index: 11`, tedy **nad lištou** (10) —
+tím překryje tooltip u kupónů, který z lišty visí dolů; tooltip se proto
+nemusí zavírat a po zavření panelu je zase vidět.
+
+Nájezd obsahu: **linka se natáhne zleva doprava** (`searchLine`, 620 ms,
+jako by se načítala), pak zleva naskáčou řádky s chipy, popisek
+„Doporučené" a karty po 70 ms (`searchIn`).
+
+Panel má **dva stavy** (`data-query` na panelu): prázdné pole = „Naposledy
+hledané" a doporučené produkty (`411:12701`), cokoli napsaného = stav
+s výsledky (`455:2556`). Řádek „Lidé často hledají", který měl návrh pod
+historií, je na zadání **pryč**; po vymazání historie proto zmizí i prázdný
+obal řádků, aby nad „Doporučené" nezůstala mezera 40. Přepíná se `display`, takže se nájezd zleva
+přehraje znovu — animace se u znovuzobrazeného prvku spouští od začátku.
+Křížek nejdřív uklidí dotaz a vrátí výchozí obsah; teprve z prázdného pole
+zavře celý panel. Zavřený panel se vždy vrací do výchozího stavu.
+
+**Stav s výsledky** (`455:2556`) má nahoře hlavičku „Nalezené produkty (32)"
+s odkazem „zobrazit vše" a pásek pěti karet se šipkami, **pod nimi** dva
+řádky odkazů — „Doporučené kategorie" a „Astratex magazín", v obou dva chipy
+se šipkou. Návrh je má nad produkty; dolů je přesunulo zadání, odsazení 40
+zůstalo stejné. V odkazech i v názvech produktů je **hledaný řetězec tučně**
+(`<b>` uvnitř `.searchChip__text` / `.searchCard__name`), jak to má návrh.
+
+Pořadí nájezdu kopíruje pořadí na stránce. Výchozí stav: řádek historie (0),
+popisek Doporučené (1), karty (2+). Stav s výsledky: hlavička (0), karty
+(1+), řádky odkazů (7, 8); bannery v obou (8+).
+
+**Bannery jsou jen ve stavu s dotazem** (`455:2673`) — vážou se k tomu, co
+uživatel hledá. Výchozí stav je bez nich na celou šířku 1840; stav s výsledky
+má 1360 + 80 + 400. Oba jsou při 1920 přesně 400 × 225, r8, text vlevo
+(28/32 semibold + 17/21 regular, doslova černá) a vpravo dole skleněné
+kolečko 40 se šipkou otočenou o −45°.
+
+**Sloupec bannerů se zmenšuje poměrově.** Není napevno 400 px, ale drží svůj
+podíl z šířky panelu — `clamp(220px, 21.739%, 400px)`, tedy 400 / 1840 z
+návrhu. Uvnitř se měří v `cqw` (banner je sám sobě `container-type:
+inline-size`), takže se s ním poměrově zmenší úplně všechno včetně písma:
+1 cqw = 4 px při šířce 400, čísla z Figmy jsou dělená čtyřmi (42 px →
+10,5 cqw, 28 px → 7 cqw). Výšku drží `aspect-ratio: 400 / 225`. Na 1280
+vyjde banner 257,6 × 144,9 a produktová karta se tím zvedne ze 120,6 na
+147,1 px. Pod ~1110 px drží banner dolní mez 220 px kvůli čitelnosti textu.
+**Poloměr rohů se nezmenšuje** — je napevno **6 px**, sjednocený
+s produktovými kartami (návrh má u bannerů 8). Kdyby se přepočítával
+poměrově, vypadal by při 1280 jako jiný tvar.
+
+První má podklad `#f7f3f2` a dvě vrstvy fotky (scéna
++ vyříznutá modelka) skrz **rozostřenou masku z návrhu**
+(`assets/banners/banner-lace-mask.svg`, `mask-size: 233.6 × 243.6`,
+`mask-position: 134.699px 268.7px`), takže fotka vlevo měkce končí. Druhý má
+přechod `to left` z `#e7d8d4` do `#f7f3f2` a dvě vyříznuté PNG (křeslo
+a modelka). Na **hover** se přiblíží na 1,05 (480 ms) **celá grafika**, ne
+jen obsah výřezu — všechny vrstvy sedí v obalu `.searchBanner__layers`
+o rozměru banneru a zvětšuje se ten, takže roste i maska a hrany vrstev.
+Zároveň kolečko ztmavne na 42/42/42 68 % a šipka popojede o 3 px svým směrem.
+
+**Produkty v pásku** — šest skutečných produktů z návrhu (fotky i videa
+jsou v `assets/products/`, originály ve `fotky/produkty/`). Ve výchozím
+stavu je fotka, při najetí myší se přes ni prolne video (240 ms) a po
+odjetí se zastaví a převine na začátek. **Platí to pro oba stavy panelu** —
+výchozí pásek i karty mezi výsledky mají stejné fotky, videa i hover.
+
+Kromě toho běží **ukázka**: po otevření panelu se sama spustí jedna náhodná
+karta (jen z těch, které jsou zrovna v záběru pásku), a když video dojede,
+po pauze naskočí jiná — nikdy ta samá dvakrát po sobě. Hraje vždy **nejvýš
+jedno video**; hover má přednost, ukázka se při něm vrátí na fotku a po
+odjetí se po 1,6 s rozjede znovu. Pod kurzorem video běží dokola, ukázka
+jen jednou (`loop` řídí skript, proto není v markupu). Ukázka se vybírá
+jen z karet, které jsou právě vidět — tedy z aktivního stavu panelu
+(`offsetParent`) a ze záběru vlastního pásku; když se zrovna nehodí
+(skrytá záložka, kurzor na kartě, nic v záběru), zkusí to za 1,2 s znovu,
+aby jedno nevhodné kolo ukázku neumlčelo nadobro. Karta bez videa se
+při najetí místo toho lehce přiblíží (`--card-zoom-scale`, 480 ms); vybírá
+je `:not(:has(.searchCard__video))`. Všechny karty mají `cursor: pointer`. Zavřený panel a
+skrytá záložka ukázku zastaví, `prefers-reduced-motion` ji nespustí vůbec. Videa mají `preload="none"` — je
+jich pět po ~15 MB a bez najetí nemají proč se stahovat. Párování podle
+názvu souboru; **„Krajková podprsenka evolution" video nemá**, takže u ní
+zůstane fotka. Dotykových zařízení se to netýká, hover tam není.
+
+**Název produktu má dva řádky** (`line-clamp: 2`), delší se uřízne třemi
+tečkami; platí v obou stavech panelu. Místo na druhý řádek se **nerezervuje**
+— krátký název zabere jeden řádek a text pod ním vyjede nahoru. Ceny tím
+pádem u karet s různě dlouhým názvem nestojí na jedné lince; je to vědomá
+volba, prázdná mezera pod krátkými názvy vypadala hůř.
+
+`serve.py` kvůli videu umí **Range** (206) — bez toho posílal vždy celý
+soubor a nešlo přetáčet.
+
+**Pásky jsou dva** — ve výchozím stavu i mezi výsledky — a každý se
+obsluhuje sám za sebe (`[data-strip]`). Ve výsledcích je v záběru **pět**
+karet (1360 = 5 × 249,6 + 4 × 28), krok je 1098 px.
+
+**Pásek doporučených** — šest karet v záběru (1840 = 6 × 283,33 + 5 × 28),
+zbytek se odjíždí do strany. Posuvník je schovaný, posouvají šipky
+`Button / Sharp&Round` (40 kolečko, černá 16 %, bílý lem, rozostřené pozadí)
+vycentrované **středem na hraně fotky**, tedy půlkou přes okraj. Pravá je vidět vždy, levá se objeví, jakmile se
+pásek pohne, a na nule zase zmizí. Krok je jedna obrazovka bez jedné karty,
+aby zůstal záchytný bod.
+
+Svisle visí šipky na **šířce** pásku, ne na jeho výšce: `top: 0` a
+`margin-top: calc(0.75 * šířka karty)` — procenta v `margin-top` se počítají
+ze šířky, kdežto v `top` z výšky. Fotka má poměr 20/30, takže 0,75 × šířka
+karty je přesně její půlka. Na textu pod fotkou tím pádem nezáleží; dřív
+stačilo, aby se na užší obrazovce zalomila cena, a šipka spadla o 12 px.
 
 **Drawer** (`drawer.js`) — otevírá ikona kupónů, vyjíždí zprava, overlay 50 %,
 vlastní tenký posuvník (4×64, `rgba(42,42,42,.72)`), dole bílý přechod 283 px,
@@ -201,6 +312,16 @@ o 2 px svým směrem.
 | Tooltip má velmi jemný stín, Figma žádný nemá | Aby karta držela hranu i mimo fotku (odsouhlaseno) |
 | Scroll hint je přesně na středu | Figma ho má na `50% − 4px`, což vypadá na nechtěný posun |
 | Overlay u drawru | Figma ho nemá, ale drží to systém s menu |
+| Sloupec bannerů se pod 1920 zmenšuje poměrově, návrh má 400 px napevno | Při 1280 ukrajoval produktovým kartám skoro třetinu místa |
+| Bannery mají r6 místo r8 z návrhu | Sjednoceno s produktovými kartami (zadáno) |
+| Název produktu má dva řádky a pak tečky, návrh počítá s jedním | Delší názvy se jinak uřízly hned v polovině (zadáno) |
+| Výchozí stav nemá řádek „Lidé často hledají" z návrhu | Zadáno — zůstává jen „Naposledy hledané" |
+| Odkazy „Doporučené kategorie" a „Astratex magazín" jsou pod produkty, návrh je má nad nimi | Zadáno |
+| Karty ve výsledcích mají názvy podle svých fotek, ne „Krajkové kalhotky Elizabeth" u všech pěti | V návrhu zůstal zástupný název na všech kartách, ale fotky jsou pět různých produktů |
+| V pásku výsledků je šestá karta navíc (pět je v návrhu) | Aby pravá šipka měla kam posunout |
+| Levá šipka u výsledků se objeví až po posunu, návrh ji kreslí rovnou | Stejné chování jako v pásku ve výchozím stavu |
+| „Jak vyprat **krajkové** spodní prádlo" — v návrhu je překlep „kajkové" | Zjevná chyba v textu, ne záměr |
+| Chip má obrys stínem `inset`, ne `border` | Figma kreslí obrys dovnitř, rámeček má 41 px; s `border` by měl 43 |
 | Hero používá statický Google Sans místo Google Sans Flex | Flex není v systému ani veřejně na Google Fonts; řezy 600/400/500 sedí, šířky textů se můžou lišit o jednotky px |
 
 Odchylky písma v řádu desetin pixelu jsou normální — prohlížeč sází text
@@ -277,6 +398,37 @@ Tmavá sada ikon je exportovaná na plátně 19,2 px (lupa 20 px), světlá na 2
 Obě mají `viewBox`, takže se škálují včetně tloušťky tahu a v 24 px vycházejí
 stejně; nové exporty tmavé sady nebyly potřeba.
 
+## 8d. Export zpět do Figmy (stránka „Web z kódu")
+
+Hotová stránka je ve stejném souboru (`LAkfV5lfb3ASyFinSbpyYu`) na nové
+stránce **„Web z kódu — 2026-10"**, rámec `429:2426`, 1920 × 2127.
+
+Postaveno nástrojem `use_figma` z **druhého** Figma konektoru
+(`plugin:figma:figma`, vzdálený server Figmy) — ten lokální z aplikace
+umí jen číst. Konektor vyžaduje přihlášení přes `/mcp`.
+
+Stavěno z publikované knihovny **Astratex Global Components**, ne
+z nakreslených obdélníků:
+
+| Co | Odkud |
+|---|---|
+| Logo, ikony hlavičky, ikony USP, šipka carouselu | komponenty z knihovny |
+| velikosti písma a prokládání | textové styly `Google Sans/...` |
+| barvy textů a ploch | proměnné `Neutral/N0 … N900` |
+| ikonka kupónu | klon z původní hlavičky (není publikovaná zvlášť) |
+| špička slevového štítku, křížek tooltipu | `createNodeFromSvg` z `assets/` |
+| fotka hero | `upload_assets` (6 MB PNG) |
+
+Všechny kontejnery mají autolayout (jediná výjimka je instance Loga).
+Rozměry sedí s webem: hlavička 72 (16/32), hero 1080 s obsahem 961
+(96/40/40), text → tlačítko 24, → pagination 48, USP 319 (py 80, gap 32,
+sloupce 456), dlaždice 728 (64/40, gap 24), tooltip 341 × 78.
+
+**Odchylka:** textové styly z knihovny jsou postavené na **Google Sans
+Flex**, zatímco web používá klasický **Google Sans**. Velikosti i prokládání
+jsou shodné, liší se jen řez rodiny. Přepsat font na kartě by znamenalo
+odpojit text od knihovního stylu, takže jsem to nechal na knihovně.
+
 ## 9. Historie požadavků (pořadí)
 
 1. Implementace hero + hlavička + USP + dlaždice z Figmy (1:1, 1920×1853)
@@ -300,7 +452,13 @@ stejně; nové exporty tmavé sady nebyly potřeba.
 17. Úpravy v node 342:2095: hlavička 72, odsazení 24/48 v hero, scroll prvek
     40×64 s tečkou místo šipky
 18. USP v3 (node 375:3177): kruhové ikony 72 px, nové texty, hover animace
-19. Animace ikon v USP (nájezd, přelesk, pohyb na hover) — moje, nezadané
+19. Animace ikon v USP (nájezd, mlha, pohyb na hover) — moje, nezadané
 20. Třetí slide v carouselu (node 296:9506) na druhé pozici; texty
     „Krajka, která padne / Sladěné sety podprsenek a kalhotek / Vybrat set"
     jsou moje, ve Figmě u té fotky žádné nebyly
+21. Nasazení na GitHub Pages + export stránky zpět do Figmy
+22. Vyhledávací panel (node 411:12701) s nájezdem zleva
+23. Vyhledávání: stav s výsledky při psaní (node 442:3142)
+24. Skutečné produkty ve vyhledávání: fotky + video na hover
+25. Výsledky vyhledávání v2 (node 455:2556): dva řádky odkazů nahoře,
+    skutečné fotky a videa i v této fázi, vyplněné bannery s hoverem
