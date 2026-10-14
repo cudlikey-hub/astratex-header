@@ -150,6 +150,18 @@
 
     <!-- Frame 848 · 244:4435 -->
     <div class="topbar__side" data-node-id="244:4435">
+
+      <!-- Top Bar Item · 375:2973 — jen v mobilní šířce; na desktopu jsou
+           místo něj odkazy Dámské / Pánské / Výprodej. -->
+      <button class="action topbar__burger" type="button" aria-label="Menu"
+              data-mobile-menu-trigger aria-haspopup="dialog" aria-expanded="false"
+              aria-controls="mobile-menu" data-node-id="375:2973">
+        <span class="action__icon inkSwap">
+          <img class="ink ink--light" src="assets/ink-light/icon-burger.svg" alt="">
+          <img class="ink ink--dark" src="assets/ink-dark/icon-burger.svg" alt="">
+        </span>
+      </button>
+
       <!-- Frame 26080071 · 244:4436 -->
       <nav class="topbar__nav" data-node-id="244:4436">
         <!-- Frame 260801354 · 244:4440 -->
@@ -342,9 +354,39 @@
       </div>
 
       <!-- Frame 26080146 · 184:13536 — col · gap 32 · 400 × 225 tiles -->
-      <div class="megamenu__promos megamenu__reveal" style="--i: 4" data-node-id="184:13536" aria-hidden="true">
-        <div class="megamenu__promo" data-node-id="184:13537"></div>
-        <div class="megamenu__promo" data-node-id="184:13538"></div>
+      <div class="megamenu__promos megamenu__reveal" style="--i: 4" data-node-id="184:13536">
+        <a class="searchBanner searchBanner--lace" href="#" data-node-id="184:13537">
+          <span class="searchBanner__layers" aria-hidden="true">
+            <span class="searchBanner__art searchBanner__art--lace">
+              <img src="assets/banners/banner-lace-scene.png" alt="">
+              <img src="assets/banners/banner-lace-model.png" alt="">
+            </span>
+          </span>
+          <span class="searchBanner__text">
+            <span class="searchBanner__title">Sleva 20 %</span>
+            <span class="searchBanner__sub">na krajkové<br>spodní prádlo</span>
+          </span>
+          <span class="searchBanner__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </a>
+        <a class="searchBanner searchBanner--sale" href="#" data-node-id="184:13538">
+          <span class="searchBanner__layers" aria-hidden="true">
+            <span class="searchBanner__art searchBanner__art--chair">
+              <img src="assets/banners/banner-sale-chair.png" alt="">
+            </span>
+            <span class="searchBanner__art searchBanner__art--model">
+              <img src="assets/banners/banner-sale-model.png" alt="">
+            </span>
+          </span>
+          <span class="searchBanner__text searchBanner__text--wide">
+            <span class="searchBanner__title">Sleva až 30 %</span>
+            <span class="searchBanner__sub">na nezlevněné</span>
+          </span>
+          <span class="searchBanner__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </a>
       </div>
 
     </div>
@@ -486,6 +528,462 @@
     </div>
   </aside>
 
+
+  <!-- ============ Mobilní menu — step 11 · 375:2566 ============
+       Otevírá hamburger. Překrývá celou obrazovku včetně lišty, proto má
+       vlastní horní řádek s hledáním a křížkem. Existuje jen v mobilní
+       šířce; na desktopu je místo něj mega menu. -->
+  <div class="mobileMenu" id="mobile-menu" role="dialog" aria-modal="true"
+       aria-label="Menu" aria-hidden="true" data-mobile-menu data-level="root"
+       data-node-id="375:2566">
+
+    <!-- První úroveň · 375:2566 -->
+    <div class="mobileMenu__level" data-level-panel="root">
+    <div class="mobileMenu__sheet" data-node-id="375:2572">
+
+      <!-- 375:2573 — řádek na místě hlavičky: hledání vlevo, křížek vpravo -->
+      <div class="mobileMenu__top" data-node-id="375:2573">
+        <button class="mobileMenu__search" type="button" data-submenu="search"
+                data-node-id="375:2575">
+          <span class="mobileMenu__searchIcon" aria-hidden="true" data-node-id="375:2576">
+            <img src="assets/search/icon-search-20.svg" alt="">
+          </span>
+          <span class="mobileMenu__searchText" data-node-id="375:2577">Hledat produkt</span>
+        </button>
+        <button class="mobileMenu__close" type="button" data-mobile-menu-close
+                aria-label="Zavřít menu" data-node-id="375:2580">
+          <span class="mobileMenu__closeIcon" aria-hidden="true">
+            <img src="assets/search/icon-cross-24.svg" alt="">
+          </span>
+        </button>
+      </div>
+
+      <!-- 375:2590 — záložky a pod nimi kategorie -->
+      <div class="mobileMenu__block" data-node-id="375:2590">
+        <div class="mobileTabs" role="tablist" aria-label="Oddělení" data-node-id="375:2591">
+          <button class="mobileTab is-active" type="button" role="tab"
+                  aria-selected="true" data-node-id="375:2592">Dámské</button>
+          <button class="mobileTab" type="button" role="tab"
+                  aria-selected="false" data-node-id="375:2593">Pánské</button>
+          <button class="mobileTab" type="button" role="tab"
+                  aria-selected="false" data-node-id="375:2597">
+            <span>Výprodej</span>
+            <span class="tag" aria-hidden="true" data-node-id="375:2599">
+              <span class="tag__arrow"><img src="assets/tag-arrow.svg" alt=""></span>
+              <span class="tag__body"><span class="tag__text">až 60 %</span></span>
+            </span>
+          </button>
+        </div>
+
+        <nav class="mobileCats" aria-label="Kategorie" data-node-id="375:2602">
+          <button class="mobileCat" type="button" data-submenu="bras"
+                  aria-haspopup="true" data-node-id="375:2603">Podprsenky</button>
+          <a class="mobileCat" href="#" data-node-id="375:2606">Kalhotky</a>
+          <a class="mobileCat" href="#" data-node-id="375:2609">Plavky</a>
+          <a class="mobileCat" href="#" data-node-id="375:2612">Noční prádlo</a>
+          <a class="mobileCat" href="#" data-node-id="375:2615">Spodní prádlo</a>
+          <a class="mobileCat" href="#" data-node-id="375:2618">Oblečení</a>
+          <a class="mobileCat mobileCat--sale" href="#" data-node-id="375:2621">Výprodej</a>
+          <a class="mobileCat mobileCat--happy" href="#" data-node-id="375:2623">Šťastná stovka</a>
+        </nav>
+      </div>
+
+      <!-- 375:2625 — tytéž bannery jako ve vyhledávání -->
+      <div class="mobileMenu__tiles" data-node-id="375:2625">
+        <a class="searchBanner searchBanner--lace" href="#" data-node-id="375:2626">
+          <span class="searchBanner__layers" aria-hidden="true">
+            <span class="searchBanner__art searchBanner__art--lace">
+              <img src="assets/banners/banner-lace-scene.png" alt="">
+              <img src="assets/banners/banner-lace-model.png" alt="">
+            </span>
+          </span>
+          <span class="searchBanner__text">
+            <span class="searchBanner__title">Sleva 20 %</span>
+            <span class="searchBanner__sub">na krajkové<br>spodní prádlo</span>
+          </span>
+          <span class="searchBanner__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </a>
+        <a class="searchBanner searchBanner--sale" href="#" data-node-id="375:2627">
+          <span class="searchBanner__layers" aria-hidden="true">
+            <span class="searchBanner__art searchBanner__art--chair">
+              <img src="assets/banners/banner-sale-chair.png" alt="">
+            </span>
+            <span class="searchBanner__art searchBanner__art--model">
+              <img src="assets/banners/banner-sale-model.png" alt="">
+            </span>
+          </span>
+          <span class="searchBanner__text searchBanner__text--wide">
+            <span class="searchBanner__title">Sleva až 30 %</span>
+            <span class="searchBanner__sub">na nezlevněné</span>
+          </span>
+          <span class="searchBanner__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </a>
+      </div>
+
+      <!-- 375:2628 -->
+      <div class="mobileMenu__block" data-node-id="375:2628">
+        <span class="mobileMenu__label" data-node-id="375:2633">pro zákazníky</span>
+        <nav class="mobileLinks" data-node-id="375:2635">
+          <a class="mobileLink" href="#" data-node-id="375:2636">Přihlášení</a>
+          <a class="mobileLink" href="#" data-node-id="375:2639">Oblíbené</a>
+          <a class="mobileLink" href="#" data-node-id="375:2642">Výměna a vrácení</a>
+          <a class="mobileLink" href="#" data-node-id="375:2645">Poradna velikosti</a>
+          <a class="mobileLink" href="#" data-node-id="375:2648">Astratex Magazín</a>
+        </nav>
+      </div>
+
+      <!-- 375:2651 -->
+      <div class="mobileMenu__block" data-node-id="375:2651">
+        <div class="mobileMenu__labelRow" data-node-id="375:2652">
+          <span class="mobileMenu__label" data-node-id="375:2653">zákaznická podpora</span>
+          <span class="mobileMenu__label" data-node-id="375:2654">(Po-Pá 8.00 - 18.00)</span>
+        </div>
+        <nav class="mobileLinks" data-node-id="375:2655">
+          <a class="mobileLink" href="tel:+420491204304" data-node-id="375:2656">491 204 304</a>
+          <a class="mobileLink" href="mailto:info@astratex.cz" data-node-id="375:2659">info@astratex.cz</a>
+          <a class="mobileLink" href="#" data-node-id="375:2662">Whatsapp (+420 491 204 304)</a>
+        </nav>
+      </div>
+    </div>
+    </div>
+
+    <!-- Hledání — step4 · 375:2665. Další úroveň téhož zásobníku, takže
+         vjíždí zprava stejně jako kategorie a šipka vrací do menu. -->
+    <div class="mobileMenu__level mobileMenu__level--sub" data-level-panel="search"
+         aria-hidden="true" data-node-id="375:2665">
+      <div class="mobileMenu__sheet" data-node-id="375:2671">
+
+        <div class="mobileMenu__top" data-node-id="375:2672">
+          <button class="mobileMenu__back" type="button" data-mobile-menu-back>
+            <span class="mobileMenu__backIcon" aria-hidden="true" data-node-id="375:2675">
+              <img src="assets/menu/icon-arrow-left.svg" alt="">
+            </span>
+            <span class="mobileMenu__backText" data-node-id="375:2676">Dámské</span>
+          </button>
+          <button class="mobileMenu__close" type="button" data-mobile-menu-close
+                  aria-label="Zavřít menu" data-node-id="375:2679">
+            <span class="mobileMenu__closeIcon" aria-hidden="true">
+              <img src="assets/search/icon-cross-24.svg" alt="">
+            </span>
+          </button>
+        </div>
+
+        <!-- 375:2689 — pole, historie, doporučené a bannery po 40 -->
+        <div class="mobileFind" data-query="0" data-node-id="375:2689">
+
+          <!-- 375:2690 — pole s linkou N900 pod ním -->
+          <div class="mobileFind__bar" data-node-id="375:2690">
+            <span class="mobileFind__icon" aria-hidden="true" data-node-id="375:2691">
+              <img src="assets/search/icon-search-20.svg" alt="">
+            </span>
+            <input class="mobileFind__input" type="search" placeholder="Hledat produkt"
+                   aria-label="Hledat produkt" data-mobile-find-input data-node-id="444:3517">
+            <button class="mobileFind__wipe" type="button" data-mobile-find-wipe
+                    data-node-id="491:3755">Smazat</button>
+          </div>
+
+          <!-- Výchozí obsah: historie a doporučené · 444:3384 -->
+          <div class="mobileFind__state" data-state="idle">
+
+          <!-- 375:2694 -->
+          <div class="mobileFind__block" data-node-id="375:2694">
+            <div class="mobileFind__head" data-node-id="375:2695">
+              <span class="mobileMenu__label" data-node-id="375:2701">Naposledy hledané</span>
+              <button class="mobileFind__clear" type="button" data-node-id="375:2703">Vymazat historii</button>
+            </div>
+            <div class="mobileFind__chips" data-node-id="491:3739">
+              <a class="mobileChip" href="#" data-node-id="375:2705">
+                <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/search/icon-search-20.svg" alt=""></span>
+                podprsenka push up
+              </a>
+              <a class="mobileChip" href="#" data-node-id="491:3743">
+                <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/search/icon-search-20.svg" alt=""></span>
+                plavky
+              </a>
+              <a class="mobileChip" href="#" data-node-id="491:3746">
+                <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/search/icon-search-20.svg" alt=""></span>
+                kalhotky
+              </a>
+            </div>
+          </div>
+
+          <!-- 442:3319 -->
+          <div class="mobileFind__block" data-node-id="442:3319">
+            <span class="mobileMenu__label" data-node-id="442:3324">Doporučené</span>
+            <div class="mobileHits" data-node-id="442:3326">
+            <a class="mobileHit" href="#" data-node-id="442:3327">
+              <span class="mobileHit__thumb">
+                <img src="assets/products/lady-belle-brazilky-04.jpg" alt="" loading="lazy">
+              </span>
+              <span class="mobileHit__meta">
+                <span class="mobileHit__name">Krajkové kalhotky lady Belle</span>
+                <span class="mobileHit__variant">Klasické kalhotky</span>
+                <span class="mobileHit__price">
+                  <span class="mobileHit__now">490&nbsp;Kč</span>
+                  <span class="mobileHit__was">645&nbsp;Kč</span>
+                  <span class="mobileHit__off">-40&nbsp;%</span>
+                </span>
+              </span>
+            </a>
+            <a class="mobileHit" href="#" data-node-id="442:3343">
+              <span class="mobileHit__thumb">
+                <img src="assets/products/iris-lace-rose-podprsenka-01.jpg" alt="" loading="lazy">
+              </span>
+              <span class="mobileHit__meta">
+                <span class="mobileHit__name">Krajková podprsenka Iris Lace</span>
+                <span class="mobileHit__variant">Klasické kalhotky</span>
+                <span class="mobileHit__price">
+                  <span class="mobileHit__now">490&nbsp;Kč</span>
+                  <span class="mobileHit__was">645&nbsp;Kč</span>
+                  <span class="mobileHit__off">-40&nbsp;%</span>
+                </span>
+              </span>
+            </a>
+            <a class="mobileHit" href="#" data-node-id="442:3359">
+              <span class="mobileHit__thumb">
+                <img src="assets/products/fantastic-double-push-up-03.jpg" alt="" loading="lazy">
+              </span>
+              <span class="mobileHit__meta">
+                <span class="mobileHit__name">Krajková podprsenka Doble push-up</span>
+                <span class="mobileHit__variant">Klasické kalhotky</span>
+                <span class="mobileHit__price">
+                  <span class="mobileHit__now">490&nbsp;Kč</span>
+                  <span class="mobileHit__was">645&nbsp;Kč</span>
+                  <span class="mobileHit__off">-40&nbsp;%</span>
+                </span>
+              </span>
+            </a>
+            </div>
+          </div>
+          </div>
+
+          <!-- Stav s dotazem — step5 · 444:3491 -->
+          <div class="mobileFind__state" data-state="results">
+
+            <!-- 444:3531 -->
+            <div class="mobileFind__block" data-node-id="444:3531">
+              <span style="--i: 0" class="mobileMenu__label mobileFind__in" data-node-id="444:3536">Nalezené produkty</span>
+              <div class="mobileHits" data-node-id="444:3538">
+              <a style="--i: 1" class="mobileHit mobileFind__in" href="#" data-node-id="444:3539">
+                <span class="mobileHit__thumb">
+                  <img src="assets/products/lady-belle-brazilky-04.jpg" alt="" loading="lazy">
+                </span>
+                <span class="mobileHit__meta">
+                  <span class="mobileHit__name"><b>Krajkov</b>é kalhotky lady Belle</span>
+                  <span class="mobileHit__variant">Klasické kalhotky</span>
+                  <span class="mobileHit__price">
+                    <span class="mobileHit__now">490&nbsp;Kč</span>
+                    <span class="mobileHit__was">645&nbsp;Kč</span>
+                    <span class="mobileHit__off">-40&nbsp;%</span>
+                  </span>
+                </span>
+              </a>
+              <a style="--i: 2" class="mobileHit mobileFind__in" href="#" data-node-id="444:3555">
+                <span class="mobileHit__thumb">
+                  <img src="assets/products/iris-lace-rose-podprsenka-01.jpg" alt="" loading="lazy">
+                </span>
+                <span class="mobileHit__meta">
+                  <span class="mobileHit__name"><b>Krajkov</b>á podprsenka Iris Lace</span>
+                  <span class="mobileHit__variant">Klasické kalhotky</span>
+                  <span class="mobileHit__price">
+                    <span class="mobileHit__now">490&nbsp;Kč</span>
+                    <span class="mobileHit__was">645&nbsp;Kč</span>
+                    <span class="mobileHit__off">-40&nbsp;%</span>
+                  </span>
+                </span>
+              </a>
+              <a style="--i: 3" class="mobileHit mobileFind__in" href="#" data-node-id="444:3571">
+                <span class="mobileHit__thumb">
+                  <img src="assets/products/fantastic-double-push-up-03.jpg" alt="" loading="lazy">
+                </span>
+                <span class="mobileHit__meta">
+                  <span class="mobileHit__name"><b>Krajkov</b>á podprsenka Doble push-up</span>
+                  <span class="mobileHit__variant">Klasické kalhotky</span>
+                  <span class="mobileHit__price">
+                    <span class="mobileHit__now">490&nbsp;Kč</span>
+                    <span class="mobileHit__was">645&nbsp;Kč</span>
+                    <span class="mobileHit__off">-40&nbsp;%</span>
+                  </span>
+                </span>
+              </a>
+                <!-- 491:3735 -->
+                <a style="--i: 4" class="mobileChip mobileChip--wide mobileChip--center mobileFind__in" href="#" data-node-id="491:3735">
+                  <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/search/icon-search-20.svg" alt=""></span>
+                  Zobrazit vše
+                </a>
+              </div>
+            </div>
+
+            <!-- 444:3587 -->
+            <div style="--i: 5" class="mobileFind__block mobileFind__in" data-node-id="444:3587">
+              <span class="mobileMenu__label" data-node-id="444:3592">Doporučené kategorie</span>
+              <div class="mobileFind__rows" data-node-id="444:3594">
+                <a class="mobileChip mobileChip--wide" href="#" data-node-id="444:3595">
+                  <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span><b>Krajkov</b>é podprsenky</span>
+                </a>
+                <a class="mobileChip mobileChip--wide" href="#" data-node-id="444:3598">
+                  <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span><b>Krajkov</b>é body</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 491:3694 -->
+            <div style="--i: 6" class="mobileFind__block mobileFind__in" data-node-id="491:3694">
+              <span class="mobileMenu__label" data-node-id="491:3699">Astratex magazín</span>
+              <div class="mobileFind__rows" data-node-id="491:3701">
+                <a class="mobileChip mobileChip--wide" href="#" data-node-id="491:3702">
+                  <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span>Jak vyprat <b>krajkov</b>é spodní prádlo</span>
+                </a>
+                <a class="mobileChip mobileChip--wide" href="#" data-node-id="491:3705">
+                  <span class="mobileFind__chipIcon" aria-hidden="true"><img src="assets/menu/icon-arrow-right.svg" alt=""></span>
+                  <span>Top 3 <b>krajkov</b>é podprsenky</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 444:3601 — bannery se vážou k hledanému dotazu, takže
+                 stejně jako na desktopu jsou až tady, ne ve výchozím stavu.
+                 Je to tatáž komponenta jako v desktopovém panelu, jen
+                 v užším rámu — proto `.searchBanner`. -->
+            <div class="mobileMenu__tiles mobileFind__in" style="--i: 7" data-node-id="444:3601">
+              <a class="searchBanner searchBanner--lace" href="#" data-node-id="493:4043">
+                <span class="searchBanner__layers" aria-hidden="true">
+                  <span class="searchBanner__art searchBanner__art--lace" data-node-id="493:4048">
+                    <img src="assets/banners/banner-lace-scene.png" alt="">
+                    <img src="assets/banners/banner-lace-model.png" alt="">
+                  </span>
+                </span>
+                <span class="searchBanner__text" data-node-id="493:4044">
+                  <span class="searchBanner__title" data-node-id="493:4045">Sleva 20 %</span>
+                  <span class="searchBanner__sub" data-node-id="493:4046">na krajkové<br>spodní prádlo</span>
+                </span>
+                <span class="searchBanner__go" aria-hidden="true" data-node-id="493:4049">
+                  <img src="assets/search/icon-arrow-right-20.svg" alt="">
+                </span>
+              </a>
+
+              <a class="searchBanner searchBanner--sale" href="#" data-node-id="493:4052">
+                <span class="searchBanner__layers" aria-hidden="true">
+                  <span class="searchBanner__art searchBanner__art--chair" data-node-id="493:4053">
+                    <img src="assets/banners/banner-sale-chair.png" alt="">
+                  </span>
+                  <span class="searchBanner__art searchBanner__art--model" data-node-id="493:4054">
+                    <img src="assets/banners/banner-sale-model.png" alt="">
+                  </span>
+                </span>
+                <span class="searchBanner__text searchBanner__text--wide" data-node-id="493:4055">
+                  <span class="searchBanner__title" data-node-id="493:4056">Sleva až 30 %</span>
+                  <span class="searchBanner__sub" data-node-id="493:4057">na nezlevněné</span>
+                </span>
+                <span class="searchBanner__go" aria-hidden="true" data-node-id="493:4058">
+                  <img src="assets/search/icon-arrow-right-20.svg" alt="">
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Druhá úroveň — step3 · 375:2849. Vjíždí zprava, první úroveň se
+         pod ní odsune doleva. -->
+    <div class="mobileMenu__level mobileMenu__level--sub" data-level-panel="bras"
+         aria-hidden="true" data-node-id="375:2849">
+      <div class="mobileMenu__sheet" data-node-id="375:2855">
+
+        <!-- 375:2856 — zpět na první úroveň, vpravo stejný křížek -->
+        <div class="mobileMenu__top" data-node-id="375:2857">
+          <button class="mobileMenu__back" type="button" data-mobile-menu-back>
+            <span class="mobileMenu__backIcon" aria-hidden="true" data-node-id="375:2859">
+              <img src="assets/menu/icon-arrow-left.svg" alt="">
+            </span>
+            <span class="mobileMenu__backText" data-node-id="375:2860">Dámské</span>
+          </button>
+          <button class="mobileMenu__close" type="button" data-mobile-menu-close
+                  aria-label="Zavřít menu" data-node-id="375:2863">
+            <span class="mobileMenu__closeIcon" aria-hidden="true">
+              <img src="assets/search/icon-cross-24.svg" alt="">
+            </span>
+          </button>
+        </div>
+
+        <!-- 375:2873 — nadpis a pod ním skupiny, rozestup 40 -->
+        <div class="mobileSub" data-node-id="375:2873">
+          <p class="mobileSub__title" data-node-id="375:2876">Podprsenky</p>
+
+          <div class="mobileSub__group" data-node-id="375:2881">
+            <span class="mobileMenu__label" data-node-id="375:2886">Střih a tvar</span>
+            <nav class="mobileSubCats" data-node-id="375:2888">
+          <a class="mobileSubCat" href="#" data-node-id="375:2889">Zobrazit vše</a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2892">Klasické <span class="tag" aria-hidden="true"><span class="tag__arrow"><img src="assets/menu/tag-arrow-pink.svg" alt=""></span><span class="tag__body"><span class="tag__text">1+1</span></span></span></a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2896">Push-up</a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2899">Plunge</a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2902">Balconette &amp; Bardot</a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2905">Bralette</a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2908">Bez ramínek</a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2911">Bralette</a>
+          <a class="mobileSubCat" href="#" data-node-id="375:2914">Doplňky</a>
+            </nav>
+          </div>
+
+          <div class="mobileSub__group mobileSub__group--chips" data-node-id="375:2917">
+            <span class="mobileMenu__label" data-node-id="375:2922">Styl a funkce</span>
+            <div class="mobileChips" data-node-id="375:2924">
+          <a class="mobileChip" href="#" data-node-id="375:2925">Sportovní</a>
+          <a class="mobileChip" href="#" data-node-id="375:2928">Kojící</a>
+          <a class="mobileChip" href="#" data-node-id="375:2931">Po abilaci</a>
+          <a class="mobileChip" href="#" data-node-id="375:2934">Svůdné</a>
+          <a class="mobileChip" href="#" data-node-id="375:2937">Zmenšující <span class="tag" aria-hidden="true"><span class="tag__arrow"><img src="assets/menu/tag-arrow-pink.svg" alt=""></span><span class="tag__body"><span class="tag__text">až -70 %</span></span></span></a>
+          <a class="mobileChip" href="#" data-node-id="375:2941">Nalepovací</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 375:2944 -->
+        <div class="mobileMenu__tiles" data-node-id="375:2944">
+          <a class="searchBanner searchBanner--lace" href="#" data-node-id="375:2945">
+            <span class="searchBanner__layers" aria-hidden="true">
+              <span class="searchBanner__art searchBanner__art--lace">
+                <img src="assets/banners/banner-lace-scene.png" alt="">
+                <img src="assets/banners/banner-lace-model.png" alt="">
+              </span>
+            </span>
+            <span class="searchBanner__text">
+              <span class="searchBanner__title">Sleva 20 %</span>
+              <span class="searchBanner__sub">na krajkové<br>spodní prádlo</span>
+            </span>
+            <span class="searchBanner__go" aria-hidden="true">
+              <img src="assets/search/icon-arrow-right-20.svg" alt="">
+            </span>
+          </a>
+          <a class="searchBanner searchBanner--sale" href="#" data-node-id="375:2946">
+            <span class="searchBanner__layers" aria-hidden="true">
+              <span class="searchBanner__art searchBanner__art--chair">
+                <img src="assets/banners/banner-sale-chair.png" alt="">
+              </span>
+              <span class="searchBanner__art searchBanner__art--model">
+                <img src="assets/banners/banner-sale-model.png" alt="">
+              </span>
+            </span>
+            <span class="searchBanner__text searchBanner__text--wide">
+              <span class="searchBanner__title">Sleva až 30 %</span>
+              <span class="searchBanner__sub">na nezlevněné</span>
+            </span>
+            <span class="searchBanner__go" aria-hidden="true">
+              <img src="assets/search/icon-arrow-right-20.svg" alt="">
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ Vyhledávání · 411:12701 ============
        Otevírá lupa v hlavičce, stejným odkrytím shora jako mega menu.
@@ -1057,12 +1555,124 @@
   </section>
 
   <!-- ============ Frame 1352 — Instagram stories · 244:4428 ============ -->
-  <section class="stories" data-node-id="244:4428">
-    <div class="story" data-node-id="244:4429" data-name="Instagram story - 1"></div>
-    <div class="story" data-node-id="244:4430" data-name="Instagram story - 3"></div>
-    <div class="story" data-node-id="244:4431" data-name="Instagram story - 4"></div>
-    <div class="story" data-node-id="244:4432" data-name="Instagram story - 5"></div>
-    <div class="story" data-node-id="244:4433" data-name="Instagram story - 6"></div>
+  <section class="stories" data-motion data-node-id="375:3204">
+    <a class="story story--bras" href="#" style="--i: 0" data-node-id="501:5172">
+      <span class="story__art" aria-hidden="true">
+        <img class="story__photo story__photo--bras" src="assets/stories/card1-podprsenky.png" alt="">
+      </span>
+      <span class="story__shine" aria-hidden="true"></span>
+      <span class="story__body">
+        <span class="story__head">
+          <span class="story__badge">− 25 %</span>
+          <span class="story__copy">
+            <span class="story__title">Podprsenky<br>až − 25 %</span>
+            <span class="story__sub">Krajkové, push-up i bez kostic</span>
+          </span>
+        </span>
+        <span class="story__cta">
+          <span class="story__ctaLabel">Využít slevy</span>
+          <span class="story__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </span>
+      </span>
+    </a>
+
+    <a class="story story--diva" href="#" style="--i: 1" data-node-id="503:5226">
+      <span class="story__art" aria-hidden="true">
+        <img class="story__photo story__photo--diva" src="assets/stories/card2-diva.jpg" alt="">
+        <img class="story__deco story__deco--diva" src="assets/stories/card2-vector.svg" alt="">
+      </span>
+      <span class="story__shine" aria-hidden="true"></span>
+      <span class="story__body">
+        <span class="story__head">
+          <span class="story__badge">Novinka</span>
+          <span class="story__copy">
+            <span class="story__title">Diva by Iva</span>
+            <span class="story__sub">Nechte svou ženskost vyniknout</span>
+          </span>
+        </span>
+        <span class="story__cta">
+          <span class="story__ctaLabel">Prohlédnout</span>
+          <span class="story__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </span>
+      </span>
+    </a>
+
+    <a class="story story--friday" href="#" style="--i: 2" data-node-id="375:3206">
+      <span class="story__art" aria-hidden="true">
+        <img class="story__photo story__photo--friday" src="assets/stories/card3-blackfriday.jpg" alt="">
+        <img class="story__deco story__deco--friday" src="assets/stories/card3-vector.svg" alt="">
+      </span>
+      <span class="story__shine" aria-hidden="true"></span>
+      <span class="story__big" aria-hidden="true" data-node-id="503:5619">
+        <span class="story__bigUnit">
+          <span class="story__bigAz">až</span>
+          <span class="story__bigBar"></span>
+        </span>
+        <span class="story__bigNum">70</span>
+        <span class="story__bigPct">%</span>
+      </span>
+      <span class="story__body">
+        <span class="story__head">
+          <span class="story__badge">Jen do neděle</span>
+          <span class="story__copy">
+            <span class="story__title">Black Friday</span>
+            <span class="story__sub">Sleva až 70 % na celý sortiment</span>
+          </span>
+        </span>
+        <span class="story__cta">
+          <span class="story__ctaLabel">Nakupovat</span>
+          <span class="story__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </span>
+      </span>
+    </a>
+
+    <a class="story story--delivery" href="#" style="--i: 3" data-node-id="507:5721">
+      <span class="story__art" aria-hidden="true">
+        <img class="story__photo story__photo--delivery" src="assets/stories/card4-doprava.jpg" alt="">
+      </span>
+      <span class="story__shine" aria-hidden="true"></span>
+      <span class="story__body">
+        <span class="story__head story__head--big">
+          <span class="story__shout">DOPRAVA<br>ZDARMA</span>
+        </span>
+        <span class="story__cta">
+          <span class="story__ctaLabel">Nakupovat</span>
+          <span class="story__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </span>
+      </span>
+    </a>
+
+    <a class="story story--men" href="#" style="--i: 4" data-node-id="506:5703">
+      <span class="story__art" aria-hidden="true">
+        <img class="story__photo story__photo--men" src="assets/stories/card5-panske.jpg" alt="">
+        <span class="story__veil"></span>
+        <img class="story__photo story__photo--men" src="assets/stories/card5-panske-top.png" alt="">
+      </span>
+      <span class="story__shine" aria-hidden="true"></span>
+      <span class="story__body">
+        <span class="story__head">
+          <span class="story__badge">až − 50 %</span>
+          <span class="story__copy">
+            <span class="story__title">Pánské spodní prádlo</span>
+            <span class="story__sub">Na veškerý sortiment až 50% sleva</span>
+          </span>
+        </span>
+        <span class="story__cta">
+          <span class="story__ctaLabel">Nakupovat</span>
+          <span class="story__go" aria-hidden="true">
+            <img src="assets/search/icon-arrow-right-20.svg" alt="">
+          </span>
+        </span>
+      </span>
+    </a>
   </section>
 
 </div>
@@ -1101,5 +1711,6 @@
 <script src="coupon-tip.js"></script>
 <script src="usp-motion.js"></script>
 <script src="search.js"></script>
+<script src="mobile-menu.js"></script>
 </body>
 </html>

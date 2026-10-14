@@ -34,6 +34,15 @@ Soubor: `LAkfV5lfb3ASyFinSbpyYu` (Header)
 | `411:12701` | vyhledávání v hlavičce (výchozí) |
 | `442:3142` | vyhledávání s dotazem — starší verze |
 | `455:2556` | vyhledávání s dotazem (výsledky) v2 — platná |
+| `375:3204` | karty pod USP (5 × 400 × 600) |
+| `375:2947` | mobil step1 — hero s hlavičkou, USP a dlaždice (360 × 1484) |
+| `375:2971` | mobilní hlavička — logo u hamburgeru, lupa vpravo |
+| `375:2566` | mobilní menu step 11 — první úroveň (360 × 1448) |
+| `375:2849` | mobilní menu step3 — druhá úroveň Podprsenky (360 × 1420) |
+| `375:2665` | mobilní hledání step4 — starší verze |
+| `444:3384` | mobilní hledání step4 v2 — výchozí stav |
+| `444:3491` | mobilní hledání step5 — stav s dotazem |
+| `510:5849` | mobilní karty pod USP (5 × 240 × 360) |
 | `309:10328` | tooltip u ikonky kupónů |
 | `342:2095` | poslední verze celé stránky |
 
@@ -234,6 +243,12 @@ k okraji a odsazení karty se u nich projeví ve vnitřním odsazení a výšce.
 v N100 s ikonou 31,5, pod ním 12 px mezera a text na střed (24/32 SemiBold
 N900 + 21/25 Regular N700, mezi sebou 2 px).
 
+Klubová ikona je jediná vložená **inline** (aby šlo korunkou otáčet uvnitř
+kroužku) a nese v sobě natvrdo `width="35" height="35"`. Bez pravidla
+`.usp__icon svg { width: 100%; height: 100% }` se do kroužku nezmenší
+a vyleze z něj doprava a dolů — na desktopu o 1,75 px, na mobilu o 3,5.
+Pravidlo je proto u `.usp__icon img` a platí pro obě šířky.
+
 **Pohyb v USP** — tři vrstvy, všechny vypnuté při `prefers-reduced-motion`:
 
 1. **Nájezd** (`usp-motion.js`) — `IntersectionObserver` při 35 % viditelnosti
@@ -297,6 +312,225 @@ nad tmavou fotkou 24 %. Menu: šipka vyjíždí u kategorií, podtržení v Typ/
 ztmavený rámeček u čipů. Šipky carouselu: pilulka ztmavne, šipka se posune
 o 2 px svým směrem.
 
+## 5b. Mobil (node `375:2947`)
+
+Zatím první krok: **hlavička + hero, USP a placeholder dlaždice**. Všechno
+ostatní (mega menu, vyhledávací panel, šuplík s kupóny) je pořád jen
+v desktopové podobě.
+
+Hranice je **1279 px** — jediný `@media (max-width: 1279px)` na konci
+`styles.css`. Nad ní se nic nemění, pod ní platí mobilní sazba; layout je
+pružný, takže se návrh ze 360 roztáhne až do 1279. Animace se nepřepisují:
+carousel, nájezd USP, mlha v kruzích i bílá hlavička po scrollu jedou
+stejně jako na desktopu.
+
+- **Hlavička** (`375:2971`) 56 vysoká, px 8. Vlevo burger
+  (`assets/ink-*/icon-burger.svg`, jediný nový asset) a hned za ním logo
+  100 × 15 s mezerou 8, vpravo lupa, účet a košík s mezerou 4. Odkazy
+  Dámské / Pánské / Výprodej, kupóny, oblíbené a tooltip se schovají.
+  Logo je v DOMu prostřední dítě lišty, takže stačilo nenechat levou stranu
+  růst (`flex: 0 0 auto`) a pravou naopak roztáhnout (`flex: 1 0 0`);
+  pořadí ikon vpravo v markupu už sedí.
+- **Hero** na celou výšku okna (`100dvh`, stejně jako na desktopu) a od
+  kraje ke kraji; přepínač rozložení v logu je tu vypnutý. Návrh ho kreslí
+  600 vysoký, ale zadání je plná výška — USP tím pádem začíná pod ohybem. Fotky jsou **stejné jako na desktopu, jen jinak oříznuté**.
+  Vodorovně to řeší `object-position` (`--ox`), svisle `--zoom` a `--ty`.
+  Pozor na rozdíl: `object-position` vybírá výřez z celé fotky, kdežto
+  `transform` hýbe až tím, co `cover` ořízl — jeho vůle je proto jen
+  (zoom − 1) / 2 na stranu a za ní se vedle fotky objeví prázdno. Na to
+  jsem jednou najel: vodorovný posun `--tx: 10,8 %` při zoomu 1,15 nechal
+  vlevo bílý pruh. Svisle vůle jiná není (cover sedí přesně na výšku),
+  takže zvednutí obstará `--ty` a drží se pod tím stropem.
+  Hodnoty `--zoom / --ox / --ty`: slide 0 `1,18 / 44,5 % / −8,5 %` (výřez
+  z návrhu, hlava sedí pod logem), slide 1 `1,4 / 47,2 % / −17 %`,
+  slide 2 `1,45 / 46,3 % / −21 %` (vycentrované na trup, ne na hlavu).
+  Pozor: změna zoomu zvětší i vodorovnou odchylku od středu, takže se
+  s ním musí přepočítat `--ox` — jinak modelka ze středu uteče.
+  Zoom je proti návrhu vyšší u všech tří: v plné výšce okna je rám mnohem
+  vyšší než 600 z návrhu, modelka v něm jinak sedí malá a dole.
+  U druhého snímku je fotka navíc zrcadlená (`--flip: -1`), takže posun
+  `--ox` doprava posune modelku na obrazovce **doprava**, ne doleva.
+  Přes fotku jde přechod z návrhu a pod textem druhý, aby byl titulek
+  čitelný; `.hero__left` tu musí mít `border-radius: 0` — desktopových r16
+  by se jinak chytil i ten přechod.
+  Titulek 48/52, podtitul 17/21, tlačítko a tečky vedle sebe.
+- **USP** 2 × 2, px 16 · py 40 · rozestupy 24, kruh 64 s ikonou 28 (stejný
+  poměr jako 72/31,5 na desktopu), titulek 17/21, podtitul **14/18** N700
+  (`385:3549`), mezi nimi 2.
+- **Karty pod USP** (`510:5849`) 240 × 360, r 19,2, gap 16, levé odsazení 16,
+  scrolluje se vodorovně prstem (scrollbar skrytý, `overscroll` nechán).
+  Kresba je v návrhu **přesně 0,6 desktopu**, takže ji `cqw` trefí sama
+  a žádný ořez se v mobilním bloku nepřepisuje. Co na měřítko nejede a je
+  proto v pixelech: vnitřní odsazení 16 (0,6 by dalo 19,2), sazba snapnutá
+  na typografickou škálu (nadpis 21/25, štítek, podtitul i popisek tlačítka
+  14/18)
+  a pilulka s tlačítkem — ta je 0,714 desktopu, ale kolečko si bere svých
+  32 a šipku 16, protože je to instance komponenty. Animace jsou tytéž
+  jako na desktopu, sdílí se stejné CSS.
+
+### Mobilní menu (`375:2566`)
+
+Otevírá hamburger, obsluhuje `mobile-menu.js`. Na rozdíl od mega menu
+nevisí pod lištou, ale **překrývá celé okno** (`position: fixed; inset: 0`,
+`z-index: 12`, tedy nad lištou i panelem hledání) — proto má vlastní horní
+řádek s „Hledat produkt" a křížkem přesně tam, kde byla hlavička. Scrolluje
+sám v sobě, `overscroll-behavior: contain` zabrání přelití na stránku,
+takže se nemusí nijak držet stránka pod ním.
+
+Odkrývá se shora stejným `clip-path` a na stejné časování jako mega menu
+(`--menu-in/out`). Obsah pak **naskáče po jednotlivých položkách zleva**, stejným pohybem
+jako panel hledání na desktopu (posun o 18 px doleva), v rytmu sloupců
+mega menu — `.mobileMenu__reveal` s `--i`, prodleva 110 ms a krok 55 ms
+(`--menu-col-*`). Platí to pro celý dropdown: záložky, každou kategorii,
+bannery i všechny odkazy.
+
+Čísla položek **rozdává skript**, ne markup: každá úroveň si při startu
+očísluje své prvky v pořadí, v jakém jsou na obrazovce. Ručně psaná čísla
+by se při každé přidané položce musela přepisovat a je jich tu přes
+čtyřicet. Prodleva je zastropovaná (`--menu-col-cap` 440 ms) — u osmi
+kategorií a devíti střihů by poslední položka jinak naskočila až po
+sekundě a půl; co je za stropem, přijede společně. Zavírá křížek, Esc i otevření vyhledávání nebo
+šuplíku; při zavření se vrací na začátek.
+
+Posun úrovní do stran má vlastní token `--menu-level` (560 ms) — je to
+delší cesta než u odkrytí shora, na 440 ms to působilo uspěchaně. Panely
+mají schovaný posuvník (`scrollbar-width: none`), jinak při posunu ujíždí
+přes obrazovku s nimi; na telefonu je stejně překryvný.
+
+Stejně naskáče i obsah **podúrovně**, jen s prodlevou 240 ms
+(`--reveal-delay`), aby bylo nejdřív vidět, že panel přijel zprava.
+Váže se to na `aria-hidden` panelu, ne na konkrétní kategorii, takže to
+bude platit i pro podúrovně, které teprve přibudou. Návrat zpět obsah
+zase schová, takže se při dalším vstupu přehraje znovu.
+
+Rozměry z návrhu: sheet pt 16 · px 16 · pb 32, bloky po 32, uvnitř bloku 16.
+Záložky mezera 24, řádek 40 (podtržení kreslí `box-shadow: inset`, protože
+`border` by záložku nafoukl na 42 a posunul celý sheet o 2 px). Kategorie
+řádky 56 / text 24, odkazy řádky 48 / text 16, popisky 12/24 verzálky
+s prostrkáním 0,6. Dlaždice 120 vysoké, r8, mezera 24.
+
+**Druhá úroveň** (`375:2849`) se otevře klepnutím na Podprsenky. Obě
+úrovně leží přes sebe jako `.mobileMenu__level` (absolutně, každá se
+scrolluje sama) a přepíná je jediný atribut `data-level` na obalu:
+podúroveň **vjíždí zprava** (`translateX(100%)` → 0) a první ji přitom
+**vysune ven** (0 → `-100%`). Obě se posouvají o stejnou vzdálenost ve
+stejném čase, takže mezi nimi pořád zůstává přesně jedna šířka okna a jede
+to jako jeden pás — ne jako karta přes kartu (to byl původní posun o 20 %,
+který vypadal jako překryv). Nahoře má místo hledání „← Dámské", křížek zůstává.
+Obsah: nadpis 26/24, skupiny po 40, „Střih a tvar" se seznamem (řádky 56,
+text 20) a „Styl a funkce" s čipy, které se zalamují (px 16 · py 10 · r8,
+obrys N200 **stínem dovnitř**, aby čip zůstal 44 vysoký). Štítky v téhle
+úrovni jsou Pink/P500 `#dd2859`, proto má špička vlastní soubor
+`assets/menu/tag-arrow-pink.svg`. Esc vrací o úroveň výš, z první úrovně
+zavírá celé menu.
+
+Návrat na první úroveň se dělá **až po dojetí zavření** (délku si skript
+bere z `--menu-out`, ať se nerozejde s CSS) a s vypnutými přechody
+(`.is-resetting`). Když se přepnul hned, podúroveň odjela doprava a
+odkryla první — a zavření vypadalo jako dvě po sobě. Rychlé znovuotevření
+úklid provede okamžitě, takže menu vždy začíná na první úrovni a nahoře.
+
+**Hledání** (`375:2665`) je **třetí úroveň téhož zásobníku** — návrh má
+nahoře „← Dámské", takže se vrací do menu. Vjíždí zprava stejně jako
+kategorie. Dvě cesty dovnitř: lupa v liště otevře menu rovnou na téhle
+úrovni (jen odkrytí shora, bez posunu do strany) a řádek „Hledat produkt"
+v menu na ni přejede. Obsah: pole s linkou N900, naposledy hledané
+(čipy + „Vymazat historii", která blok sundá stejně jako na desktopu),
+doporučené produkty se skutečnými fotkami. **Bannery tu nejsou** — vážou
+se k hledanému dotazu, takže se objeví až ve stavu s dotazem, stejně jako
+na desktopu. Názvy jsou tady
+**bez tučného zvýraznění** — není co zvýrazňovat, dotaz ještě žádný není;
+tučně jsou až ve stavu s dotazem (ve starším návrhu to bylo i tady, autor
+to opravil). Stejně to má desktop. Nájezd jde
+**po jednotlivých položkách**, ne po blocích: zpět (0), pole (1), historie
+(2), popisek Doporučené (3), tři produkty (4–6) a bannery (7) — tedy
+240 až 625 ms.
+
+**Linka pod polem se natáhne zleva doprava** — stejné klíčové snímky
+(`searchLine`) i časování jako v desktopovém panelu, jen s prodlevou
+`--mobile-line-delay` (320 ms), aby počkala, až panel dojede zprava.
+Kreslí ji pseudoprvek, `border` by se škálovat nedal. Při odchodu z úrovně
+se pravidlo přestane uplatňovat, takže se při dalším vstupu přehraje znovu.
+
+**Naposledy hledané se nezalamuje, ale odjíždí do strany** (`491:3739`) —
+tři čipy, třetí přesahuje přes okraj jako v návrhu. Pásek má záporné
+okraje ±16, aby čipy mohly odjet až ke kraji obrazovky a nezasekly se
+v odsazení sheetu; posuvník je schovaný jako všude jinde.
+
+Lupa na mobilu **neotevírá desktopový panel vyhledávání** — ten je stavěný
+na 1840 a nevešel by se. `search.js` si na začátku obsluhy kliknutí hlídá
+`max-width: 1279px` a v mobilní šířce se nechá přeskočit.
+
+**Stav s dotazem** (`444:3491`) se přepíná atributem `data-query` na
+`.mobileFind`, stejně jako na desktopu: prázdné pole = historie a
+doporučené, cokoli napsaného = nalezené produkty, „Zobrazit vše",
+doporučené kategorie, Astratex magazín a bannery.
+
+Tytéž bannery jsou i v **mega menu na desktopu** (`184:13536`, kde rám
+400 × 225 sedí na poměr banneru přesně) a v **mobilním menu** — v první
+úrovni i v podúrovni kategorie. Všude je to jedna komponenta
+`.searchBanner`, která se sama dopočítá z šířky rámu; šedé placeholdery
+(`.megamenu__promo`, `.mobileTile`) tím zmizely z markupu i ze stylů.
+
+**Bannery jsou tatáž komponenta jako na desktopu** (`.searchBanner`,
+node `444:3601` / `493:4043`), jen v užším rámu — poměr stran je stejný
+(480/270), takže si fotky i rozostřená maska dopočítají velikost samy
+z `cqw`. Přepisuje se jen to, co se v návrhu nescaluje: text (odsazení 16,
+titulek 24/32, podtitul 17/21, mezera 4) a skleněné kolečko (40 px,
+16 od obou hran) — v užším rámu by jinak zdrobněly pod čitelnost. V poli se objeví tlačítko
+**Smazat** (N200, 24 vysoké), které dotaz uklidí a vrátí výchozí obsah.
+Zavřením menu se pole vyprázdní, takže se příště neotevře s dotazem
+od minula. Odkazy jsou široké pilulky s šipkou a tučnou shodou s dotazem.
+
+Výsledky **naskáčou zleva po sobě** jako na desktopu a ve stejném tempu
+(`--search-base` 220 ms + `--search-step` 70 ms): popisek, tři produkty,
+„Zobrazit vše" a pak oba bloky odkazů (220 → 640 ms). Je to `animation`,
+ne `transition` — stav se přepíná `display` a animace se znovuzobrazenému
+prvku spustí od začátku, takže se nájezd přehraje při každém novém dotazu,
+ale **ne při psaní dalších znaků** (atribut `data-query` zůstává na „1",
+prvek se nepřekresluje).
+
+**Co zatím nefunguje:** přepínač Dámské / Pánské / Výprodej přenáší aktivní stav, ale seznam
+kategorií zůstává stejný; návrh kreslí jen obsah pro Dámské. Druhou
+úroveň má zatím jen Podprsenky — ostatní kategorie návrh nekreslí.
+
+### Karty pod USP (`375:3204`)
+
+Pět karet 400 × 600, r32, vodorovně odjíždějících. Uvnitř se měří v `cqw`
+(karta je sama sobě `container`), takže stejná komponenta funguje
+i v mobilní šířce, kde je karta 240 — sazba se zmenší na 60 %. **Poloměr
+musí zůstat v pixelech**: `cqw` na samotném kontejneru se počítá z jeho
+rodiče, ne ze sebe, a vyšlo by 153 px.
+
+Stavba: fotka (každá má vlastní ořez z návrhu), nahoře štítek + nadpis 38
++ podtitul 21/25, dole bílá pilulka s popiskem 19/23 a tmavým kolečkem 40.
+Sekce nemá horní odsazení, mezeru nad kartami dává spodní padding USP.
+
+**Fotka na první kartě je PNG s průhledností** (modelka je vyříznutá a
+prosvítá skrz ni podklad karty) — převod do JPEG jí podloží bílou a karta
+pak zespoda zbělá. Totéž platí pro horní vrstvu páté karty.
+
+Nápis na kartě s dopravou se středí **na celou výšku karty**, ne na místo
+mezi okrajem a tlačítkem — je proto vyjmutý z toku a tlačítko se drží dole
+přes `margin-top: auto` (samotné `space-between` by ho tam vyneslo nahoru).
+Tmavá karta (Black Friday) má obrácený štítek, bílý ink a navíc skladbu
+„až 70 %“ — procento má v návrhu užší rámeček než samotný znak (34 proti
+48), takže se zasouvá pod nulu; bez toho celek přeteče přes kartu.
+
+**Animace** (spouští `usp-motion.js`, stejný pozorovatel jako USP, práh
+0,2 — poslední karta se nikdy celá do záběru nedostane):
+- karta přijede zespoda a zvětší se z 0,98 (`--story-in` 700 ms, krok
+  `--story-step` 90 ms),
+- text v ní přijede **shora** (+120 ms), tlačítko **zespoda** (+200 ms),
+- a jakmile karta dosedne, přejede přes ni **lesk** — šikmý světelný pruh
+  (+420 ms). Karta po kartě, takže se vlna přelije zleva doprava.
+- Velké „70“ má vlastní snímky (`storyBigIn`), protože si drží vlastní
+  vystředění — obecné `transform: none` z nájezdu by ho odsunulo na kraj.
+
+**Hover**: z tmavého kolečka se přes celou pilulku **rozlije tmavá**
+(kruh roste na dvanáctinásobek), popisek zbělá a kolečko se obrátí na bílé
+s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede lesk.
+
 ## 6. Vědomé odchylky od Figmy
 
 | Věc | Proč |
@@ -317,6 +551,17 @@ o 2 px svým směrem.
 | Název produktu má dva řádky a pak tečky, návrh počítá s jedním | Delší názvy se jinak uřízly hned v polovině (zadáno) |
 | Výchozí stav nemá řádek „Lidé často hledají" z návrhu | Zadáno — zůstává jen „Naposledy hledané" |
 | Odkazy „Doporučené kategorie" a „Astratex magazín" jsou pod produkty, návrh je má nad nimi | Zadáno |
+| Mobilní přechod přes fotku je o něco tmavší než v návrhu (0,62 a 0,5 místo 0,5 a 0,476) | Návrh kreslí jen tmavou fotku; na snímku ze slonové kosti by bílý titulek zmizel |
+| Mobilní ořez druhého a třetího snímku je dopočítaný (1,46× místo 1,15×) | Návrh na mobilu kreslí jen první snímek; při stejném zoomu seděla modelka moc nízko |
+| Mobil nemá šipky carouselu ani scroll hint | V návrhu nejsou; listuje se tečkami |
+| Pás karet pod USP má na mobilu i pravé odsazení 16, návrh má jen levé | Jinak se poslední karta na konci scrollu lepí na hranu displeje |
+| Všech pět karet má na mobilu stejně velké tlačítko (kolečko 32), návrh má u Black Friday 28,6 | Ostatní čtyři karty mají 32; vypadá to na nedotažené měřítko jedné karty, ne na záměr |
+| Skupina „až 70 %" sedí na mobilu vystředěná, návrh ji má o ~6 px vpravo | Je to stejné řešení jako na desktopu (rámy se tam překrývají a středí se přes okraje); zvlášť posunutý mobil by se s desktopem rozešel |
+| Mezera mezi polem a obsahem je v obou stavech 40; návrh má ve stavu s dotazem 32 | Jinak by obsah při psaní poskočil o 8 px — ve Figmě je to zřejmě důsledek přerovnání rámů, ne záměr |
+| Doporučené produkty v mobilním hledání mají skutečné fotky, návrh kreslí pruhované placeholdery | Fotky už v projektu jsou a stejně to má desktop |
+| Bannery v mobilním menu jsou 201 vysoké, placeholdery v návrhu měly 120 | Banner má pevný poměr 16:9; na 120 by se musel zdeformovat nebo oříznout |
+| Záložky v mobilním menu nemění seznam kategorií | Návrh kreslí jen obsah pro Dámské |
+| Druhou úroveň menu má jen Podprsenky | Ostatní kategorie zatím nemají návrh |
 | Karty ve výsledcích mají názvy podle svých fotek, ne „Krajkové kalhotky Elizabeth" u všech pěti | V návrhu zůstal zástupný název na všech kartách, ale fotky jsou pět různých produktů |
 | V pásku výsledků je šestá karta navíc (pět je v návrhu) | Aby pravá šipka měla kam posunout |
 | Levá šipka u výsledků se objeví až po posunu, návrh ji kreslí rovnou | Stejné chování jako v pásku ve výchozím stavu |

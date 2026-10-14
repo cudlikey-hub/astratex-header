@@ -83,9 +83,13 @@
   --menu-ease-out: cubic-bezier(0.4, 0, 1, 1);
   --menu-in: 440ms;
   --menu-out: 240ms;
+  --menu-level: 560ms;          /* posun úrovní mobilního menu do stran */
+  /* Linka pod mobilním polem čeká, až panel dojede zprava. */
+  --mobile-line-delay: 320ms;
   --menu-col-in: 380ms;
   --menu-col-delay: 110ms;      /* first column waits for the sheet to open */
   --menu-col-stagger: 55ms;     /* then each next column */
+  --menu-col-cap: 440ms;        /* strop pro dlouhé seznamy v mobilním menu */
 
   /* Coupon drawer. Slides in from the right on the menu's easing; its
      contents follow a beat later, top to bottom, drifting in 16px. */
@@ -191,6 +195,13 @@ a { text-decoration: none; color: inherit; }
   --usp-in: 780ms cubic-bezier(0.16, 1, 0.3, 1);         /* nájezd sekce */
   --usp-in-step: 300ms;                                  /* sloupce jdou po sobě */
   --usp-liquid: 22s;                                     /* přelévání skla */
+  /* Karty pod USP: nájezd, lesk a rozlití barvy v tlačítku */
+  --story-in: 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  --story-step: 90ms;
+  --story-shine: 900ms;
+  --story-zoom: 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  --story-flood: 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  --story-arrow: 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .page {
@@ -1101,6 +1112,7 @@ a { text-decoration: none; color: inherit; }
     --usp-fog-b: 0s;
     --search-line: 1ms;
     --search-line-delay: 0ms;
+    --mobile-line-delay: 0ms;
     --card-video: 1ms;
     --card-zoom: 1ms;
     --card-zoom-scale: 1;
@@ -1442,13 +1454,6 @@ a { text-decoration: none; color: inherit; }
   flex: 0 1 400px;
   min-width: 200px;
 }
-.megamenu__promo {
-  width: 100%;
-  aspect-ratio: 400 / 225;
-  border-radius: 8px;
-  background: var(--story-grey);
-}
-
 .megamenu a:focus-visible {
   outline: 2px solid var(--neutral-n900);
   outline-offset: 4px;
@@ -2902,7 +2907,11 @@ a { text-decoration: none; color: inherit; }
   flex: 0 0 auto;
   transition: transform var(--usp-badge);
 }
-.usp__icon img { display: block; width: 100%; height: 100%; }
+/* Klubová ikona je jediná vložená inline a nese v sobě natvrdo 35 × 35;
+   bez tohohle pravidla se kresba do kroužku nezmenší a vyleze z něj
+   o 1,75 px doprava a dolů (na mobilu o 3,5). */
+.usp__icon img,
+.usp__icon svg { display: block; width: 100%; height: 100%; }
 
 /* 375:3183 … — gap 2 · text na střed */
 .usp__text {
@@ -2941,18 +2950,1394 @@ a { text-decoration: none; color: inherit; }
 .stories {
   position: relative;
   width: 100%;
-  height: 728px;
   display: flex;
   align-items: flex-start;
   gap: 24px;
-  padding: 64px 0 64px 40px;
+  /* Nahoře nic — mezeru nad karty dává spodní odsazení USP. */
+  padding: 0 0 64px 40px;
 }
 
-/* Instagram story - n · 244:4429 … — 400 × 600 · r 32 · #D2D2D2 */
+/* Karty · 375:3204 — 400 × 600 · r 32.
+   Uvnitř se měří v `cqw` (karta je sama sobě `container`), takže se celá
+   sazba zmenší s kartou — v mobilní šířce je stejná karta 240 široká.
+   1 cqw = 4 px při šířce 400, čísla z návrhu jsou tedy dělená čtyřmi. */
 .story {
+  container-type: inline-size;
+  position: relative;
+  display: block;
   width: 400px;
   height: 600px;
-  border-radius: 32px;
-  background: var(--story-grey);
   flex: 0 0 auto;
+  /* Poloměr musí být v pixelech: `cqw` na samotném kontejneru se počítá
+     z jeho rodiče, ne ze sebe — vyšlo by 153 px. */
+  border-radius: 32px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #dfcbc5, #ead2ce);
+  color: var(--neutral-n900);
+  text-decoration: none;
+  cursor: pointer;
+}
+.story--diva,
+.story--delivery { background: linear-gradient(to bottom, #efdee2, #c0a6ae); }
+/* 375:3206 — tmavá karta má vlastní ink i obrácený štítek */
+.story--friday {
+  background: radial-gradient(circle at 50% 41%, #2a2a2a 0%, #1c1e1f 50%, #0f1215 100%);
+  color: var(--white);
+}
+
+/* ---- kresba ---------------------------------------------------- */
+.story__art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
+}
+.story__photo,
+.story__deco {
+  position: absolute;
+  display: block;
+  max-width: none;
+  object-fit: cover;
+  /* fotka se na najetí nadechne; kreslí se přes `scale`, aby to
+     neovlivnilo rozložení karty */
+  transition: transform var(--story-zoom);
+}
+/* 501:5173 — 1578 × 1033 na (50 % − 35), top 117 */
+.story__photo--bras {
+  width: 394.5cqw;
+  height: 258.25cqw;
+  top: 29.25cqw;
+  left: calc(50% - 8.75cqw);
+  transform: translateX(-50%);
+}
+/* 503:5227 — 476 × 630, top −15 */
+.story__photo--diva {
+  width: 119cqw;
+  height: 157.5cqw;
+  top: -3.75cqw;
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* 503:5228 — dekorativní oblouk */
+.story__deco--diva {
+  width: 125.549cqw;
+  height: 93.125cqw;
+  left: -8cqw;
+  top: -13.75cqw;
+}
+/* 506:5700 — 501 × 684, otočená o 180° */
+.story__photo--friday {
+  width: 125.25cqw;
+  height: 171cqw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+.story__deco--friday {
+  width: 47.75cqw;
+  height: 53.631cqw;
+  left: -3.5cqw;
+  top: -11cqw;
+}
+/* 507:5739 — fotka přes celou kartu */
+.story__photo--delivery {
+  width: 100cqw;
+  height: 150cqw;
+  top: 0;
+  left: 0;
+}
+/* 506:5719 — 1760,6 × 1510,5 na (50 % − 389,68), top −355,23 */
+.story__photo--men {
+  width: 440.158cqw;
+  height: 377.616cqw;
+  top: -88.808cqw;
+  left: calc(50% - 97.42cqw);
+  transform: translateX(-50%);
+}
+/* přechod mezi oběma vrstvami fotky · 506:5719 */
+.story__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    179.33deg,
+    #dfdad5 23.545%,
+    #dfdad5 38.658%,
+    rgba(223, 218, 213, 0.45) 50.56%,
+    rgba(101, 99, 96, 0) 62.839%
+  );
+}
+
+/* ---- obsah ------------------------------------------------------ */
+/* 501:5174 — p 32, hlavička nahoře, CTA dole */
+.story__body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8cqw;
+}
+.story__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4cqw;
+  width: 100%;
+}
+/* 501:5176 — štítek p6 r6, 21/25 SemiBold */
+.story__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5cqw;
+  border-radius: 1.5cqw;
+  background: var(--neutral-n900);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 5.25cqw;
+  line-height: 6.25cqw;
+  color: var(--white);
+  white-space: nowrap;
+}
+.story--friday .story__badge {
+  background: var(--white);
+  color: var(--neutral-n900);
+}
+.story__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2cqw;
+  width: 100%;
+}
+/* 501:5179 — 38 SemiBold, řádkování 1 */
+.story__title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 9.5cqw;
+  line-height: 1;
+  word-break: break-word;
+}
+/* 501:5180 — 21/25 */
+.story__sub {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 5.25cqw;
+  line-height: 6.25cqw;
+  word-break: break-word;
+}
+/* 507:5741 — velký nápis místo nadpisu */
+/* 507:5741 — nápis se středí na **celou výšku karty**, ne na místo mezi
+   horním okrajem a tlačítkem. Dělá to flex přes celou výšku, ne
+   `transform` — ten by smazal nájezd. */
+.story__head--big {
+  position: absolute;
+  left: 8cqw;
+  right: 8cqw;
+  top: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: stretch;
+  width: auto;
+}
+.story__shout {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14cqw;
+  line-height: 15cqw;
+  color: #654d4c;
+  text-align: center;
+}
+
+/* 503:5619 — „až 70 %" na tmavé kartě */
+.story__big {
+  position: absolute;
+  left: 50%;
+  top: 52.25cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(-50%);
+  color: var(--white);
+  pointer-events: none;
+}
+/* V návrhu se „až" zasouvá pod začátek sedmičky a procento naopak
+   odsedá od nuly — rámečky se tam překrývají, tady to řeší okraje. */
+.story__bigUnit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1.281cqw;
+  margin-right: -3cqw;
+}
+.story__bigAz {
+  font-family: Inter, var(--font-sans);
+  font-weight: 800;
+  font-size: 7.685cqw;
+  line-height: 1;
+  text-transform: lowercase;
+}
+.story__bigBar {
+  display: block;
+  width: 100%;
+  height: 1.067cqw;
+  background: var(--white);
+}
+.story__bigNum {
+  font-family: Inter, var(--font-sans);
+  font-weight: 700;
+  font-size: 61.9cqw;
+  line-height: 1.05;
+  letter-spacing: -3.714cqw;
+}
+.story__bigPct {
+  align-self: center;
+  /* Rámeček je v návrhu užší než samotný znak (34,15 proti 48), takže
+     se procento o kus zasune pod nulu — bez toho by celek přetekl. */
+  width: 8.539cqw;
+  margin-left: 6cqw;
+  font-family: Inter, var(--font-sans);
+  font-weight: 900;
+  font-size: 11.954cqw;
+  line-height: 1.05;
+  text-align: center;
+}
+
+/* 501:5181 — bílá pilulka, uvnitř popisek a tmavé kolečko se šipkou */
+.story__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Drží se u dolní hrany i na kartě, kde je nadpis vyjmutý z toku
+     (doprava zdarma) — tam by ho `space-between` samo vyneslo nahoru. */
+  margin-top: auto;
+  gap: 4cqw;
+  padding: 2cqw 2cqw 2cqw 4cqw;
+  border-radius: 999px;
+  background: var(--white);
+  box-shadow: inset 0 0 0 0.5cqw var(--white);
+  overflow: hidden;
+}
+.story--diva .story__cta,
+.story--friday .story__cta,
+.story--delivery .story__cta {
+  padding-left: 6cqw;
+  filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.25));
+}
+/* 501:5182 — 19/23 SemiBold N900 */
+.story__ctaLabel {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 4.75cqw;
+  line-height: 5.75cqw;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+  transition: color var(--story-flood);
+}
+/* 501:5183 — kolečko 40 */
+.story__go {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10cqw;
+  height: 10cqw;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--neutral-n900);
+  box-shadow: inset 0 0 0 0.25cqw rgba(255, 255, 255, 0.8);
+  transition: background-color var(--story-flood);
+}
+.story__go img {
+  display: block;
+  width: 5cqw;
+  height: 5cqw;
+  transform: rotate(-45deg);
+  transition: transform var(--story-arrow), filter var(--story-flood);
+}
+
+/* Najetí: z kolečka se přes celou pilulku rozlije tmavá, popisek
+   zbělá a kolečko se obrátí — bílé s tmavou šipkou. Kruh roste
+   z místa kolečka, takže to vypadá, že barva vytekla z něj. */
+.story__cta::before {
+  content: "";
+  position: absolute;
+  right: 2cqw;
+  top: 50%;
+  width: 10cqw;
+  height: 10cqw;
+  margin-top: -5cqw;
+  border-radius: 50%;
+  background: var(--neutral-n900);
+  transform: scale(0);
+  transform-origin: center;
+  transition: transform var(--story-flood);
+}
+@media (hover: hover) {
+  .story:hover .story__cta::before { transform: scale(12); }
+  .story:hover .story__ctaLabel { color: var(--white); }
+  .story:hover .story__go {
+    background: var(--white);
+    box-shadow: inset 0 0 0 0.25cqw rgba(21, 21, 21, 0.12);
+  }
+  .story:hover .story__go img { filter: invert(1); }
+  .story:hover .story__go img { transform: rotate(-45deg) translateX(3px); }
+  .story:hover .story__photo { transform-origin: center; }
+  .story:hover .story__photo--bras { transform: translateX(-50%) scale(1.04); }
+  .story:hover .story__photo--diva { transform: translateX(-50%) scale(1.04); }
+  .story:hover .story__photo--friday { transform: translate(-50%, -50%) rotate(180deg) scale(1.04); }
+  .story:hover .story__photo--delivery { transform: scale(1.04); }
+  .story:hover .story__photo--men { transform: translateX(-50%) scale(1.04); }
+  /* a přes kartu ještě jednou přejede lesk */
+  .story:hover .story__shine { animation: storyShine var(--story-shine) ease-out; }
+}
+
+/* Lesk: šikmý světelný pruh, který přejede kartu. Jednou při nájezdu
+   sekce (karta po kartě) a pak při každém najetí myší. */
+.story__shine {
+  position: absolute;
+  top: -25%;
+  left: 0;
+  width: 60%;
+  height: 150%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.38) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-180%) skewX(-12deg);
+}
+@keyframes storyShine {
+  from { opacity: 0; transform: translateX(-180%) skewX(-12deg); }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  to   { opacity: 0; transform: translateX(300%) skewX(-12deg); }
+}
+
+/* ---- nájezd sekce ----------------------------------------------
+   Karty přijedou zespoda po sobě, v nich text shora a tlačítko zdola —
+   a jakmile je karta na místě, přejede přes ni lesk. */
+.stories[data-motion] .story { opacity: 0; }
+.stories[data-motion="in"] .story {
+  animation: storyIn var(--story-in) calc(var(--i) * var(--story-step)) both;
+}
+.stories[data-motion] .story__head,
+.stories[data-motion] .story__big,
+.stories[data-motion] .story__cta { opacity: 0; }
+.stories[data-motion="in"] .story__head {
+  animation: storyHeadIn var(--story-in)
+             calc(var(--i) * var(--story-step) + 120ms) both;
+}
+/* „70" si drží vlastní vystředění, takže musí mít i vlastní snímky —
+   `transform: none` z obecné animace by ho odsunulo na kraj. */
+.stories[data-motion="in"] .story__big {
+  animation: storyBigIn var(--story-in)
+             calc(var(--i) * var(--story-step) + 120ms) both;
+}
+@keyframes storyBigIn {
+  from { opacity: 0; transform: translate(-50%, -24px); }
+  to   { opacity: 1; transform: translateX(-50%); }
+}
+.stories[data-motion="in"] .story__cta {
+  animation: storyCtaIn var(--story-in)
+             calc(var(--i) * var(--story-step) + 200ms) both;
+}
+.stories[data-motion="in"] .story__shine {
+  animation: storyShine var(--story-shine)
+             calc(var(--i) * var(--story-step) + 420ms) ease-out;
+}
+@keyframes storyIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes storyHeadIn {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes storyCtaIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stories[data-motion] .story,
+  .stories[data-motion] .story__head,
+  .stories[data-motion] .story__big,
+  .stories[data-motion] .story__cta { opacity: 1; }
+  .stories[data-motion="in"] .story,
+  .stories[data-motion="in"] .story__head,
+  .stories[data-motion="in"] .story__big,
+  .stories[data-motion="in"] .story__cta,
+  .stories[data-motion="in"] .story__shine { animation: none; }
+}
+
+/* Burger je jen mobilní; na desktopu ho nahrazují odkazy v liště. */
+.topbar__burger { display: none; }
+
+/* =========================================================
+   MOBIL — step1 · 375:2947   (návrh 360 × 1484)
+   Zobrazuje se všude pod desktopovou šířkou, tedy do 1279 px.
+   Rozměry z návrhu platí doslova; layout je pružný, takže se stejná
+   sazba roztáhne i na širší okno. Animace (carousel, nájezd USP,
+   mlha v kruzích, bílá hlavička po scrollu) zůstávají z desktopu.
+   ========================================================= */
+@media (max-width: 1279px) {
+
+  /* Desktopová podlaha 1280 by pod ní dělala vodorovný posuvník. */
+  .page {
+    min-width: 0;
+    /* Hero jde na mobilu vždy od kraje ke kraji; přepínač rozložení
+       v logu tu nemá co měnit. */
+    --hero-inset: 0px;
+    --hero-radius: 0px;
+  }
+  .page[data-hero="inset"] { --hero-inset: 0px; --hero-radius: 0px; }
+
+  /* ---- Header · 375:2971 — 56 vysoká, px 8 ---------------------- */
+  :root { --bar-height: 56px; }
+  .topbar {
+    min-width: 0;
+    gap: 0;
+    padding: 8px;
+  }
+  /* 375:2972 — hamburger a hned za ním logo, mezera 8. Logo je v DOMu
+     prostřední dítě lišty, takže stačí nenechat levou stranu růst a
+     pravou naopak roztáhnout: ikony pak odjedou doprava. */
+  .topbar { gap: 8px; }
+  .topbar__side { flex: 0 0 auto; }
+  .topbar__side--end { flex: 1 0 0; }
+  .topbar__burger { display: flex; }
+  /* Odkazy Dámské / Pánské / Výprodej nahrazuje burger. */
+  .topbar__nav { display: none; }
+  /* 375:2976 — vpravo lupa, účet a košík, mezera 4. Pořadí v DOMu už
+     sedí; stačí schovat kupóny a oblíbené, které se na mobil nevešly. */
+  .topbar .action[data-drawer-trigger],
+  .topbar .action[aria-label="Oblíbené"],
+  .tip { display: none; }
+  .topbar__actions { gap: 4px; }
+  .logo { width: 100px; height: 15px; }
+
+  /* ---- Hero · 375:2948 ------------------------------------------
+     Návrh ho kreslí 600 vysoký, ale stejně jako na desktopu zabírá celou
+     výšku okna (`100dvh` z výchozího pravidla) — proto se tu výška
+     nepřepisuje, jen zmizí odsazení karty. */
+  .hero {
+    gap: 0;
+  }
+  /* Přechod přes celou fotku, aby na ní text držel · 375:2949.
+     Oproti návrhu je spodek o kousek tmavší (0,5 místo 0,476 a náběh
+     dřív): návrh kreslí jen tmavou fotku, ale třetí snímek je slonová
+     kost a bílý titulek by na něm jinak zmizel. */
+  .hero__slides::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.084) 0%,
+      rgba(0, 0, 0, 0) 21%,
+      rgba(0, 0, 0, 0) 46%,
+      rgba(0, 0, 0, 0.22) 70%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+  }
+
+  /* Ořezy fotek jsou jiné než na desktopu: na výšku se fotka chytá výškou,
+     takže z ní zbyde jen úzký svislý pruh.
+
+     Vodorovně se posouvá `object-position` — to vybírá výřez z **celé**
+     fotky, takže vůle je skoro neomezená. `--tx` by to nezvládlo: transform
+     hýbe až tím, co `cover` ořízl, a jeho vůle je jen (zoom − 1) / 2 na
+     stranu; přes ni se vedle fotky objeví prázdno.
+     Svisle vůle jiná není (cover sedí přesně na výšku), takže zvednutí
+     obstará `--ty` v rámci toho, co dovolí zoom.
+
+     Slide 0 odpovídá návrhu: fotka 1,15× přes cover, zarovnaná dolů,
+     výřez v 44,5 % šířky. Zbylé dva návrh na mobilu nekreslí — jsou
+     nastavené tak, aby modelka stála stejně vysoko jako na prvním. */
+  .hero__slide img { object-position: var(--ox, 50%) 50%; }
+  .hero__slide[data-slide="0"] { --zoom: 1.18; --ox: 44.5%; --tx: 0; --ty: -8.5%; }
+  .hero__slide[data-slide="1"] { --zoom: 1.4;  --ox: 47.2%; --tx: 0; --ty: -17%;  }
+  .hero__slide[data-slide="2"] { --zoom: 1.45; --ox: 46.3%; --tx: 0; --ty: -21%;  }
+
+  .hero__inner {
+    height: 100%;
+    padding: 0;
+    align-items: flex-end;
+    border-radius: 0;
+  }
+  /* 375:2950 — spodní blok s vlastním přechodem, px 16 · pt 32 · pb 16 */
+  .hero__left {
+    align-self: flex-end;
+    width: 100%;
+    /* Desktop má na tomhle bloku r16 kvůli kartě; tady nese přechod,
+       takže by se zakulatil i on — návrh žádné zaoblení nemá. */
+    border-radius: 0;
+    padding: 32px 16px 16px;
+    /* Návrh má 0 → 0,5; kvůli světlé fotce je přechod o něco silnější
+       a tmavne dřív, jinak na ní bílý titulek není čitelný. */
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.3) 25%,
+      rgba(0, 0, 0, 0.62) 100%
+    );
+  }
+  .hero__left > div { width: 100%; gap: 0; }
+  /* Bez pevného sloupce by se mřížka roztáhla na nejdelší titulek
+     („Astratex -25 %") a text by vylezl z obrazovky. */
+  .hero__stack { width: 100%; grid-template-columns: minmax(0, 1fr); }
+  .hero__set { width: 100%; gap: 24px; }
+  /* Pod textem je vždy tmavý přechod, takže i nad světlou fotkou zůstává
+     bílý — na rozdíl od desktopu, kde se ink přepíná podle snímku. */
+  .hero__copy { gap: 8px; color: var(--white); }
+  /* 375:2953 — H5 48/52 */
+  .hero__title {
+    width: auto;
+    font-size: 48px;
+    line-height: 52px;
+  }
+  /* 375:2954 — 17/21 */
+  .hero__subtitle {
+    width: auto;
+    font-size: 17px;
+    line-height: 21px;
+  }
+  /* 375:2966 — tečky jdou vedle tlačítka, spodní hranou na jeho spodek */
+  .dots {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 2;
+  }
+  /* Na mobilu se listuje tečkami a tahem, šipky by jen překážely. */
+  .hero__nav,
+  .scrollHint { display: none; }
+
+  /* ---- USP · 385:3541 — px 16 · py 40 · 2 × 2 ------------------- */
+  .usp {
+    gap: 24px;
+    padding: 40px 16px;
+  }
+  .usp__item {
+    flex: 0 0 calc(50% - 12px);
+    max-width: calc(50% - 12px);
+    padding: 8px 0;
+  }
+  /* 477:3562 — kruh 64, ikona 28 (poměr stejný jako 72/31,5 na desktopu) */
+  .usp__badge { width: 64px; height: 64px; }
+  .usp__icon { width: 28px; height: 28px; }
+  .usp__measure { width: 28px; margin-left: -14px; top: 48px; }
+  /* 385:3548 — 17/21 · 385:3549 — 14/18 */
+  .usp__title {
+    font-size: 17px;
+    line-height: 21px;
+  }
+  .usp__sub {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  /* ---- Bannery v mobilním hledání · 444:3601 --------------------
+     Tatáž komponenta jako na desktopu a stejný poměr stran (480/270),
+     takže si fotky i maska dopočítají velikost samy z `cqw`. Nescaluje
+     se jen text a kolečko — ty si v návrhu drží svou velikost, aby
+     v užším rámu zůstaly čitelné. */
+  .searchBanner__text { gap: 4px; padding: 0 16px; }
+  .searchBanner__title { font-size: 24px; line-height: 32px; }
+  .searchBanner__sub { font-size: 17px; line-height: 21px; }
+  .searchBanner__go {
+    right: 16px;
+    bottom: 16px;
+    width: 40px;
+    height: 40px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .searchBanner__go img { width: 20px; height: 20px; }
+  @media (hover: hover) {
+    .searchBanner:hover .searchBanner__go img { transform: rotate(-45deg) translateX(3px); }
+  }
+
+  /* ---- Karty · 510:5849 — 240 × 360 · r 19,2 · gap 16 · pl 16 ----
+     Kresba je v návrhu přesně 0,6 desktopu, takže ji `cqw` trefí sama
+     a žádný ořez se tu nepřepisuje. Sazba a tlačítko ale na měřítko
+     nejedou: text je snapnutý na typografickou škálu (21/25 a 12/16)
+     a kolečko si drží svých 32 — proto jsou tyhle hodnoty v pixelech,
+     stejně jako u `searchBanner`. */
+  .stories {
+    height: auto;
+    gap: 16px;
+    padding: 0 16px 64px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .stories::-webkit-scrollbar { display: none; }
+  .story {
+    width: 240px;
+    height: 360px;
+    border-radius: 19.2px;
+  }
+  /* 510:5852 — p 16 (desktopních 8 cqw by dalo 19,2) */
+  .story__body { padding: 16px; }
+  /* 510:5855 · 510:5857 · 510:5858 — 14/18, 21/25, 14/18 */
+  .story__badge { font-size: 14px; line-height: 18px; }
+  .story__title { font-size: 21px; line-height: 25px; }
+  .story__sub { font-size: 14px; line-height: 18px; }
+  /* 510:5859 — pilulka je 0,714 desktopu, kolečko si bere svých 32 */
+  .story__cta {
+    gap: 11.429px;
+    padding: 5.714px 5.714px 5.714px 11.429px;
+    box-shadow: inset 0 0 0 1.429px var(--white);
+  }
+  .story--diva .story__cta,
+  .story--friday .story__cta,
+  .story--delivery .story__cta { padding-left: 17.143px; }
+  /* Na mobilu má stín i pánská karta (510:5928) — na desktopu ne. */
+  .story--diva .story__cta,
+  .story--friday .story__cta,
+  .story--delivery .story__cta,
+  .story--men .story__cta {
+    filter: drop-shadow(2.857px 2.857px 5.714px rgba(0, 0, 0, 0.25));
+  }
+  /* 510:5860 — 14/18 */
+  .story__ctaLabel { font-size: 14px; line-height: 18px; }
+  .story__go {
+    width: 32px;
+    height: 32px;
+    box-shadow: inset 0 0 0 0.8px rgba(255, 255, 255, 0.8);
+  }
+  .story__go img { width: 16px; height: 16px; }
+  /* Rozlévání musí růst z kolečka, takže kopíruje jeho novou velikost. */
+  .story__cta::before {
+    right: 5.714px;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
+  }
+  @media (hover: hover) {
+    .story:hover .story__go { box-shadow: inset 0 0 0 0.8px rgba(21, 21, 21, 0.12); }
+  }
+}
+
+/* =========================================================
+   MOBILNÍ MENU — step 11 · 375:2566
+   Otevírá hamburger. Na rozdíl od mega menu nevisí pod lištou, ale
+   překrývá celé okno — proto má vlastní horní řádek s hledáním
+   a křížkem tam, kde byla hlavička. Odkrývá se shora stejným
+   `clip-path` a na stejné časování jako mega menu; obsah po blocích
+   naskáče za ním.
+   ========================================================= */
+.mobileMenu {
+  display: none;            /* na desktopu je místo něj mega menu */
+  position: fixed;
+  inset: 0;
+  z-index: 12;              /* nad lištou (10) i panelem hledání (11) */
+  overflow: hidden;         /* úrovně se uvnitř posouvají do stran */
+  background: var(--white);
+  visibility: hidden;
+  clip-path: inset(0 0 100% 0);
+  transition:
+    clip-path var(--menu-out) var(--menu-ease-out),
+    visibility 0s linear var(--menu-out);
+}
+
+/* Úrovně leží přes sebe a každá scrolluje sama; `overscroll-behavior`
+   zabrání tomu, aby se scroll na konci přelil na stránku pod menu. */
+.mobileMenu__level {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Posuvník by při posunu ujížděl přes obrazovku s panelem; na telefonu
+     je stejně překryvný, tak ho schováme úplně. */
+  scrollbar-width: none;
+  background: var(--white);
+  transition: transform var(--menu-level) var(--menu-ease-in);
+}
+.mobileMenu__level::-webkit-scrollbar { display: none; }
+/* Druhá úroveň čeká za pravým okrajem · 375:2849 */
+.mobileMenu__level--sub {
+  transform: translateX(100%);
+  visibility: hidden;
+  transition:
+    transform var(--menu-level) var(--menu-ease-in),
+    visibility 0s linear var(--menu-level);
+}
+/* Po otevření podúrovně vjede zprava a první ji **vysune** ven: obě se
+   posouvají o stejnou vzdálenost a ve stejném čase, takže to jede jako
+   jeden pás vedle sebe, ne jako karta přes kartu. Váže se to na
+   `aria-hidden`, které nastavuje skript, takže to platí pro každou
+   podúroveň — kategorie i hledání. */
+.mobileMenu__level--sub[aria-hidden="false"] {
+  transform: none;
+  visibility: visible;
+  transition:
+    transform var(--menu-level) var(--menu-ease-in),
+    visibility 0s;
+}
+.mobileMenu:not([data-level="root"]) [data-level-panel="root"] {
+  transform: translateX(-100%);
+}
+@media (max-width: 1279px) {
+  .mobileMenu { display: block; }
+}
+.mobileMenu.is-open {
+  visibility: visible;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path var(--menu-in) var(--menu-ease-in),
+    visibility 0s;
+}
+
+/* 375:2572 — pt 16 · px 16 · pb 32 · bloky po 32 */
+.mobileMenu__sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 16px 16px 32px;
+  min-height: 100%;
+}
+
+/* Bloky naskáčou po sobě shora, stejný rytmus jako sloupce mega menu
+   (`--menu-col-*`). Na první úrovni je spouští otevření menu, v podúrovni
+   její vjetí zprava — a to u **kterékoli** podúrovně, protože se to váže
+   na `aria-hidden`, ne na konkrétní kategorii. */
+.mobileMenu__reveal {
+  opacity: 0;
+  transform: translateX(-18px);
+  transition:
+    opacity var(--menu-out) var(--menu-ease-out),
+    transform var(--menu-out) var(--menu-ease-out);
+}
+/* Konec řady se nečeká donekonečna: u dlouhých seznamů (osm kategorií,
+   devět střihů) by poslední položka naskočila až po sekundě a půl, proto
+   je prodleva zastropovaná — co je za stropem, přijede společně. */
+.mobileMenu.is-open [data-level-panel="root"] .mobileMenu__reveal,
+.mobileMenu__level--sub[aria-hidden="false"] .mobileMenu__reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--menu-col-in) var(--menu-ease-in) var(--reveal-step),
+    transform var(--menu-col-in) var(--menu-ease-in) var(--reveal-step);
+}
+.mobileMenu__reveal {
+  --reveal-step: calc(
+    var(--reveal-delay, var(--menu-col-delay))
+    + min(var(--i, 0) * var(--menu-col-stagger), var(--menu-col-cap))
+  );
+}
+/* Podúroveň čeká o kus déle: nejdřív ať je vidět, že panel přijel zprava,
+   teprve pak se v něm usadí obsah. */
+.mobileMenu__level--sub { --reveal-delay: 240ms; }
+
+/* Úklid po zavření (návrat na první úroveň) běží na schovaném menu a bez
+   přechodů — nemá se co animovat, jen se to má tiše srovnat. */
+.mobileMenu.is-resetting .mobileMenu__level,
+.mobileMenu.is-resetting .mobileMenu__reveal { transition: none; }
+
+/* 375:2573 — řádek vysoký 40 na místě hlavičky */
+.mobileMenu__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+/* 375:2575 — lupa 18 + text 16/24 */
+.mobileMenu__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.mobileMenu__searchIcon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+.mobileMenu__searchIcon img { display: block; width: 100%; height: 100%; }
+.mobileMenu__searchText {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+}
+/* 375:2580 — Top Bar Item 40 s křížkem 24 */
+.mobileMenu__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+@media (hover: hover) {
+  .mobileMenu__close:hover { background-color: var(--neutral-n100); }
+}
+.mobileMenu__close:active .mobileMenu__closeIcon { transform: scale(0.9); }
+.mobileMenu__closeIcon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  transition: transform 160ms var(--menu-ease-in);
+}
+.mobileMenu__closeIcon img { display: block; width: 100%; height: 100%; }
+
+/* 375:2590 / 375:2628 / 375:2651 — nadpis a pod ním seznam, mezera 16 */
+.mobileMenu__block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 375:2591 — Dámské / Pánské / Výprodej, mezera 24, odjíždí do strany */
+.mobileTabs {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  overflow-x: auto;
+  overflow-y: clip;
+  scrollbar-width: none;
+}
+.mobileTabs::-webkit-scrollbar { display: none; }
+.mobileTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  padding: 8px 2px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #4d4d4d;
+  white-space: nowrap;
+  transition: color 160ms ease, box-shadow 160ms ease;
+}
+/* Podtržení kreslí stín dovnitř, ne `border` — ten by záložku nafoukl
+   na 42 px a posunul celý zbytek sheetu o dva pixely dolů. */
+.mobileTab.is-active {
+  font-weight: 600;
+  color: var(--neutral-n900);
+  box-shadow: inset 0 -2px 0 var(--neutral-n900);
+}
+/* Štítek „až 60 %" je tu menší než v desktopové liště (šipka 9, text 12/16) */
+.mobileTab .tag__arrow { width: 9px; }
+.mobileTab .tag__body { padding: 1px 4px 1px 0; }
+.mobileTab .tag__text { font-size: 12px; line-height: 16px; }
+
+/* 375:2602 — řádky 56, text 24/24 */
+.mobileCats {
+  display: flex;
+  flex-direction: column;
+}
+/* Položka může být odkaz i tlačítko (Podprsenky vedou na druhou
+   úroveň), proto se tlačítku shodí jeho vlastní vzhled. */
+.mobileCat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mobileCat--sale { font-weight: 500; color: var(--sale-red); }
+.mobileCat--happy { font-weight: 500; color: var(--happy-purple); }
+
+/* 375:2625 — dvě dlaždice 120 vysoké, r8, mezera 24 */
+.mobileMenu__tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 375:2633 / 375:2652 — 12/24 Medium, verzálky, prostrkání 0,6 */
+.mobileMenu__label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 24px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--menu-label);
+}
+.mobileMenu__labelRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.mobileMenu__labelRow .mobileMenu__label:first-child { flex: 1 1 auto; min-width: 0; }
+.mobileMenu__labelRow .mobileMenu__label:last-child { flex: 0 0 auto; white-space: nowrap; }
+
+/* 375:2635 / 375:2655 — řádky 48, text 16/24 */
+.mobileLinks {
+  display: flex;
+  flex-direction: column;
+}
+.mobileLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+}
+@media (hover: hover) {
+  .mobileCat:hover,
+  .mobileLink:hover { opacity: 0.6; }
+}
+
+/* ---- druhá úroveň · 375:2849 ------------------------------------ */
+/* 375:2857 — „zpět" se šipkou 18 a textem 16/24 */
+.mobileMenu__back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.mobileMenu__backIcon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  transition: transform 160ms var(--menu-ease-in);
+}
+.mobileMenu__backIcon img { display: block; width: 100%; height: 100%; }
+@media (hover: hover) {
+  .mobileMenu__back:hover .mobileMenu__backIcon { transform: translateX(-2px); }
+}
+.mobileMenu__backText {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+}
+
+/* 375:2873 — nadpis a skupiny po 40 */
+.mobileSub {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+/* 375:2876 — 26/24 Regular */
+.mobileSub__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+}
+.mobileSub__group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* 375:2917 — skupina s čipy má pod popiskem větší mezeru */
+.mobileSub__group--chips { gap: 32px; }
+
+/* 375:2888 — řádky 56, text 20/24 */
+.mobileSubCats {
+  display: flex;
+  flex-direction: column;
+}
+.mobileSubCat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 375:2924 — čipy se zalamují, mezera 16 */
+.mobileChips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+/* 375:2925 … — px 16 · py 10 · r8 · obrys N200 dovnitř (rámeček má 44,
+   `border` by ho nafoukl na 46) */
+.mobileChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px var(--neutral-n200);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+  transition: box-shadow 160ms ease, background-color 160ms ease;
+}
+@media (hover: hover) {
+  .mobileSubCat:hover { opacity: 0.6; }
+  .mobileChip:hover {
+    box-shadow: inset 0 0 0 1px var(--neutral-n900);
+    background-color: var(--neutral-n50);
+  }
+}
+/* 444:3595 … — stejná pilulka přes celou šířku, text zarovnaný doleva */
+.mobileChip--wide {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+/* 491:3735 — „Zobrazit vše" má obsah na střed */
+.mobileChip--center { justify-content: center; }
+.mobileChip b { font-weight: 700; }
+
+/* Štítky v podúrovni jsou menší a růžové (Pink/P500) */
+.mobileSubCat .tag__arrow,
+.mobileChip .tag__arrow { width: 9px; }
+.mobileSubCat .tag__body,
+.mobileChip .tag__body { padding: 1px 4px 1px 0; background: #dd2859; }
+.mobileSubCat .tag__text,
+.mobileChip .tag__text { font-size: 12px; line-height: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mobileMenu,
+  .mobileMenu.is-open,
+  .mobileMenu__reveal,
+  .mobileMenu.is-open .mobileMenu__reveal,
+  .mobileMenu__level,
+  .mobileMenu__level--sub { transition: none; }
+}
+
+
+/* ---- hledání na mobilu · 375:2665 ------------------------------- */
+/* 375:2689 — pole, historie, doporučené a bannery po 40 */
+.mobileFind {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+/* 375:2690 — py 12, pod polem linka N900 */
+.mobileFind__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 12px 0;
+}
+/* Linka se při každém vstupu na tuhle úroveň natáhne zleva doprava,
+   stejně jako v desktopovém panelu hledání (`searchLine`). Kreslí ji
+   pseudoprvek, aby šla škálovat — `border` by to neuměl. */
+.mobileFind__bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--neutral-n900);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.mobileMenu__level--sub[aria-hidden="false"] .mobileFind__bar::after {
+  animation: searchLine var(--search-line) var(--mobile-line-delay) forwards;
+}
+.mobileFind__icon {
+  display: block;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+}
+.mobileFind__icon img { display: block; width: 100%; height: 100%; }
+/* 375:2692 — 18/20 */
+.mobileFind__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  color: var(--neutral-n900);
+  -webkit-appearance: none;
+          appearance: none;
+}
+.mobileFind__input::placeholder { color: var(--neutral-n900); opacity: 1; }
+.mobileFind__input:focus { outline: none; }
+.mobileFind__input::-webkit-search-cancel-button { display: none; }
+
+/* Dva stavy: prázdné pole = historie a doporučené (444:3384), cokoli
+   napsaného = nalezené produkty a odkazy (444:3491). Přepíná `display`,
+   takže se nájezd bloků přehraje znovu. */
+.mobileFind__state {
+  display: none;
+  flex-direction: column;
+  gap: 40px;
+}
+.mobileFind[data-query="0"] .mobileFind__state[data-state="idle"],
+.mobileFind[data-query="1"] .mobileFind__state[data-state="results"] { display: flex; }
+
+/* Výsledky naskáčou zleva po sobě — popisek, tři produkty, „Zobrazit vše"
+   a pak oba bloky odkazů. Stejné tempo jako v desktopovém panelu
+   (`--search-*`). Je to `animation`, ne `transition`: stav se přepíná
+   `display`, a animace se znovuzobrazenému prvku spustí od začátku, takže
+   se nájezd přehraje při každém novém dotazu. `backwards` ho po dobu
+   prodlevy drží neviditelný. */
+.mobileFind[data-query="1"] .mobileFind__in {
+  animation: mobileFindIn var(--search-in)
+             calc(var(--search-base) + var(--i, 0) * var(--search-step)) backwards;
+}
+@keyframes mobileFindIn {
+  from { opacity: 0; transform: translateX(-18px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobileFind[data-query="1"] .mobileFind__in { animation: none; }
+}
+
+.mobileFind__block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* 444:3594 — odkazy pod popiskem, mezera 8 */
+.mobileFind__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 491:3755 — „Smazat" v poli: N200, h 24, px 8, r4, text 12/16 N700.
+   Ukáže se, až je v poli co mazat. */
+.mobileFind__wipe {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  flex: 0 0 auto;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--neutral-n200);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--neutral-n700);
+  white-space: nowrap;
+  transition: background-color 160ms ease;
+}
+.mobileFind[data-query="1"] .mobileFind__wipe { display: flex; }
+@media (hover: hover) {
+  .mobileFind__wipe:hover { background: var(--neutral-n300); }
+}
+/* 375:2695 — popisek vlevo, „Vymazat historii" vpravo */
+.mobileFind__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+/* 375:2703 — 14/20 podtržené, N600 */
+.mobileFind__clear {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--menu-label);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .mobileFind__clear:hover { color: var(--neutral-n900); }
+}
+/* 491:3739 — čipy historie jdou vedle sebe a odjíždějí do strany, ne pod
+   sebe; třetí „kalhotky" přesahuje přes okraj stejně jako v návrhu.
+   Odsazení 16 po stranách je zrušené zápornými okraji, aby čipy mohly
+   odjet až ke kraji obrazovky a ne se zasekly v odsazení sheetu. */
+.mobileFind__chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 -16px;
+  padding: 0 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.mobileFind__chips::-webkit-scrollbar { display: none; }
+.mobileFind__chips .mobileChip { flex: 0 0 auto; }
+.mobileFind__chipIcon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+.mobileFind__chipIcon img { display: block; width: 100%; height: 100%; }
+
+/* 442:3326 — nalezené položky pod sebou, mezera 16 */
+.mobileHits {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* 442:3327 — náhled 60 × 90 vlevo, vedle něj text */
+.mobileHit {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.mobileHit__thumb {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 90px;
+  flex: 0 0 auto;
+  border-radius: 6px;
+  overflow: hidden;
+  /* stejný pruhovaný podklad jako u karet ve vyhledávání na desktopu */
+  background: repeating-linear-gradient(
+    131.63deg,
+    #f0f0f0 0 7.2154%,
+    #e9e9e9 7.2154% 14.431%
+  );
+}
+.mobileHit__thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mobileHit__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+/* 442:3330 — 14/20, shoda s dotazem tučně */
+.mobileHit__name {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--neutral-n900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mobileHit__name b { font-weight: 700; }
+/* 442:3331 — 12/20 N600 */
+.mobileHit__variant {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--menu-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 442:3332 — cena, původní cena a sleva, mezera 8 */
+.mobileHit__price {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.mobileHit__now {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--neutral-n900);
+  white-space: nowrap;
+}
+.mobileHit__was {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--menu-label);
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+/* 442:3336 — Pink/P500, px 4, r4 */
+.mobileHit__off {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: #dd2859;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--white);
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .mobileHit:hover .mobileHit__name { text-decoration: underline; }
 }

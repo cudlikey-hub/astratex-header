@@ -63,7 +63,14 @@
     });
   }
 
-  trigger.addEventListener("click", function () { setOpen(!open); });
+  /* V mobilní šířce patří lupa mobilnímu menu (úroveň „hledání"), tenhle
+     panel je stavěný na 1840 a nevešel by se. Obsluhuje ho mobile-menu.js. */
+  var mobile = window.matchMedia("(max-width: 1279px)");
+
+  trigger.addEventListener("click", function () {
+    if (mobile.matches) return;
+    setOpen(!open);
+  });
 
   if (closeBtn) {
     closeBtn.addEventListener("click", function () {
