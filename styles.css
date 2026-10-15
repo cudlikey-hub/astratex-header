@@ -2955,6 +2955,60 @@ a { text-decoration: none; color: inherit; }
   gap: 24px;
   /* Nahoře nic — mezeru nad karty dává spodní odsazení USP. */
   padding: 0 0 64px 40px;
+  /* Pět karet je 2136 široko, takže pásek přetéká i na 1920. Scrollbar
+     se skrývá — posouvá se šipkou, prstem nebo kolečkem. */
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.stories::-webkit-scrollbar { display: none; }
+
+/* Obal kvůli šipce: ta nesmí být uvnitř posouvaného pásku, jinak by
+   odjela i ona. */
+.storiesRow { position: relative; }
+
+/* 510:5746 — kolečko 64 s šipkou 32, bílá na 80 %. Svisle na střed
+   karet, ne celého pásku: ten má dole ještě 64 px odsazení. */
+.storiesNext {
+  position: absolute;
+  right: 40px;
+  top: calc((100% - 64px) / 2);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-top: -32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition:
+    opacity var(--story-flood),
+    background-color var(--story-flood),
+    transform var(--story-flood);
+}
+.storiesNext img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  transition: transform var(--story-arrow);
+}
+@media (hover: hover) {
+  .storiesNext:hover { background: var(--white); }
+  .storiesNext:hover img { transform: translateX(3px); }
+}
+.storiesNext:active { transform: scale(0.96); }
+
+/* Na konci pásku už není kam pokračovat. Z pořadí tabulátoru tlačítko
+   vyřadí `disabled`, které nastavuje `stories.js` — samotné `opacity`
+   by ho jen zneviditelnilo. */
+.storiesRow[data-end="1"] .storiesNext {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Karty · 375:3204 — 400 × 600 · r 32.
@@ -3579,11 +3633,9 @@ a { text-decoration: none; color: inherit; }
     height: auto;
     gap: 16px;
     padding: 0 16px 64px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
   }
-  .stories::-webkit-scrollbar { display: none; }
+  /* Na dotyku se listuje prstem, šipka by jen zabírala kartu. */
+  .storiesNext { display: none; }
   .story {
     width: 240px;
     height: 360px;

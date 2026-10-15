@@ -69,6 +69,7 @@ drawer.js       drawer s kupóny
 header.js       bílá hlavička po scrollu
 hero-layout.js  přepínač plná šířka ⇄ karta (logo)
 usp-motion.js   nájezd USP sekce při scrollu
+stories.js      posun pásku karet pod USP šipkou
 coupon-tip.js   tooltip u ikonky kupónů
 serve.py        lokální server, port 5173
 assets/         hero-1.png, hero-2.png, ikony, ink-light/, ink-dark/, menu/, drawer/
@@ -506,6 +507,16 @@ Stavba: fotka (každá má vlastní ořez z návrhu), nahoře štítek + nadpis 
 + podtitul 21/25, dole bílá pilulka s popiskem 19/23 a tmavým kolečkem 40.
 Sekce nemá horní odsazení, mezeru nad kartami dává spodní padding USP.
 
+Pět karet je **2136 široko**, takže pásek přetéká i na 1920 a `.page` má
+`overflow-x: hidden` — bez posunu se na poslední dvě karty nedalo dostat.
+Pásek proto scrolluje sám v sobě (scrollbar skrytý) a vpravo nad ním je
+šipka `510:5746` — kolečko 64 s ikonou 32, bílá na 80 % se stínem
+4/4/16. Protože nesmí odjet s obsahem, leží mimo pásek v obalu
+`.storiesRow`; obsluhuje ji `stories.js`. Posouvá o jednu obrazovku bez
+poslední viditelné karty (stejný krok jako pásky ve vyhledávání)
+a na konci mizí — `disabled` ji zároveň vyřadí z tabulátoru. Na mobilu
+se nezobrazuje, tam se listuje prstem.
+
 **Fotka na první kartě je PNG s průhledností** (modelka je vyříznutá a
 prosvítá skrz ni podklad karty) — převod do JPEG jí podloží bílou a karta
 pak zespoda zbělá. Totéž platí pro horní vrstvu páté karty.
@@ -554,9 +565,13 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Mobilní přechod přes fotku je o něco tmavší než v návrhu (0,62 a 0,5 místo 0,5 a 0,476) | Návrh kreslí jen tmavou fotku; na snímku ze slonové kosti by bílý titulek zmizel |
 | Mobilní ořez druhého a třetího snímku je dopočítaný (1,46× místo 1,15×) | Návrh na mobilu kreslí jen první snímek; při stejném zoomu seděla modelka moc nízko |
 | Mobil nemá šipky carouselu ani scroll hint | V návrhu nejsou; listuje se tečkami |
+| Šipka u karet pod USP je svisle na středu karet, návrh ji má o 20 px výš | Návrh ji má na y 248 v desktopovém i mobilním rámu, kde jsou karty různě vysoké — je to zapomenutá poloha, ne záměr |
+| Šipka má od pravého okraje 40 px, návrh 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
+| Šipka na konci pásku zmizí a zpět se dá jen scrollem | Návrh kreslí jen pravou šipku; levá tam není |
 | Pás karet pod USP má na mobilu i pravé odsazení 16, návrh má jen levé | Jinak se poslední karta na konci scrollu lepí na hranu displeje |
 | Všech pět karet má na mobilu stejně velké tlačítko (kolečko 32), návrh má u Black Friday 28,6 | Ostatní čtyři karty mají 32; vypadá to na nedotažené měřítko jedné karty, ne na záměr |
 | Skupina „až 70 %" sedí na mobilu vystředěná, návrh ji má o ~6 px vpravo | Je to stejné řešení jako na desktopu (rámy se tam překrývají a středí se přes okraje); zvlášť posunutý mobil by se s desktopem rozešel |
+| Křížek v poli hledání zavírá celý panel, i když je v poli text | Je to tlačítko „Zavřít vyhledávání"; dvoufázové chování (napřed smazat, pak zavřít) mátlo (zadáno) |
 | Mezera mezi polem a obsahem je v obou stavech 40; návrh má ve stavu s dotazem 32 | Jinak by obsah při psaní poskočil o 8 px — ve Figmě je to zřejmě důsledek přerovnání rámů, ne záměr |
 | Doporučené produkty v mobilním hledání mají skutečné fotky, návrh kreslí pruhované placeholdery | Fotky už v projektu jsou a stejně to má desktop |
 | Bannery v mobilním menu jsou 201 vysoké, placeholdery v návrhu měly 120 | Banner má pevný poměr 16:9; na 120 by se musel zdeformovat nebo oříznout |

@@ -73,15 +73,9 @@
   });
 
   if (closeBtn) {
+    /* Křížek je „Zavřít vyhledávání", ne „vymazat" — zavírá na jedno
+       kliknutí i rozepsaný dotaz. Pole za sebou uklidí `setOpen`. */
     closeBtn.addEventListener("click", function () {
-      // Křížek nejdřív uklidí dotaz a vrátí výchozí obsah; teprve když je
-      // pole prázdné, zavře celý panel.
-      if (input && input.value !== "") {
-        input.value = "";
-        setQuery(false);
-        input.focus({ preventScroll: true });
-        return;
-      }
       setOpen(false);
       trigger.focus({ preventScroll: true });
     });
