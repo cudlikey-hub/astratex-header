@@ -524,6 +524,10 @@ poslední viditelné karty (stejný krok jako pásky ve vyhledávání).
 Na ovladači bez hoveru zůstávají vidět pořád; na mobilu se nezobrazují
 vůbec, tam se listuje prstem.
 
+Za pátou kartou jsou dvě prázdné šedé (`375:3207`, `375:3208`, #d2d2d2) —
+jsou v návrhu a naznačují, že pás pokračuje. Nikam nevedou, takže jsou to
+`span`y s `aria-hidden` a bez reakce na kurzor.
+
 **Fotka na první kartě je PNG s průhledností** (modelka je vyříznutá a
 prosvítá skrz ni podklad karty) — převod do JPEG jí podloží bílou a karta
 pak zespoda zbělá. Totéž platí pro horní vrstvu páté karty.

@@ -3060,6 +3060,13 @@ a { text-decoration: none; color: inherit; }
 }
 .story--diva,
 .story--delivery { background: linear-gradient(to bottom, #efdee2, #c0a6ae); }
+/* 375:3207 a 375:3208 — prázdné karty na konci pásku. Nejsou na co
+   klikat, takže ani nereagují na kurzor. */
+.story--ghost {
+  background: var(--story-grey);
+  cursor: default;
+  pointer-events: none;
+}
 /* 375:3206 — tmavá karta má vlastní ink i obrácený štítek */
 .story--friday {
   background: radial-gradient(circle at 50% 41%, #2a2a2a 0%, #1c1e1f 50%, #0f1215 100%);
