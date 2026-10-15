@@ -528,6 +528,14 @@ Za pátou kartou jsou dvě prázdné šedé (`375:3207`, `375:3208`, #d2d2d2) �
 jsou v návrhu a naznačují, že pás pokračuje. Nikam nevedou, takže jsou to
 `span`y s `aria-hidden` a bez reakce na kurzor.
 
+**Fotky musí mít dvojnásobek vykreslené šířky.** Karty mají silný ořez,
+takže se fotka roztahuje daleko přes kartu — první se vykresluje na 1578
+a pátá na 1761 CSS px. Na retině (DPR 2) to znamená 3156, resp. 3521
+skutečných pixelů. Pozor na past: adresa obrázku z `get_design_context`
+vrací **zmenšenou kopii do 1024 px**. Originál dá až
+`download_assets` → `rawImages` (tady 4096 px). První karta tím chvíli
+běžela na 1600 px a viditelně se rozostřila.
+
 **Fotka na první kartě je PNG s průhledností** (modelka je vyříznutá a
 prosvítá skrz ni podklad karty) — převod do JPEG jí podloží bílou a karta
 pak zespoda zbělá. Totéž platí pro horní vrstvu páté karty.
