@@ -1,12 +1,15 @@
-/* Pásek karet pod USP — šipka pro posun doprava (510:5746).
+/* Pásek karet pod USP — šipky pro posun do stran (510:5746).
 
    Pět karet je 2136 široko, takže se pásek nevejde ani na 1920 a bez
-   šipky nebylo jak se na poslední dvě dostat: `.page` má
+   šipek nebylo jak se na poslední dvě dostat: `.page` má
    `overflow-x: hidden`, takže přetékající karty jen zmizely.
 
    Posouvá se o jednu obrazovku, ale ne na doraz — poslední viditelná
    karta zůstane na druhém konci jako záchytný bod, stejně jako to dělají
-   pásky doporučených ve vyhledávání. Na konci šipka zmizí. */
+   pásky doporučených ve vyhledávání.
+
+   Tady se jen hlídá, na kterém kraji pásek stojí, a podle toho se šipka
+   vypne. Zbytek (odkrytí pod kurzorem, zmizení vypnuté) je v CSS. */
 (function () {
   "use strict";
 
@@ -14,29 +17,28 @@
   if (!row) return;
 
   var track = row.querySelector(".stories");
+  var prev = row.querySelector("[data-stories-prev]");
   var next = row.querySelector("[data-stories-next]");
-  if (!track || !next) return;
+  if (!track || !prev || !next) return;
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  function atEnd() {
-    // Zaokrouhlení v prohlížečích dělá i půlpixelové zbytky.
-    return track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
-  }
-
   function sync() {
-    var done = atEnd();
-    row.dataset.end = done ? "1" : "0";
-    next.disabled = done;
+    // Zaokrouhlení v prohlížečích dělá i půlpixelové zbytky.
+    prev.disabled = track.scrollLeft <= 1;
+    next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
   }
 
-  next.addEventListener("click", function () {
+  function page(dir) {
     var card = track.firstElementChild;
     var step = card
       ? Math.max(track.clientWidth - card.offsetWidth, card.offsetWidth)
       : track.clientWidth;
-    track.scrollBy({ left: step, behavior: reduced.matches ? "auto" : "smooth" });
-  });
+    track.scrollBy({ left: dir * step, behavior: reduced.matches ? "auto" : "smooth" });
+  }
+
+  next.addEventListener("click", function () { page(1); });
+  prev.addEventListener("click", function () { page(-1); });
 
   track.addEventListener("scroll", sync, { passive: true });
   window.addEventListener("resize", sync);

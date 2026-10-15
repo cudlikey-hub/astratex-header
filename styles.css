@@ -2968,10 +2968,10 @@ a { text-decoration: none; color: inherit; }
 .storiesRow { position: relative; }
 
 /* 510:5746 — kolečko 64 s šipkou 32, bílá na 80 %. Svisle na střed
-   karet, ne celého pásku: ten má dole ještě 64 px odsazení. */
-.storiesNext {
+   karet, ne celého pásku: ten má dole ještě 64 px odsazení.
+   Levá šipka je tatáž kresba překlopená přes svislou osu. */
+.storiesNav {
   position: absolute;
-  right: 40px;
   top: calc((100% - 64px) / 2);
   z-index: 2;
   display: flex;
@@ -2991,24 +2991,51 @@ a { text-decoration: none; color: inherit; }
     background-color var(--story-flood),
     transform var(--story-flood);
 }
-.storiesNext img {
+.storiesNav--next { right: 40px; }
+.storiesNav--prev { left: 40px; }
+/* Překlopí se celé tlačítko, takže šipka míří doleva. Stín se tím
+   překlopí taky, proto má předznamenané −4: po otočení dopadne zase
+   doprava dolů jako všude jinde na stránce. */
+.storiesNav--prev {
+  transform: scaleX(-1);
+  box-shadow: -4px 4px 16px rgba(0, 0, 0, 0.25);
+}
+.storiesNav img {
   display: block;
   width: 32px;
   height: 32px;
   transition: transform var(--story-arrow);
 }
 @media (hover: hover) {
-  .storiesNext:hover { background: var(--white); }
-  .storiesNext:hover img { transform: translateX(3px); }
+  .storiesNav:hover { background: var(--white); }
+  /* Šipka se přisune ve směru, kterým posouvá — u levé to díky
+     překlopení celého tlačítka vyjde samo. */
+  .storiesNav:hover img { transform: translateX(3px); }
 }
-.storiesNext:active { transform: scale(0.96); }
+.storiesNav--next:active { transform: scale(0.96); }
+.storiesNav--prev:active { transform: scaleX(-1) scale(0.96); }
 
-/* Na konci pásku už není kam pokračovat. Z pořadí tabulátoru tlačítko
+/* Na kraji pásku už není kam pokračovat. Z pořadí tabulátoru tlačítko
    vyřadí `disabled`, které nastavuje `stories.js` — samotné `opacity`
    by ho jen zneviditelnilo. */
-.storiesRow[data-end="1"] .storiesNext {
+.storiesNav:disabled {
   opacity: 0;
   pointer-events: none;
+}
+
+/* Šipky se ukazují až pod kurzorem — nad stránkou v klidu by jen
+   zakrývaly kartu. Na ovladači bez hoveru (dotyk, pero) zůstávají
+   vidět, jinak by se k nim nedalo dostat. */
+@media (hover: hover) {
+  .storiesNav {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .storiesRow:hover .storiesNav:not(:disabled),
+  .storiesRow:focus-within .storiesNav:not(:disabled) {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 /* Karty · 375:3204 — 400 × 600 · r 32.
@@ -3634,8 +3661,8 @@ a { text-decoration: none; color: inherit; }
     gap: 16px;
     padding: 0 16px 64px;
   }
-  /* Na dotyku se listuje prstem, šipka by jen zabírala kartu. */
-  .storiesNext { display: none; }
+  /* Na dotyku se listuje prstem, šipky by jen zabíraly kartu. */
+  .storiesNav { display: none; }
   .story {
     width: 240px;
     height: 360px;

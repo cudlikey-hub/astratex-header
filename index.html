@@ -1675,8 +1675,13 @@
       </span>
     </a>
   </section>
-    <!-- 510:5746 — posun pásku o obrazovku dál; mizí na konci -->
-    <button class="storiesNext" type="button" aria-label="Další dlaždice"
+    <!-- 510:5746 — posun pásku o obrazovku. Levá je tatáž šipka zrcadlově;
+         v návrhu není, ale bez ní se nedá vrátit. -->
+    <button class="storiesNav storiesNav--prev" type="button" aria-label="Předchozí dlaždice"
+            data-stories-prev>
+      <img src="assets/stories/icon-arrow-right-32.svg" alt="">
+    </button>
+    <button class="storiesNav storiesNav--next" type="button" aria-label="Další dlaždice"
             data-stories-next data-node-id="510:5746">
       <img src="assets/stories/icon-arrow-right-32.svg" alt="">
     </button>
