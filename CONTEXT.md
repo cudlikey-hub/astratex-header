@@ -43,6 +43,8 @@ Soubor: `LAkfV5lfb3ASyFinSbpyYu` (Header)
 | `444:3384` | mobilní hledání step4 v2 — výchozí stav |
 | `444:3491` | mobilní hledání step5 — stav s dotazem |
 | `510:5849` | mobilní karty pod USP (5 × 240 × 360) |
+| `522:2642` | kupónová karta pod USP — sbalené tlačítko |
+| `522:2700` | kupónová karta pod USP — rozbalené tlačítko |
 | `309:10328` | tooltip u ikonky kupónů |
 | `342:2095` | poslední verze celé stránky |
 
@@ -503,7 +505,7 @@ i v mobilní šířce, kde je karta 240 — sazba se zmenší na 60 %. **Polomě
 musí zůstat v pixelech**: `cqw` na samotném kontejneru se počítá z jeho
 rodiče, ne ze sebe, a vyšlo by 153 px.
 
-Stavba: fotka (každá má vlastní ořez z návrhu), nahoře štítek + nadpis 38
+Stavba: fotka (každá má vlastní ořez z návrhu), nahoře štítek + nadpis 36
 + podtitul 21/25, dole bílá pilulka s popiskem 19/23 a tmavým kolečkem 40.
 Sekce nemá horní odsazení, mezeru nad kartami dává spodní padding USP.
 
@@ -523,6 +525,17 @@ vidět jen pravá a na konci jen levá. Posouvá se o jednu obrazovku bez
 poslední viditelné karty (stejný krok jako pásky ve vyhledávání).
 Na ovladači bez hoveru zůstávají vidět pořád; na mobilu se nezobrazují
 vůbec, tam se listuje prstem.
+
+**Kupónová karta** (`522:2642`) je šestá, hned před prázdnými. Používá
+tutéž fotku jako první karta, štítek v ní ale nese kód (ikona, „Kód:"
+a samotný kód, mezery 8 a 4) a hlavně má jiné tlačítko: ve výchozím
+stavu je to jen kolečko 56 — tmavé sklo na 32 % s bílým prstencem 2,8.
+Najetí **na celou kartu** (`:hover`, kvůli klávesnici i `:focus-within`)
+ho roztáhne na pilulku 185 × 56 podle `522:2700`: popisek se vysune
+zpod kolečka, šipka se zmenší z 33,6 na 24 a pod ní se objeví kolečko
+40. Dělá to šířka a levé odsazení (8 → 24) při `overflow: hidden`
+a `justify-content: flex-end`, takže kolečko zůstane stát u pravé hrany
+a roste se to doleva. Prstenec se přitom ztenčí z 2,8 na 2, jak má návrh.
 
 Za pátou kartou jsou dvě prázdné šedé (`375:3207`, `375:3208`, #d2d2d2) —
 jsou v návrhu a naznačují, že pás pokračuje. Nikam nevedou, takže jsou to
@@ -587,6 +600,8 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky u karet pod USP jsou svisle na středu karet, návrh je má o 20 px výš | Návrh ji má na y 248 v desktopovém i mobilním rámu, kde jsou karty různě vysoké — je to zapomenutá poloha, ne záměr |
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
+| Kupónová pilulka je na mobilu rovnou rozbalená a bere si rozměry tlačítek ze sousedních karet (43,4 vysoká, kolečko 32, popisek 14/18) | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |
+| Sbalené kolečko má jen kupónová karta, ostatních pět má pilulku vidět pořád | Návrh kreslí nové chování jen u téhle karty |
 | Pás karet pod USP má na mobilu i pravé odsazení 16, návrh má jen levé | Jinak se poslední karta na konci scrollu lepí na hranu displeje |
 | Všech pět karet má na mobilu stejně velké tlačítko (kolečko 32), návrh má u Black Friday 28,6 | Ostatní čtyři karty mají 32; vypadá to na nedotažené měřítko jedné karty, ne na záměr |
 | Skupina „až 70 %" sedí na mobilu vystředěná, návrh ji má o ~6 px vpravo | Je to stejné řešení jako na desktopu (rámy se tam překrývají a středí se přes okraje); zvlášť posunutý mobil by se s desktopem rozešel |

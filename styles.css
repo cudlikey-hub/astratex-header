@@ -202,6 +202,7 @@ a { text-decoration: none; color: inherit; }
   --story-zoom: 620ms cubic-bezier(0.22, 0.61, 0.36, 1);
   --story-flood: 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
   --story-arrow: 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  --story-pill: 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .page {
@@ -3200,11 +3201,11 @@ a { text-decoration: none; color: inherit; }
   gap: 2cqw;
   width: 100%;
 }
-/* 501:5179 — 38 SemiBold, řádkování 1 */
+/* 522:2649 — 36 SemiBold, řádkování 1 (dřív 38) */
 .story__title {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 9.5cqw;
+  font-size: 9cqw;
   line-height: 1;
   word-break: break-word;
 }
@@ -3216,6 +3217,20 @@ a { text-decoration: none; color: inherit; }
   line-height: 6.25cqw;
   word-break: break-word;
 }
+/* 522:2646 — štítek s kupónem: ikona, „Kód:" a samotný kód.
+   Rozměry dědí po obyčejném štítku, přibývají jen mezery. */
+.story__badge--code { gap: 2cqw; }
+.story__codeWord {
+  display: inline-flex;
+  align-items: center;
+  gap: 1cqw;
+}
+.story__codeWord img {
+  display: block;
+  width: 6cqw;
+  height: 6cqw;
+}
+
 /* 507:5741 — velký nápis místo nadpisu */
 /* 507:5741 — nápis se středí na **celou výšku karty**, ne na místo mezi
    horním okrajem a tlačítkem. Dělá to flex přes celou výšku, ne
@@ -3384,6 +3399,97 @@ a { text-decoration: none; color: inherit; }
   .story:hover .story__photo--men { transform: translateX(-50%) scale(1.04); }
   /* a přes kartu ještě jednou přejede lesk */
   .story:hover .story__shine { animation: storyShine var(--story-shine) ease-out; }
+}
+
+/* =========================================================
+   KUPÓNOVÁ KARTA — 522:2642 / 522:2700
+   Místo pilulky s popiskem má jen kolečko (522:2689). Teprve najetí
+   na celou kartu ho roztáhne doleva v pilulku s textem (522:2713):
+   kreslí to šířka a levé odsazení, takže kolečko zůstane stát u pravé
+   hrany a popisek se vysune zpod něj. Vše v `cqw`, takže se to zmenší
+   s kartou stejně jako zbytek sazby.
+   ========================================================= */
+.storyPill {
+  position: relative;
+  /* Drží se dolní hrany stejně jako .story__cta; řádek v návrhu
+     (522:2693) je zarovnaný doprava. */
+  margin-top: auto;
+  align-self: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5cqw;
+  width: 14cqw;                 /* 56 — sbalené, jen kolečko */
+  height: 14cqw;
+  padding: 2cqw;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.32);
+  box-shadow: inset 0 0 0 0.7cqw var(--white);
+  backdrop-filter: blur(4.2px);
+  -webkit-backdrop-filter: blur(4.2px);
+  /* Popisek čeká za pravou hranou a odsud se vysouvá. */
+  overflow: hidden;
+  transition:
+    width var(--story-pill),
+    padding-left var(--story-pill),
+    box-shadow var(--story-pill);
+}
+/* 522:2718 — 19/23 SemiBold bílý */
+.storyPill__label {
+  flex: 0 0 auto;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 4.75cqw;
+  line-height: 5.75cqw;
+  color: var(--white);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--story-pill);
+}
+/* 525:3119 — kolečko uvnitř pilulky. Sbalené je průhledné: tmavý
+   podklad tam dělá celá pilulka a dvě vrstvy na 32 % by se sečetly. */
+.storyPill__go {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10cqw;
+  height: 10cqw;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0);
+  transition: background-color var(--story-pill);
+}
+.storyPill__go img {
+  display: block;
+  width: 8.4cqw;                /* 33,6 — v rozbaleném stavu 24 */
+  height: 8.4cqw;
+  transform: rotate(-45deg);
+  transition: width var(--story-pill), height var(--story-pill);
+}
+
+/* Spouští to celá karta, ne tlačítko — a `:focus-within` kvůli
+   klávesnici, protože odkazem je celá karta. */
+.story--coupon:is(:hover, :focus-within) .storyPill {
+  width: 46.25cqw;              /* 185 */
+  padding-left: 6cqw;           /* 24 */
+  box-shadow: inset 0 0 0 0.5cqw var(--white);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.story--coupon:is(:hover, :focus-within) .storyPill__label { opacity: 1; }
+.story--coupon:is(:hover, :focus-within) .storyPill__go {
+  background: rgba(0, 0, 0, 0.32);
+}
+.story--coupon:is(:hover, :focus-within) .storyPill__go img {
+  width: 6cqw;                  /* 24 */
+  height: 6cqw;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storyPill,
+  .storyPill__label,
+  .storyPill__go,
+  .storyPill__go img { transition: none; }
 }
 
 /* Lesk: šikmý světelný pruh, který přejede kartu. Jednou při nájezdu
@@ -3699,6 +3805,24 @@ a { text-decoration: none; color: inherit; }
   }
   /* 510:5860 — 14/18 */
   .story__ctaLabel { font-size: 14px; line-height: 18px; }
+  /* Kupónová karta: na dotyku není na co najet, pilulka je proto rovnou
+     rozbalená a bere si rozměry tlačítek na sousedních kartách. */
+  .storyPill {
+    width: auto;
+    height: 43.429px;
+    gap: 6px;
+    padding: 5.714px 5.714px 5.714px 17.143px;
+    box-shadow: inset 0 0 0 1.429px var(--white);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  .storyPill__label { opacity: 1; font-size: 14px; line-height: 18px; }
+  .storyPill__go {
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.32);
+  }
+  .storyPill__go img { width: 19.2px; height: 19.2px; }
   .story__go {
     width: 32px;
     height: 32px;
