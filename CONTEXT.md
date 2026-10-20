@@ -605,6 +605,7 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
+| Tmavé kolečko kupónové karty nemá prstenec a šipka se v něm na najetí nehýbe; ostatních pět karet obojí má | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
 | Kupónové tlačítko je na mobilu rovnou rozbalené a vypadá přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |
 | Tlačítko kupónové karty je u pravé hrany i na mobilu, sousední karty ho mají vlevo | Takhle je nakreslené v návrhu té karty; mobilní verzi nemá |
 | Sbalené kolečko má jen kupónová karta, ostatních pět má pilulku vidět pořád | Návrh kreslí nové chování jen u téhle karty |

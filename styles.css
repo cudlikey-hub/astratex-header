@@ -3467,13 +3467,19 @@ a { text-decoration: none; color: inherit; }
   opacity: 1;
   color: var(--neutral-n900);
 }
+/* Bez prstence — na kolečku té velikosti se při 1 px roztřepil a nic
+   nepřidával (zadáno). */
 .story--coupon:is(:hover, :focus-within) .story__go {
   background: var(--neutral-n900);
-  box-shadow: inset 0 0 0 0.25cqw rgba(255, 255, 255, 0.8);
+  box-shadow: none;
 }
+/* Šipka zůstává přesně na středu: `transform` tu přepisuje posun
+   o 3 px, kterým se šipka na ostatních kartách na najetí rozjede —
+   tady najetí tlačítko rozbaluje, takže by se hýbalo obojí. */
 .story--coupon:is(:hover, :focus-within) .story__go img {
   width: 5cqw;
   height: 5cqw;
+  transform: rotate(-45deg);
   filter: none;
 }
 
@@ -3810,7 +3816,7 @@ a { text-decoration: none; color: inherit; }
   .story--coupon .story__ctaLabel { max-width: none; opacity: 1; }
   .story--coupon .story__go {
     background: var(--neutral-n900);
-    box-shadow: inset 0 0 0 0.8px rgba(255, 255, 255, 0.8);
+    box-shadow: none;
   }
   .story--coupon .story__go img { width: 16px; height: 16px; }
   .story__go {
