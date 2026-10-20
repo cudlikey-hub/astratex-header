@@ -153,6 +153,11 @@ se šipkou. Návrh je má nad produkty; dolů je přesunulo zadání, odsazení 
 zůstalo stejné. V odkazech i v názvech produktů je **hledaný řetězec tučně**
 (`<b>` uvnitř `.searchChip__text` / `.searchCard__name`), jak to má návrh.
 
+Produktová karta (`464:3460`) nese **jen název a cenu, mezi nimi 8** —
+kategorie, která pod názvem bývala, je v návrhu skrytá (`464:3465`).
+Totéž platí pro mobilní řádek výsledku, tam ale mezera zůstává na 4
+(zadáno).
+
 Pořadí nájezdu kopíruje pořadí na stránce. Výchozí stav: řádek historie (0),
 popisek Doporučené (1), karty (2+). Stav s výsledky: hlavička (0), karty
 (1+), řádky odkazů (7, 8); bannery v obou (8+).

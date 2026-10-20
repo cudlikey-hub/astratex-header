@@ -2294,7 +2294,9 @@ a { text-decoration: none; color: inherit; }
     transform: scale(var(--card-zoom-scale));
   }
 }
-.searchCard__meta { display: flex; flex-direction: column; gap: 4px; }
+/* 464:3463 — název a cena, mezi nimi 8. Kategorie, která tu bývala,
+   je v návrhu skrytá (464:3465). */
+.searchCard__meta { display: flex; flex-direction: column; gap: 8px; }
 /* Název smí mít dva řádky, delší se uřízne třemi tečkami. Místo na druhý
    řádek se **nedrží** — krátký název zabere jen jeden a text pod ním
    vyjede nahoru; cena pak u karet s různě dlouhým názvem nestojí na
@@ -2311,16 +2313,6 @@ a { text-decoration: none; color: inherit; }
           line-clamp: 2;
   overflow: hidden;
   overflow-wrap: anywhere;
-}
-.searchCard__variant {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--menu-label);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 /* Cena se smí zalomit, ale jen mezi aktuální cenou a zbytkem: číslo s „Kč"
    drží pohromadě nezlomitelnou mezerou a původní cena se slevou tvoří jeden
@@ -4515,17 +4507,6 @@ a { text-decoration: none; color: inherit; }
   white-space: nowrap;
 }
 .mobileHit__name b { font-weight: 700; }
-/* 442:3331 — 12/20 N600 */
-.mobileHit__variant {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 20px;
-  color: var(--menu-label);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 /* 442:3332 — cena, původní cena a sleva, mezera 8 */
 .mobileHit__price {
   display: flex;
