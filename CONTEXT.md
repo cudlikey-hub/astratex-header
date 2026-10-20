@@ -45,6 +45,7 @@ Soubor: `LAkfV5lfb3ASyFinSbpyYu` (Header)
 | `510:5849` | mobilní karty pod USP (5 × 240 × 360) |
 | `522:2642` | kupónová karta pod USP — sbalené tlačítko |
 | `522:2700` | kupónová karta pod USP — rozbalené tlačítko |
+| `522:2933` | kupónová karta pod USP — dvojice štítků |
 | `309:10328` | tooltip u ikonky kupónů |
 | `342:2095` | poslední verze celé stránky |
 
@@ -527,8 +528,10 @@ Na ovladači bez hoveru zůstávají vidět pořád; na mobilu se nezobrazují
 vůbec, tam se listuje prstem.
 
 **Kupónová karta** (`522:2642`) je šestá, hned před prázdnými. Používá
-tutéž fotku jako první karta, štítek v ní ale nese kód (ikona, „Kód:"
-a samotný kód, mezery 8 a 4) a hlavně má jiné tlačítko: ve výchozím
+tutéž fotku jako první karta, místo jednoho štítku má ale dva vedle sebe
+(`522:2933`, mezera 16): tmavý s ikonou kupónu a kódem (mezera 8)
+a růžový `#dd2859` s akcí. Rozměry obou dědí po obyčejném štítku, liší
+se jen obsahem a barvou. Hlavně má ale jiné tlačítko: ve výchozím
 stavu je to jen kolečko 56 — tmavé sklo na 32 % s bílým prstencem 2,8.
 Najetí **na celou kartu** (`:hover`, kvůli klávesnici i `:focus-within`)
 z něj udělá **tutéž bílou pilulku, jakou mají ostatní karty** (zadáno —

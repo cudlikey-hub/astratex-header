@@ -3217,19 +3217,22 @@ a { text-decoration: none; color: inherit; }
   line-height: 6.25cqw;
   word-break: break-word;
 }
-/* 522:2646 — štítek s kupónem: ikona, „Kód:" a samotný kód.
-   Rozměry dědí po obyčejném štítku, přibývají jen mezery. */
-.story__badge--code { gap: 2cqw; }
-.story__codeWord {
-  display: inline-flex;
-  align-items: center;
-  gap: 1cqw;
+/* 522:2937 — na kupónové kartě jsou štítky dva vedle sebe. Rozměry
+   obou dědí po obyčejném štítku, liší se jen obsahem a barvou. */
+.story__tags {
+  display: flex;
+  align-items: flex-start;
+  gap: 4cqw;
 }
-.story__codeWord img {
+/* 522:2938 — ikona kupónu a samotný kód */
+.story__badge--code { gap: 2cqw; }
+.story__badge--code img {
   display: block;
   width: 6cqw;
   height: 6cqw;
 }
+/* 522:2943 */
+.story__badge--sale { background: #dd2859; }
 
 /* 507:5741 — velký nápis místo nadpisu */
 /* 507:5741 — nápis se středí na **celou výšku karty**, ne na místo mezi
