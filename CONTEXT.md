@@ -516,7 +516,8 @@ i v mobilní šířce, kde je karta 240 — sazba se zmenší na 60 %. **Polomě
 musí zůstat v pixelech**: `cqw` na samotném kontejneru se počítá z jeho
 rodiče, ne ze sebe, a vyšlo by 153 px.
 
-Stavba: fotka (každá má vlastní ořez z návrhu), nahoře štítek + nadpis 36
+Stavba: fotka (každá má vlastní ořez z návrhu), nahoře štítek 19/23
+(ikony v něm 22) + nadpis 36
 + podtitul 21/25, dole bílá pilulka s popiskem 19/23 a tmavým kolečkem 40.
 Sekce nemá horní odsazení, mezeru nad kartami dává spodní padding USP.
 
@@ -640,6 +641,7 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
+| Štítky nad nadpisem jsou 19/23 a ikony v nich 22; návrh má 21/25 a 24 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4) |
 | Odpočet běží do nejbližší půlnoci, ne do neděle podle štítku | Formát HH:MM:SS z návrhu pojme jen necelý den; do neděle by hodiny měly tři číslice a prvek by se roztáhl. Konkrétní termín jde nastavit `data-deadline` |
 | Tmavé kolečko na kartách se sbaleným tlačítkem nemá prstenec a šipka se v něm na najetí nehýbe; ostatní karty obojí mají | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
 | Sbalená tlačítka jsou na dotyku rovnou rozbalená a vypadají přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |

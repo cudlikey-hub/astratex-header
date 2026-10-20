@@ -3204,8 +3204,9 @@ a { text-decoration: none; color: inherit; }
   background: var(--neutral-n900);
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 5.25cqw;
-  line-height: 6.25cqw;
+  /* 19/23 — sazba ze škály; štítek tím klesl ze 37 na 35 (zadáno) */
+  font-size: 4.75cqw;
+  line-height: 5.75cqw;
   color: var(--white);
   white-space: nowrap;
 }
@@ -3259,8 +3260,8 @@ a { text-decoration: none; color: inherit; }
 }
 .storyTimer img {
   display: block;
-  width: 6cqw;
-  height: 6cqw;
+  width: 5.5cqw;               /* 22 (zadáno) */
+  height: 5.5cqw;
 }
 
 /* 522:2937 — na kupónové kartě jsou štítky dva vedle sebe. Rozměry
@@ -3274,8 +3275,8 @@ a { text-decoration: none; color: inherit; }
 .story__badge--code { gap: 2cqw; }
 .story__badge--code img {
   display: block;
-  width: 6cqw;
-  height: 6cqw;
+  width: 5.5cqw;               /* 22 (zadáno) */
+  height: 5.5cqw;
 }
 /* 522:2943 */
 .story__badge--sale { background: #dd2859; }
@@ -3856,6 +3857,10 @@ a { text-decoration: none; color: inherit; }
   .story__ctaLabel { font-size: 14px; line-height: 18px; }
   /* 525:3017 — odpočet drží čitelnost jako zbytek sazby */
   .storyTimer { font-size: 14px; line-height: 18px; }
+  /* Zmenšení ikon na 22 se týká jen desktopu; na mobilu by `cqw` samo
+     spadlo ze 14,4 na 13,2, a tam se nic měnit nemělo. */
+  .story__badge--code img,
+  .storyTimer img { width: 14.4px; height: 14.4px; }
   .story__go {
     width: 32px;
     height: 32px;
