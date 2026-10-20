@@ -46,6 +46,7 @@ Soubor: `LAkfV5lfb3ASyFinSbpyYu` (Header)
 | `522:2642` | kupónová karta pod USP — sbalené tlačítko |
 | `522:2700` | kupónová karta pod USP — rozbalené tlačítko |
 | `522:2933` | kupónová karta pod USP — dvojice štítků |
+| `525:3007` | Black Friday karta s odpočtem |
 | `309:10328` | tooltip u ikonky kupónů |
 | `342:2095` | poslední verze celé stránky |
 
@@ -72,7 +73,7 @@ drawer.js       drawer s kupóny
 header.js       bílá hlavička po scrollu
 hero-layout.js  přepínač plná šířka ⇄ karta (logo)
 usp-motion.js   nájezd USP sekce při scrollu
-stories.js      posun pásku karet pod USP šipkami
+stories.js      posun pásku karet šipkami a odpočet na kartě
 coupon-tip.js   tooltip u ikonky kupónů
 serve.py        lokální server, port 5173
 assets/         hero-1.png, hero-2.png, ikony, ink-light/, ink-dark/, menu/, drawer/
@@ -531,20 +532,42 @@ vůbec, tam se listuje prstem.
 tutéž fotku jako první karta, místo jednoho štítku má ale dva vedle sebe
 (`522:2933`, mezera 16): tmavý s ikonou kupónu a kódem (mezera 8)
 a růžový `#dd2859` s akcí. Rozměry obou dědí po obyčejném štítku, liší
-se jen obsahem a barvou. Hlavně má ale jiné tlačítko: ve výchozím
-stavu je to jen kolečko 56 — tmavé sklo na 32 % s bílým prstencem 2,8.
-Najetí **na celou kartu** (`:hover`, kvůli klávesnici i `:focus-within`)
-z něj udělá **tutéž bílou pilulku, jakou mají ostatní karty** (zadáno —
-návrh `522:2700` tam má tmavou skleněnou, viz odchylky). Rozbalený stav
-je proto obyčejné `.story__cta` a přepisuje se jen to, čím se liší
-sbalený. Popisek se vysune zpod kolečka, šipka se zmenší z 33,6 na 20
-a kolečko 40 se vybarví na tmavé. Pilulka nemá pevnou šířku — animuje se
-`max-width` popisku, mezera (0 → 16) a levé odsazení (8 → 16), takže
-sbalená vyjde na 8 + 40 + 8 = 56 jako v návrhu a rozbalená je přesně tak
-široká jako na sousedních kartách. Kolečko přitom stojí u pravé hrany
-(`justify-content: flex-end`) a pilulka roste doleva.
+se jen obsahem a barvou. Hlavně má ale **sbalené tlačítko**, viz níž.
 
-Za pátou kartou jsou dvě prázdné šedé (`375:3207`, `375:3208`, #d2d2d2) —
+**Black Friday s odpočtem** (`525:3007`) je sedmá. Kresba i velké „70"
+jsou tytéž jako na třetí kartě, přibývá řádek `525:3012`: štítek vlevo,
+vpravo ikona hodin a zbývající čas (19/23). Číslice drží `tabular-nums`,
+jinak by se odpočet každou vteřinu cukal. Tiká `stories.js`, výchozí cíl
+je nejbližší půlnoc (formát HH:MM:SS se do dvou číslic vejde jen na
+necelý den) a přepočítává se při každém tiku, takže se po půlnoci sám
+překlopí. Konkrétní termín jde zadat atributem `data-deadline` s datem
+v ISO, bez sahání do kódu.
+
+### Sbalené tlačítko (`.story--collapsible`)
+
+Obě nové karty mají místo pilulky jen **kolečko 56** (`522:2689`,
+`525:3035`) — tmavé sklo na 32 % s bílým prstencem 2,8 a šipkou 33,6.
+Najetí **na celou kartu** (`:hover`, kvůli klávesnici i `:focus-within`)
+z něj udělá **tutéž pilulku, jakou má karta normálně** (zadáno — návrh
+`522:2700` má tmavou skleněnou, viz odchylky).
+
+Rozbalený stav se proto nikde nepopisuje: prostě se přestane platit
+sbalený, takže si každá karta nese své odsazení i stín. Tmavá karta má
+rozbalenou pilulku přesně stejnou jako původní Black Friday (levé
+odsazení 24 a vržený stín), kupónová jako první karta (16, bez stínu).
+Přepisují se jen obecná pravidla hoveru, která by do toho mluvila —
+obrácení popisku do bílé a posun šipky o 3 px.
+
+Pilulka nemá pevnou šířku: animuje se `max-width` popisku, mezera
+(0 → 16) a levé odsazení, takže sbalená vyjde na 8 + 40 + 8 = 56 jako
+v návrhu a rozbalená je tak široká, jak si text řekne. Kolečko stojí
+u pravé hrany (`justify-content: flex-end`) a pilulka roste doleva.
+
+Sbalený stav platí jen pod `@media (hover: hover)` — na dotyku by se
+k popisku nedalo dostat, takže tam tlačítko zůstává rozbalené a vypadá
+přesně jako na sousedních kartách.
+
+Na konci pásku jsou dvě prázdné šedé (`375:3207`, `375:3208`, #d2d2d2) —
 jsou v návrhu a naznačují, že pás pokračuje. Nikam nevedou, takže jsou to
 `span`y s `aria-hidden` a bez reakce na kurzor.
 
@@ -608,9 +631,10 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
-| Tmavé kolečko kupónové karty nemá prstenec a šipka se v něm na najetí nehýbe; ostatních pět karet obojí má | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
-| Kupónové tlačítko je na mobilu rovnou rozbalené a vypadá přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |
-| Tlačítko kupónové karty je u pravé hrany i na mobilu, sousední karty ho mají vlevo | Takhle je nakreslené v návrhu té karty; mobilní verzi nemá |
+| Odpočet běží do nejbližší půlnoci, ne do neděle podle štítku | Formát HH:MM:SS z návrhu pojme jen necelý den; do neděle by hodiny měly tři číslice a prvek by se roztáhl. Konkrétní termín jde nastavit `data-deadline` |
+| Tmavé kolečko na kartách se sbaleným tlačítkem nemá prstenec a šipka se v něm na najetí nehýbe; ostatní karty obojí mají | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
+| Sbalená tlačítka jsou na dotyku rovnou rozbalená a vypadají přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |
+| Tlačítka obou nových karet jsou u pravé hrany, sousední karty je mají vlevo | Takhle je nakreslené v návrhu té karty; mobilní verzi nemá |
 | Sbalené kolečko má jen kupónová karta, ostatních pět má pilulku vidět pořád | Návrh kreslí nové chování jen u téhle karty |
 | Pás karet pod USP má na mobilu i pravé odsazení 16, návrh má jen levé | Jinak se poslední karta na konci scrollu lepí na hranu displeje |
 | Všech pět karet má na mobilu stejně velké tlačítko (kolečko 32), návrh má u Black Friday 28,6 | Ostatní čtyři karty mají 32; vypadá to na nedotažené měřítko jedné karty, ne na záměr |

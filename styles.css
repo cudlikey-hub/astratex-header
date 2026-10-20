@@ -3217,6 +3217,33 @@ a { text-decoration: none; color: inherit; }
   line-height: 6.25cqw;
   word-break: break-word;
 }
+/* 525:3012 — řádek s odpočtem: štítek vlevo, zbývající čas vpravo */
+.story__topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+/* 525:3015 — 19/23 SemiBold, ikona 24. `tabular-nums` drží číslice ve
+   stejné šířce, jinak by se odpočet každou vteřinu cukal. */
+.storyTimer {
+  display: inline-flex;
+  align-items: center;
+  gap: 2cqw;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 4.75cqw;
+  line-height: 5.75cqw;
+  color: var(--white);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.storyTimer img {
+  display: block;
+  width: 6cqw;
+  height: 6cqw;
+}
+
 /* 522:2937 — na kupónové kartě jsou štítky dva vedle sebe. Rozměry
    obou dědí po obyčejném štítku, liší se jen obsahem a barvou. */
 .story__tags {
@@ -3405,25 +3432,22 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* =========================================================
-   KUPÓNOVÁ KARTA — 522:2642
-   Tlačítko je tu sbalené do kolečka (522:2689) a teprve najetí na celou
-   kartu z něj udělá **tutéž bílou pilulku, jakou mají ostatní karty**.
-   Rozbalený stav je proto obyčejné `.story__cta` — tady se přepisuje
-   jen to, čím se liší sbalený. Pilulka nemá pevnou šířku: roste jí
-   obsah, protože popisku se animuje `max-width` a pilulce mezera
-   a levé odsazení. Sbalená tak vyjde na 8 + 40 + 8 = 56 jako v návrhu
-   a rozbalená je přesně tak široká jako na sousedních kartách.
+   KARTY SE SBALENÝM TLAČÍTKEM — 522:2642, 525:3007
+   Tlačítko je na nich sbalené do kolečka (522:2689, 525:3035) a teprve
+   najetí na celou kartu z něj udělá **tutéž pilulku, jakou má karta
+   normálně**. Rozbalený stav se proto nikde nepopisuje — jen se přestane
+   platit sbalený, takže si každá karta nese své odsazení i stín.
+   Přepisují se jen obecná pravidla hoveru, která by do toho mluvila.
+
+   Pilulka nemá pevnou šířku: roste jí obsah, protože se animuje
+   `max-width` popisku, mezera a levé odsazení. Sbalená tak vyjde na
+   8 + 40 + 8 = 56 jako v návrhu a rozbalená je přesně tak široká, jak
+   si text řekne.
    ========================================================= */
-.story--coupon .story__cta {
+.story--collapsible .story__cta {
   /* 522:2693 — řádek s tlačítkem je v návrhu zarovnaný doprava */
   align-self: flex-end;
   justify-content: flex-end;
-  gap: 0;
-  padding: 2cqw;
-  background: rgba(0, 0, 0, 0.32);
-  box-shadow: inset 0 0 0 0.7cqw var(--white);
-  backdrop-filter: blur(4.2px);
-  -webkit-backdrop-filter: blur(4.2px);
   transition:
     gap var(--story-pill),
     padding-left var(--story-pill),
@@ -3431,66 +3455,71 @@ a { text-decoration: none; color: inherit; }
     box-shadow var(--story-pill);
 }
 /* Popisek čeká složený na nulovou šířku a vysouvá se zpod kolečka. */
-.story--coupon .story__ctaLabel {
-  max-width: 0;
+.story--collapsible .story__ctaLabel {
   overflow: hidden;
-  opacity: 0;
   transition: max-width var(--story-pill), opacity var(--story-pill);
 }
-/* Sbalené kolečko je průhledné — tmavé sklo dělá celá pilulka a dvě
-   vrstvy na 32 % by se sečetly. Prstenec má jen ta vnější. */
-.story--coupon .story__go {
-  background: rgba(0, 0, 0, 0);
+/* Kolečko tu nemá prstenec — na 1 px se roztřepil a nic nepřidával. */
+.story--collapsible .story__go {
   box-shadow: none;
   transition: background-color var(--story-pill), box-shadow var(--story-pill);
 }
-.story--coupon .story__go img {
-  width: 8.4cqw;                /* 33,6 — rozbalené 20 jako jinde */
-  height: 8.4cqw;
+.story--collapsible .story__go img {
   transition:
     width var(--story-pill),
     height var(--story-pill),
     transform var(--story-arrow);
 }
-/* Tahle karta se nerozlévá, najetí ji místo toho rozbalí. */
-.story--coupon .story__cta::before { content: none; }
+/* Tyhle karty se nerozlévají, najetí je místo toho rozbalí. */
+.story--collapsible .story__cta::before { content: none; }
 
-/* Rozbalený stav = výchozí vzhled `.story__cta`. Spouští ho celá karta;
-   `:focus-within` kvůli klávesnici, protože odkazem je celá karta. */
-.story--coupon:is(:hover, :focus-within) .story__cta {
-  gap: 4cqw;
-  padding-left: 4cqw;
-  background: var(--white);
-  box-shadow: inset 0 0 0 0.5cqw var(--white);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-.story--coupon:is(:hover, :focus-within) .story__ctaLabel {
-  max-width: 28cqw;
-  opacity: 1;
-  color: var(--neutral-n900);
-}
-/* Bez prstence — na kolečku té velikosti se při 1 px roztřepil a nic
-   nepřidával (zadáno). */
-.story--coupon:is(:hover, :focus-within) .story__go {
-  background: var(--neutral-n900);
-  box-shadow: none;
-}
-/* Šipka zůstává přesně na středu: `transform` tu přepisuje posun
-   o 3 px, kterým se šipka na ostatních kartách na najetí rozjede —
-   tady najetí tlačítko rozbaluje, takže by se hýbalo obojí. */
-.story--coupon:is(:hover, :focus-within) .story__go img {
-  width: 5cqw;
-  height: 5cqw;
-  transform: rotate(-45deg);
-  filter: none;
+/* Sbalené jen tam, kde je čím najet. Na dotyku zůstává tlačítko
+   rozbalené — jinak by se k popisku nedalo dostat vůbec. */
+@media (hover: hover) {
+  .story--collapsible:not(:hover):not(:focus-within) .story__cta {
+    gap: 0;
+    padding: 2cqw;
+    background: rgba(0, 0, 0, 0.32);
+    box-shadow: inset 0 0 0 0.7cqw var(--white);
+    backdrop-filter: blur(4.2px);
+    -webkit-backdrop-filter: blur(4.2px);
+    /* Tmavá karta přidává pilulce vržený stín; sklu nesluší. */
+    filter: none;
+  }
+  .story--collapsible:not(:hover):not(:focus-within) .story__ctaLabel {
+    max-width: 0;
+    opacity: 0;
+  }
+  /* Sbalené kolečko je průhledné: tmavý podklad dělá celá pilulka
+     a dvě vrstvy na 32 % by se sečetly. */
+  .story--collapsible:not(:hover):not(:focus-within) .story__go {
+    background: rgba(0, 0, 0, 0);
+  }
+  .story--collapsible:not(:hover):not(:focus-within) .story__go img {
+    width: 8.4cqw;              /* 33,6 — rozbalené 20 jako jinde */
+    height: 8.4cqw;
+  }
+
+  /* Rozbalené si bere vzhled karty; tady se jen ruší obecný hover,
+     který by popisek obrátil do bílé a šipku rozjel o 3 px. */
+  .story--collapsible:is(:hover, :focus-within) .story__ctaLabel {
+    color: var(--neutral-n900);
+  }
+  .story--collapsible:is(:hover, :focus-within) .story__go {
+    background: var(--neutral-n900);
+    box-shadow: none;
+  }
+  .story--collapsible:is(:hover, :focus-within) .story__go img {
+    transform: rotate(-45deg);
+    filter: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .story--coupon .story__cta,
-  .story--coupon .story__ctaLabel,
-  .story--coupon .story__go,
-  .story--coupon .story__go img { transition: none; }
+  .story--collapsible .story__cta,
+  .story--collapsible .story__ctaLabel,
+  .story--collapsible .story__go,
+  .story--collapsible .story__go img { transition: none; }
 }
 
 /* Lesk: šikmý světelný pruh, který přejede kartu. Jednou při nájezdu
@@ -3806,22 +3835,8 @@ a { text-decoration: none; color: inherit; }
   }
   /* 510:5860 — 14/18 */
   .story__ctaLabel { font-size: 14px; line-height: 18px; }
-  /* Kupónová karta: na dotyku není na co najet, tlačítko je proto rovnou
-     rozbalené a vypadá přesně jako na sousedních kartách. */
-  .story--coupon .story__cta {
-    gap: 11.429px;
-    padding: 5.714px 5.714px 5.714px 11.429px;
-    background: var(--white);
-    box-shadow: inset 0 0 0 1.429px var(--white);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .story--coupon .story__ctaLabel { max-width: none; opacity: 1; }
-  .story--coupon .story__go {
-    background: var(--neutral-n900);
-    box-shadow: none;
-  }
-  .story--coupon .story__go img { width: 16px; height: 16px; }
+  /* 525:3017 — odpočet drží čitelnost jako zbytek sazby */
+  .storyTimer { font-size: 14px; line-height: 18px; }
   .story__go {
     width: 32px;
     height: 32px;
