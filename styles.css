@@ -1952,6 +1952,33 @@ a { text-decoration: none; color: inherit; }
 .searchBar__input:focus { outline: none; }
 
 /* 411:12709 — Top Bar Item 40 × 40 · r10 */
+/* 527:7322 — „Smazat" se ukáže, až když je v poli text. Je to totéž
+   tlačítko jako v mobilním hledání, jen o stupeň větší sazba (14/18
+   proti 12/16). Mezeru 8 ke křížku dává `gap` celého řádku. */
+.searchBar__wipe {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  flex: 0 0 auto;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--neutral-n200);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--neutral-n700);
+  white-space: nowrap;
+  transition: background-color 160ms ease;
+}
+[data-search-panel][data-query="1"] .searchBar__wipe { display: flex; }
+@media (hover: hover) {
+  .searchBar__wipe:hover { background: var(--neutral-n300); }
+}
+
 .searchBar__close {
   display: flex;
   align-items: center;

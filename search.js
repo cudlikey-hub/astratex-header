@@ -72,6 +72,17 @@
     setOpen(!open);
   });
 
+  /* 527:7322 — „Smazat" uklidí jen dotaz; panel zůstane otevřený
+     a kurzor se vrátí do pole, ať se dá hned psát dál. */
+  var wipeBtn = panel.querySelector("[data-search-wipe]");
+  if (wipeBtn && input) {
+    wipeBtn.addEventListener("click", function () {
+      input.value = "";
+      setQuery(false);
+      input.focus({ preventScroll: true });
+    });
+  }
+
   if (closeBtn) {
     /* Křížek je „Zavřít vyhledávání", ne „vymazat" — zavírá na jedno
        kliknutí i rozepsaný dotaz. Pole za sebou uklidí `setOpen`. */

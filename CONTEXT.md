@@ -143,8 +143,12 @@ s výsledky (`455:2556`). Řádek „Lidé často hledají", který měl návrh 
 historií, je na zadání **pryč**; po vymazání historie proto zmizí i prázdný
 obal řádků, aby nad „Doporučené" nezůstala mezera 40. Přepíná se `display`, takže se nájezd zleva
 přehraje znovu — animace se u znovuzobrazeného prvku spouští od začátku.
-Křížek nejdřív uklidí dotaz a vrátí výchozí obsah; teprve z prázdného pole
-zavře celý panel. Zavřený panel se vždy vrací do výchozího stavu.
+V poli jsou dvě tlačítka a každé dělá jednu věc: **„Smazat"**
+(`527:7322`) uklidí jen dotaz a nechá panel otevřený s kurzorem v poli —
+naskočí, až když je v poli text, a je to totéž tlačítko jako v mobilním
+hledání, jen o stupeň větší sazba (14/18 proti 12/16). **Křížek** zavírá
+celý panel i s rozepsaným dotazem. Zavřený panel se vždy vrací do
+výchozího stavu.
 
 **Stav s výsledky** (`455:2556`) má nahoře hlavičku „Nalezené produkty (32)"
 s odkazem „zobrazit vše" a pásek pěti karet se šipkami, **pod nimi** dva
