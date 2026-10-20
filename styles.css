@@ -3402,94 +3402,86 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* =========================================================
-   KUPÓNOVÁ KARTA — 522:2642 / 522:2700
-   Místo pilulky s popiskem má jen kolečko (522:2689). Teprve najetí
-   na celou kartu ho roztáhne doleva v pilulku s textem (522:2713):
-   kreslí to šířka a levé odsazení, takže kolečko zůstane stát u pravé
-   hrany a popisek se vysune zpod něj. Vše v `cqw`, takže se to zmenší
-   s kartou stejně jako zbytek sazby.
+   KUPÓNOVÁ KARTA — 522:2642
+   Tlačítko je tu sbalené do kolečka (522:2689) a teprve najetí na celou
+   kartu z něj udělá **tutéž bílou pilulku, jakou mají ostatní karty**.
+   Rozbalený stav je proto obyčejné `.story__cta` — tady se přepisuje
+   jen to, čím se liší sbalený. Pilulka nemá pevnou šířku: roste jí
+   obsah, protože popisku se animuje `max-width` a pilulce mezera
+   a levé odsazení. Sbalená tak vyjde na 8 + 40 + 8 = 56 jako v návrhu
+   a rozbalená je přesně tak široká jako na sousedních kartách.
    ========================================================= */
-.storyPill {
-  position: relative;
-  /* Drží se dolní hrany stejně jako .story__cta; řádek v návrhu
-     (522:2693) je zarovnaný doprava. */
-  margin-top: auto;
+.story--coupon .story__cta {
+  /* 522:2693 — řádek s tlačítkem je v návrhu zarovnaný doprava */
   align-self: flex-end;
-  display: flex;
-  align-items: center;
   justify-content: flex-end;
-  gap: 1.5cqw;
-  width: 14cqw;                 /* 56 — sbalené, jen kolečko */
-  height: 14cqw;
+  gap: 0;
   padding: 2cqw;
-  border-radius: 999px;
   background: rgba(0, 0, 0, 0.32);
   box-shadow: inset 0 0 0 0.7cqw var(--white);
   backdrop-filter: blur(4.2px);
   -webkit-backdrop-filter: blur(4.2px);
-  /* Popisek čeká za pravou hranou a odsud se vysouvá. */
-  overflow: hidden;
   transition:
-    width var(--story-pill),
+    gap var(--story-pill),
     padding-left var(--story-pill),
+    background-color var(--story-pill),
     box-shadow var(--story-pill);
 }
-/* 522:2718 — 19/23 SemiBold bílý */
-.storyPill__label {
-  flex: 0 0 auto;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 4.75cqw;
-  line-height: 5.75cqw;
-  color: var(--white);
-  white-space: nowrap;
+/* Popisek čeká složený na nulovou šířku a vysouvá se zpod kolečka. */
+.story--coupon .story__ctaLabel {
+  max-width: 0;
+  overflow: hidden;
   opacity: 0;
-  transition: opacity var(--story-pill);
+  transition: max-width var(--story-pill), opacity var(--story-pill);
 }
-/* 525:3119 — kolečko uvnitř pilulky. Sbalené je průhledné: tmavý
-   podklad tam dělá celá pilulka a dvě vrstvy na 32 % by se sečetly. */
-.storyPill__go {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 10cqw;
-  height: 10cqw;
-  border-radius: 50%;
+/* Sbalené kolečko je průhledné — tmavé sklo dělá celá pilulka a dvě
+   vrstvy na 32 % by se sečetly. Prstenec má jen ta vnější. */
+.story--coupon .story__go {
   background: rgba(0, 0, 0, 0);
-  transition: background-color var(--story-pill);
+  box-shadow: none;
+  transition: background-color var(--story-pill), box-shadow var(--story-pill);
 }
-.storyPill__go img {
-  display: block;
-  width: 8.4cqw;                /* 33,6 — v rozbaleném stavu 24 */
+.story--coupon .story__go img {
+  width: 8.4cqw;                /* 33,6 — rozbalené 20 jako jinde */
   height: 8.4cqw;
-  transform: rotate(-45deg);
-  transition: width var(--story-pill), height var(--story-pill);
+  transition:
+    width var(--story-pill),
+    height var(--story-pill),
+    transform var(--story-arrow);
 }
+/* Tahle karta se nerozlévá, najetí ji místo toho rozbalí. */
+.story--coupon .story__cta::before { content: none; }
 
-/* Spouští to celá karta, ne tlačítko — a `:focus-within` kvůli
-   klávesnici, protože odkazem je celá karta. */
-.story--coupon:is(:hover, :focus-within) .storyPill {
-  width: 46.25cqw;              /* 185 */
-  padding-left: 6cqw;           /* 24 */
+/* Rozbalený stav = výchozí vzhled `.story__cta`. Spouští ho celá karta;
+   `:focus-within` kvůli klávesnici, protože odkazem je celá karta. */
+.story--coupon:is(:hover, :focus-within) .story__cta {
+  gap: 4cqw;
+  padding-left: 4cqw;
+  background: var(--white);
   box-shadow: inset 0 0 0 0.5cqw var(--white);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
-.story--coupon:is(:hover, :focus-within) .storyPill__label { opacity: 1; }
-.story--coupon:is(:hover, :focus-within) .storyPill__go {
-  background: rgba(0, 0, 0, 0.32);
+.story--coupon:is(:hover, :focus-within) .story__ctaLabel {
+  max-width: 28cqw;
+  opacity: 1;
+  color: var(--neutral-n900);
 }
-.story--coupon:is(:hover, :focus-within) .storyPill__go img {
-  width: 6cqw;                  /* 24 */
-  height: 6cqw;
+.story--coupon:is(:hover, :focus-within) .story__go {
+  background: var(--neutral-n900);
+  box-shadow: inset 0 0 0 0.25cqw rgba(255, 255, 255, 0.8);
+}
+.story--coupon:is(:hover, :focus-within) .story__go img {
+  width: 5cqw;
+  height: 5cqw;
+  filter: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .storyPill,
-  .storyPill__label,
-  .storyPill__go,
-  .storyPill__go img { transition: none; }
+  .story--coupon .story__cta,
+  .story--coupon .story__ctaLabel,
+  .story--coupon .story__go,
+  .story--coupon .story__go img { transition: none; }
 }
 
 /* Lesk: šikmý světelný pruh, který přejede kartu. Jednou při nájezdu
@@ -3805,24 +3797,22 @@ a { text-decoration: none; color: inherit; }
   }
   /* 510:5860 — 14/18 */
   .story__ctaLabel { font-size: 14px; line-height: 18px; }
-  /* Kupónová karta: na dotyku není na co najet, pilulka je proto rovnou
-     rozbalená a bere si rozměry tlačítek na sousedních kartách. */
-  .storyPill {
-    width: auto;
-    height: 43.429px;
-    gap: 6px;
-    padding: 5.714px 5.714px 5.714px 17.143px;
+  /* Kupónová karta: na dotyku není na co najet, tlačítko je proto rovnou
+     rozbalené a vypadá přesně jako na sousedních kartách. */
+  .story--coupon .story__cta {
+    gap: 11.429px;
+    padding: 5.714px 5.714px 5.714px 11.429px;
+    background: var(--white);
     box-shadow: inset 0 0 0 1.429px var(--white);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
-  .storyPill__label { opacity: 1; font-size: 14px; line-height: 18px; }
-  .storyPill__go {
-    width: 32px;
-    height: 32px;
-    background: rgba(0, 0, 0, 0.32);
+  .story--coupon .story__ctaLabel { max-width: none; opacity: 1; }
+  .story--coupon .story__go {
+    background: var(--neutral-n900);
+    box-shadow: inset 0 0 0 0.8px rgba(255, 255, 255, 0.8);
   }
-  .storyPill__go img { width: 19.2px; height: 19.2px; }
+  .story--coupon .story__go img { width: 16px; height: 16px; }
   .story__go {
     width: 32px;
     height: 32px;

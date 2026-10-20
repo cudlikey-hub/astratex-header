@@ -531,11 +531,15 @@ tutéž fotku jako první karta, štítek v ní ale nese kód (ikona, „Kód:"
 a samotný kód, mezery 8 a 4) a hlavně má jiné tlačítko: ve výchozím
 stavu je to jen kolečko 56 — tmavé sklo na 32 % s bílým prstencem 2,8.
 Najetí **na celou kartu** (`:hover`, kvůli klávesnici i `:focus-within`)
-ho roztáhne na pilulku 185 × 56 podle `522:2700`: popisek se vysune
-zpod kolečka, šipka se zmenší z 33,6 na 24 a pod ní se objeví kolečko
-40. Dělá to šířka a levé odsazení (8 → 24) při `overflow: hidden`
-a `justify-content: flex-end`, takže kolečko zůstane stát u pravé hrany
-a roste se to doleva. Prstenec se přitom ztenčí z 2,8 na 2, jak má návrh.
+z něj udělá **tutéž bílou pilulku, jakou mají ostatní karty** (zadáno —
+návrh `522:2700` tam má tmavou skleněnou, viz odchylky). Rozbalený stav
+je proto obyčejné `.story__cta` a přepisuje se jen to, čím se liší
+sbalený. Popisek se vysune zpod kolečka, šipka se zmenší z 33,6 na 20
+a kolečko 40 se vybarví na tmavé. Pilulka nemá pevnou šířku — animuje se
+`max-width` popisku, mezera (0 → 16) a levé odsazení (8 → 16), takže
+sbalená vyjde na 8 + 40 + 8 = 56 jako v návrhu a rozbalená je přesně tak
+široká jako na sousedních kartách. Kolečko přitom stojí u pravé hrany
+(`justify-content: flex-end`) a pilulka roste doleva.
 
 Za pátou kartou jsou dvě prázdné šedé (`375:3207`, `375:3208`, #d2d2d2) —
 jsou v návrhu a naznačují, že pás pokračuje. Nikam nevedou, takže jsou to
@@ -600,7 +604,9 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky u karet pod USP jsou svisle na středu karet, návrh je má o 20 px výš | Návrh ji má na y 248 v desktopovém i mobilním rámu, kde jsou karty různě vysoké — je to zapomenutá poloha, ne záměr |
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
-| Kupónová pilulka je na mobilu rovnou rozbalená a bere si rozměry tlačítek ze sousedních karet (43,4 vysoká, kolečko 32, popisek 14/18) | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |
+| Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
+| Kupónové tlačítko je na mobilu rovnou rozbalené a vypadá přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |
+| Tlačítko kupónové karty je u pravé hrany i na mobilu, sousední karty ho mají vlevo | Takhle je nakreslené v návrhu té karty; mobilní verzi nemá |
 | Sbalené kolečko má jen kupónová karta, ostatních pět má pilulku vidět pořád | Návrh kreslí nové chování jen u téhle karty |
 | Pás karet pod USP má na mobilu i pravé odsazení 16, návrh má jen levé | Jinak se poslední karta na konci scrollu lepí na hranu displeje |
 | Všech pět karet má na mobilu stejně velké tlačítko (kolečko 32), návrh má u Black Friday 28,6 | Ostatní čtyři karty mají 32; vypadá to na nedotažené měřítko jedné karty, ne na záměr |
