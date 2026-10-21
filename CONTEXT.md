@@ -540,7 +540,7 @@ vůbec, tam se listuje prstem.
 
 **Kupónová karta** (`522:2642`) je šestá, hned před prázdnými. Používá
 tutéž fotku jako první karta, místo jednoho štítku má ale dva vedle sebe
-(`522:2933`, mezera 16): tmavý s ikonou kupónu a kódem (mezera 8)
+(`522:2933`, mezera 16): tmavý s ikonou kupónu a kódem (mezera 4)
 a růžový `#dd2859` s akcí. Rozměry obou dědí po obyčejném štítku, liší
 se jen obsahem a barvou. Hlavně má ale **sbalené tlačítko**, viz níž.
 
@@ -641,7 +641,7 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
-| Štítky nad nadpisem jsou 19/23 a ikony v nich 22; návrh má 21/25 a 24 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4) |
+| Štítky nad nadpisem jsou 19/23, ikony v nich 22 a mezera k textu 4; návrh má 21/25, 24 a 8 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4, mezera 4,8) |
 | Odpočet běží do nejbližší půlnoci, ne do neděle podle štítku | Formát HH:MM:SS z návrhu pojme jen necelý den; do neděle by hodiny měly tři číslice a prvek by se roztáhl. Konkrétní termín jde nastavit `data-deadline` |
 | Tmavé kolečko na kartách se sbaleným tlačítkem nemá prstenec a šipka se v něm na najetí nehýbe; ostatní karty obojí mají | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
 | Sbalená tlačítka jsou na dotyku rovnou rozbalená a vypadají přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |

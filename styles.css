@@ -3271,8 +3271,9 @@ a { text-decoration: none; color: inherit; }
   align-items: flex-start;
   gap: 4cqw;
 }
-/* 522:2938 — ikona kupónu a samotný kód */
-.story__badge--code { gap: 2cqw; }
+/* 522:2938 — ikona kupónu a samotný kód, mezi nimi 4 (zadáno;
+   návrh má 8) */
+.story__badge--code { gap: 1cqw; }
 .story__badge--code img {
   display: block;
   width: 5.5cqw;               /* 22 (zadáno) */
@@ -3857,10 +3858,12 @@ a { text-decoration: none; color: inherit; }
   .story__ctaLabel { font-size: 14px; line-height: 18px; }
   /* 525:3017 — odpočet drží čitelnost jako zbytek sazby */
   .storyTimer { font-size: 14px; line-height: 18px; }
-  /* Zmenšení ikon na 22 se týká jen desktopu; na mobilu by `cqw` samo
-     spadlo ze 14,4 na 13,2, a tam se nic měnit nemělo. */
+  /* Zmenšení ikon na 22 a mezery na 4 se týká jen desktopu; na mobilu
+     by `cqw` samo spadlo ze 14,4 na 13,2, resp. ze 4,8 na 2,4, a tam se
+     nic měnit nemělo. */
   .story__badge--code img,
   .storyTimer img { width: 14.4px; height: 14.4px; }
+  .story__badge--code { gap: 4.8px; }
   .story__go {
     width: 32px;
     height: 32px;
