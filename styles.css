@@ -3884,6 +3884,32 @@ a { text-decoration: none; color: inherit; }
   }
 }
 
+/* Na dotyku jsou obě karty se sbaleným tlačítkem **sbalené napořád** —
+   není čím najet, takže by se pilulka nikdy nezavřela. Kolečko má tolik,
+   co měří bílá pilulka na sousedních kartách na výšku (5,714 + 32 +
+   5,714 = 43,43), takže je to kruh, ne ovál. Prstenec i šipka jsou
+   dopočítané ze sbaleného stavu na desktopu poměrem 43,43/56.
+
+   Musí to stát až za mobilním blokem: `.story--friday .story__cta` v něm
+   má stejnou sílu a přebilo by to levé odsazení zpátky na 17. */
+@media (max-width: 1279px) and (hover: none) {
+  .story--collapsible .story__cta {
+    gap: 0;
+    padding: 5.714px;
+    background: rgba(0, 0, 0, 0.32);
+    box-shadow: inset 0 0 0 2.17px var(--white);
+    backdrop-filter: blur(4.2px);
+    -webkit-backdrop-filter: blur(4.2px);
+    filter: none;
+  }
+  .story--collapsible .story__ctaLabel {
+    max-width: 0;
+    opacity: 0;
+  }
+  .story--collapsible .story__go { background: rgba(0, 0, 0, 0); }
+  .story--collapsible .story__go img { width: 26.9px; height: 26.9px; }
+}
+
 /* =========================================================
    MOBILNÍ MENU — step 11 · 375:2566
    Otevírá hamburger. Na rozdíl od mega menu nevisí pod lištou, ale

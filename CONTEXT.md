@@ -574,9 +574,14 @@ Pilulka nemá pevnou šířku: animuje se `max-width` popisku, mezera
 v návrhu a rozbalená je tak široká, jak si text řekne. Kolečko stojí
 u pravé hrany (`justify-content: flex-end`) a pilulka roste doleva.
 
-Sbalený stav platí jen pod `@media (hover: hover)` — na dotyku by se
-k popisku nedalo dostat, takže tam tlačítko zůstává rozbalené a vypadá
-přesně jako na sousedních kartách.
+Sbalený stav platí pod `@media (hover: hover)`; **na dotyku jsou obě
+karty sbalené napořád** (zadáno) — není čím najet, takže by se pilulka
+nikdy nezavřela. Kolečko tam má tolik, co měří bílá pilulka na
+sousedních kartách na výšku (5,714 + 32 + 5,714 = 43,43), takže je to
+kruh, ne ovál; prstenec 2,17 a šipka 26,9 jsou dopočítané ze sbaleného
+stavu na desktopu poměrem 43,43/56. Pravidlo musí stát **až za mobilním
+blokem**: `.story--friday .story__cta` v něm má stejnou sílu a přebilo
+by levé odsazení zpátky na 17.
 
 Na konci pásku jsou dvě prázdné šedé (`375:3207`, `375:3208`, #d2d2d2) —
 jsou v návrhu a naznačují, že pás pokračuje. Nikam nevedou, takže jsou to
@@ -645,7 +650,7 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Štítky nad nadpisem i odpočet mají 19/23, ikony 22 a mezeru k textu 4; návrh má 21/25, 24 a 8 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4, mezera 4,8) |
 | Odpočet běží do nejbližší půlnoci, ne do neděle podle štítku | Formát HH:MM:SS z návrhu pojme jen necelý den; do neděle by hodiny měly tři číslice a prvek by se roztáhl. Konkrétní termín jde nastavit `data-deadline` |
 | Tmavé kolečko na kartách se sbaleným tlačítkem nemá prstenec a šipka se v něm na najetí nehýbe; ostatní karty obojí mají | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
-| Sbalená tlačítka jsou na dotyku rovnou rozbalená a vypadají přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |
+| Sbalená tlačítka zůstávají na dotyku sbalená do kolečka 43,43; mobilní verzi těchhle karet návrh nemá | Zadáno |
 | Tlačítka obou nových karet jsou u pravé hrany, sousední karty je mají vlevo | Takhle je nakreslené v návrhu té karty; mobilní verzi nemá |
 | Sbalené kolečko má jen kupónová karta, ostatních pět má pilulku vidět pořád | Návrh kreslí nové chování jen u téhle karty |
 | Pás karet pod USP má na mobilu i pravé odsazení 16, návrh má jen levé | Jinak se poslední karta na konci scrollu lepí na hranu displeje |
