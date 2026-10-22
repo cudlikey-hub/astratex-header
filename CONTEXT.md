@@ -546,7 +546,8 @@ se jen obsahem a barvou. Hlavně má ale **sbalené tlačítko**, viz níž.
 
 **Black Friday s odpočtem** (`525:3007`) je sedmá. Kresba i velké „70"
 jsou tytéž jako na třetí kartě, přibývá řádek `525:3012`: štítek vlevo,
-vpravo ikona hodin a zbývající čas (19/23). Číslice drží `tabular-nums`,
+vpravo ikona hodin a zbývající čas (19/23, mezera 4 jako ve štítku
+s kódem). Číslice drží `tabular-nums`,
 jinak by se odpočet každou vteřinu cukal. Tiká `stories.js`, výchozí cíl
 je nejbližší půlnoc (formát HH:MM:SS se do dvou číslic vejde jen na
 necelý den) a přepočítává se při každém tiku, takže se po půlnoci sám
@@ -641,7 +642,7 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
-| Štítky nad nadpisem jsou 19/23, ikony v nich 22 a mezera k textu 4; návrh má 21/25, 24 a 8 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4, mezera 4,8) |
+| Štítky nad nadpisem i odpočet mají 19/23, ikony 22 a mezeru k textu 4; návrh má 21/25, 24 a 8 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4, mezera 4,8) |
 | Odpočet běží do nejbližší půlnoci, ne do neděle podle štítku | Formát HH:MM:SS z návrhu pojme jen necelý den; do neděle by hodiny měly tři číslice a prvek by se roztáhl. Konkrétní termín jde nastavit `data-deadline` |
 | Tmavé kolečko na kartách se sbaleným tlačítkem nemá prstenec a šipka se v něm na najetí nehýbe; ostatní karty obojí mají | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
 | Sbalená tlačítka jsou na dotyku rovnou rozbalená a vypadají přesně jako na sousedních kartách | Na dotyku není na co najet a mobilní verze téhle karty v návrhu není |

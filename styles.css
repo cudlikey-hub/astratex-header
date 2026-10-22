@@ -3249,7 +3249,8 @@ a { text-decoration: none; color: inherit; }
 .storyTimer {
   display: inline-flex;
   align-items: center;
-  gap: 2cqw;
+  /* Stejná mezera jako ve štítku s kódem — 4 (zadáno; návrh má 8) */
+  gap: 1cqw;
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 4.75cqw;
@@ -3863,7 +3864,8 @@ a { text-decoration: none; color: inherit; }
      nic měnit nemělo. */
   .story__badge--code img,
   .storyTimer img { width: 14.4px; height: 14.4px; }
-  .story__badge--code { gap: 4.8px; }
+  .story__badge--code,
+  .storyTimer { gap: 4.8px; }
   .story__go {
     width: 32px;
     height: 32px;
