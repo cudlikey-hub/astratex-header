@@ -47,6 +47,8 @@ Soubor: `LAkfV5lfb3ASyFinSbpyYu` (Header)
 | `522:2700` | kupónová karta pod USP — rozbalené tlačítko |
 | `522:2933` | kupónová karta pod USP — dvojice štítků |
 | `525:3007` | Black Friday karta s odpočtem |
+| `538:2899` | nová sada karet pod USP — desktop |
+| `542:3492` | nová sada karet pod USP — mobil |
 | `309:10328` | tooltip u ikonky kupónů |
 | `342:2095` | poslední verze celé stránky |
 
@@ -510,6 +512,24 @@ prvek se nepřekresluje).
 kategorií zůstává stejný; návrh kreslí jen obsah pro Dámské. Druhou
 úroveň má zatím jen Podprsenky — ostatní kategorie návrh nekreslí.
 
+### Nová sada karet (`538:2899`, mobil `542:3492`)
+
+**Prvních pět karet v pásku.** Oproti starší sadě mají štítek nahoře
+a **text i tlačítko dole** v jednom bloku (`.story__foot`, mezera 24).
+Nadpis je 32 místo 36 a tlačítko menší: 44 místo 56, kolečko 32, šipka
+16, popisek 17/21. Kresba, nájezd i lesk se nemění — jen se nájezd textu
+pověsil na `.story__copy`, protože text už není v hlavičce.
+
+Mobil má rám **278,26 × 417,39 · r 22,26** (0,696 desktopu), ale sazba,
+odsazení ani tlačítko na to měřítko nejedou — návrh je má v pevných
+hodnotách (štítek p4/r4 14/18 s ikonou 16, nadpis 21/25, podtitul 14/18,
+pilulka 32 bez prstence, kolečko 24), takže jsou i v CSS v pixelech.
+Velké „70" je na mobilu menší, než by vyšlo ze šířky karty; řeší to
+násobič `--big` na `.story__big`, který jinde nic nemění.
+
+Starší karty zůstávají za nimi a drží si svých 400 × 600, resp. 240 × 360
+na mobilu — pás tedy má dvě velikosti (viz odchylky).
+
 ### Karty pod USP (`375:3204`)
 
 Pět karet 400 × 600, r32, vodorovně odjíždějících. Uvnitř se měří v `cqw`
@@ -649,6 +669,9 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
+| Nové karty jsou na mobilu 278 × 417, starší zůstaly 240 × 360 — pás má dvě velikosti | Nové karty jsou podle `542:3492`, starší podle `510:5849`; zadáno bylo přidat je před stávající, ne stávající předělat |
+| Druhá nová karta má odpočet a velké „70 %", ale nadpis „Diva by Iva" jako třetí | Takhle je to v návrhu (`542:3743`); vypadá to na přetažený text, ale `přesně podle návrhu` bylo zadání |
+| Tmavá karta nové sady má tmavé pozadí, návrh ji nevybarvuje | Fotka ji překryje; bez výplně by při načítání prosvítala bílá |
 | USP má svisle 120 na desktopu a 64 na mobilu, návrh 80 a 40 | Zadáno. Spodní odsazení zároveň určuje mezeru nad kartami, ty samy nahoře nic nemají |
 | Štítky nad nadpisem i odpočet mají 19/23, ikony 22 a mezeru k textu 4; návrh má 21/25, 24 a 8 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4, mezera 4,8) |
 | Odpočet běží do nejbližší půlnoci, ne do neděle podle štítku | Formát HH:MM:SS z návrhu pojme jen necelý den; do neděle by hodiny měly tři číslice a prvek by se roztáhl. Konkrétní termín jde nastavit `data-deadline` |

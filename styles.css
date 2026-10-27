@@ -3310,6 +3310,9 @@ a { text-decoration: none; color: inherit; }
 
 /* 503:5619 — „až 70 %" na tmavé kartě */
 .story__big {
+  /* Násobič velikosti: nová sada karet má na mobilu „70" menší, než by
+     vyšlo z šířky karty. Ve výchozím stavu nic nemění. */
+  --big: 1;
   position: absolute;
   left: 50%;
   top: 52.25cqw;
@@ -3326,38 +3329,38 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 1.281cqw;
-  margin-right: -3cqw;
+  gap: calc(1.281cqw * var(--big));
+  margin-right: calc(-3cqw * var(--big));
 }
 .story__bigAz {
   font-family: Inter, var(--font-sans);
   font-weight: 800;
-  font-size: 7.685cqw;
+  font-size: calc(7.685cqw * var(--big));
   line-height: 1;
   text-transform: lowercase;
 }
 .story__bigBar {
   display: block;
   width: 100%;
-  height: 1.067cqw;
+  height: calc(1.067cqw * var(--big));
   background: var(--white);
 }
 .story__bigNum {
   font-family: Inter, var(--font-sans);
   font-weight: 700;
-  font-size: 61.9cqw;
+  font-size: calc(61.9cqw * var(--big));
   line-height: 1.05;
-  letter-spacing: -3.714cqw;
+  letter-spacing: calc(-3.714cqw * var(--big));
 }
 .story__bigPct {
   align-self: center;
   /* Rámeček je v návrhu užší než samotný znak (34,15 proti 48), takže
      se procento o kus zasune pod nulu — bez toho by celek přetekl. */
-  width: 8.539cqw;
-  margin-left: 6cqw;
+  width: calc(8.539cqw * var(--big));
+  margin-left: calc(6cqw * var(--big));
   font-family: Inter, var(--font-sans);
   font-weight: 900;
-  font-size: 11.954cqw;
+  font-size: calc(11.954cqw * var(--big));
   line-height: 1.05;
   text-align: center;
 }
@@ -3546,6 +3549,140 @@ a { text-decoration: none; color: inherit; }
   .story--collapsible .story__go img { transition: none; }
 }
 
+/* =========================================================
+   NOVÁ SADA KARET — 538:2899
+   Štítek nahoře, **text i tlačítko dole** (`542:3713`). Kresba, nájezd
+   i lesk jsou tytéž jako u starších karet — liší se fotky, sazba
+   nadpisu (32 místo 36) a menší tlačítko (44 místo 56).
+   ========================================================= */
+.story--flat .story__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6cqw;                    /* 24 */
+  width: 100%;
+  /* Drží se dolní hrany i na kartě, kde nahoře nic není (doprava). */
+  margin-top: auto;
+}
+/* 542:3710 — 32 SemiBold, řádkování 1 */
+.story--flat .story__title { font-size: 8cqw; }
+
+/* 542:3625 — pilulka 44: menší odsazení, kolečko 32 a šipka 16 */
+.story--flat .story__cta {
+  margin-top: 0;
+  gap: 2.5cqw;                  /* 10 */
+  padding: 1.5cqw 1.5cqw 1.5cqw 4cqw;
+}
+/* 542:3626 — 17/21 */
+.story--flat .story__ctaLabel {
+  font-size: 4.25cqw;
+  line-height: 5.25cqw;
+}
+.story--flat .story__go {
+  width: 8cqw;
+  height: 8cqw;
+  box-shadow: inset 0 0 0 0.2cqw rgba(255, 255, 255, 0.8);
+}
+.story--flat .story__go img { width: 4cqw; height: 4cqw; }
+/* Rozlévání roste z kolečka, takže kopíruje jeho novou velikost. */
+.story--flat .story__cta::before {
+  right: 1.5cqw;
+  width: 8cqw;
+  height: 8cqw;
+  margin-top: -4cqw;
+}
+
+/* 542:3838, 542:3752 — světlý štítek na tmavé fotce */
+.story__badge--light {
+  background: var(--white);
+  color: var(--neutral-n900);
+}
+
+/* 548:3863 — přechod, aby text dole držel na fotce */
+.story__scrim {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 117.75cqw;
+  height: 36.5cqw;
+  background: linear-gradient(
+    to bottom,
+    rgba(181, 195, 210, 0) 0%,
+    #b5c3d2 62.981%,
+    #b5c3d2 100%
+  );
+}
+
+/* ---- kresba jednotlivých karet --------------------------------- */
+/* 542:3614 — 402 × 603 na (−2, −107) */
+.story--flatBras { background: #dec1b5; }
+.story__photo--flatBras {
+  width: 100.5cqw;
+  height: 150.75cqw;
+  left: -0.5cqw;
+  top: -26.75cqw;
+}
+/* 542:3802 — 501 × 684 na střed, překlopená přes svislou osu.
+   Návrh kartu nevybarvuje (fotka ji překryje); tmavá je tu jen proto,
+   aby při načítání neprosvítala bílá. */
+.story--flatFriday {
+  background: #1c1e1f;
+  color: var(--white);
+}
+.story__photo--flatFriday {
+  width: 125.25cqw;
+  height: 171cqw;
+  left: calc(50% + 0.125cqw);
+  top: 50%;
+  transform: translate(-50%, -50%) scaleX(-1);
+}
+.story--flatFriday .story__big { top: 32.5cqw; }
+/* 542:3630 — 476 × 630 na (50 %, −47), oblouk překlopený dolů */
+.story--flatDiva { background: linear-gradient(to bottom, #efdee2, #c0a6ae); }
+.story__photo--flatDiva {
+  width: 119cqw;
+  height: 157.5cqw;
+  left: 50%;
+  top: -11.75cqw;
+  transform: translateX(-50%);
+}
+.story__deco--flatDiva {
+  width: 125.549cqw;
+  height: 93.125cqw;
+  left: -8cqw;
+  top: 67cqw;
+  transform: scaleY(-1);
+}
+/* 542:3685 — 400 × 600 na (0, −40) */
+.story--flatMen { background: #abb9c8; }
+.story__photo--flatMen {
+  width: 100cqw;
+  height: 150cqw;
+  left: 0;
+  top: -10cqw;
+}
+/* 542:3670 — fotka přes celou kartu */
+.story--flatDelivery { background: linear-gradient(to bottom, #efdee2, #c0a6ae); }
+.story__photo--flatDelivery {
+  width: 100cqw;
+  height: 150cqw;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (hover: hover) {
+  .story:hover .story__photo--flatBras { transform: scale(1.04); }
+  .story:hover .story__photo--flatFriday {
+    transform: translate(-50%, -50%) scaleX(-1) scale(1.04);
+  }
+  .story:hover .story__photo--flatDiva { transform: translateX(-50%) scale(1.04); }
+  .story:hover .story__photo--flatMen { transform: scale(1.04); }
+  .story:hover .story__photo--flatDelivery {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
 /* Lesk: šikmý světelný pruh, který přejede kartu. Jednou při nájezdu
    sekce (karta po kartě) a pak při každém najetí myší. */
 .story__shine {
@@ -3580,9 +3717,13 @@ a { text-decoration: none; color: inherit; }
   animation: storyIn var(--story-in) calc(var(--i) * var(--story-step)) both;
 }
 .stories[data-motion] .story__head,
+.stories[data-motion] .story--flat .story__copy,
 .stories[data-motion] .story__big,
 .stories[data-motion] .story__cta { opacity: 0; }
-.stories[data-motion="in"] .story__head {
+/* Nová sada má text dole u tlačítka, ne v hlavičce — nájezd je ale
+   tentýž, jen se pověsí na `.story__copy`. */
+.stories[data-motion="in"] .story__head,
+.stories[data-motion="in"] .story--flat .story__copy {
   animation: storyHeadIn var(--story-in)
              calc(var(--i) * var(--story-step) + 120ms) both;
 }
@@ -3862,6 +4003,56 @@ a { text-decoration: none; color: inherit; }
   .story__ctaLabel { font-size: 14px; line-height: 18px; }
   /* 525:3017 — odpočet drží čitelnost jako zbytek sazby */
   .storyTimer { font-size: 14px; line-height: 18px; }
+
+  /* ---- Nová sada · 542:3492 — 278,26 × 417,39 · r 22,26 ----------
+     Rám je 0,696 desktopu, ale sazba, odsazení ani tlačítko na to
+     měřítko nejedou — návrh je má v pevných hodnotách, takže jsou
+     i tady v pixelech. Musí stát za `.story`, jinak by ji nepřebily. */
+  .story--flat {
+    width: 278.26px;
+    height: 417.39px;
+    border-radius: 22.26px;
+  }
+  .story--flat .story__body { padding: 16px; }
+  /* 555:3930 — štítek p4 r4, 14/18, ikona 16 */
+  .story--flat .story__badge {
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .story--flat .story__badge--code img { width: 16px; height: 16px; }
+  /* 555:3933 — text a tlačítko pod sebou, mezi nimi 16 */
+  .story--flat .story__foot { gap: 16px; }
+  .story--flat .story__copy { gap: 6px; }
+  .story--flat .story__title { font-size: 21px; line-height: 25px; }
+  .story--flat .story__sub { font-size: 14px; line-height: 18px; }
+  /* 555:3937 — pilulka 32 bez prstence, kolečko 24, šipka 16 */
+  .story--flat .story__cta {
+    gap: 8px;
+    padding: 4px 4px 4px 12px;
+    box-shadow: none;
+  }
+  .story--flat .story__ctaLabel { font-size: 14px; line-height: 18px; }
+  .story--flat .story__go {
+    width: 24px;
+    height: 24px;
+    box-shadow: none;
+  }
+  .story--flat .story__go img { width: 16px; height: 16px; }
+  .story--flat .story__cta::before {
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+  }
+  /* 555:3955 — „70" je tu menší, než by vyšlo ze šířky karty */
+  .story--flatFriday .story__big {
+    --big: 0.859;
+    top: 38.47cqw;
+  }
+  /* 555:3995 — 32/40 Bold */
+  .story--flat .story__shout { font-size: 32px; line-height: 40px; }
   /* Zmenšení ikon na 22 a mezery na 4 se týká jen desktopu; na mobilu
      by `cqw` samo spadlo ze 14,4 na 13,2, resp. ze 4,8 na 2,4, a tam se
      nic měnit nemělo. */
