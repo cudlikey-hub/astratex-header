@@ -2594,7 +2594,9 @@ a { text-decoration: none; color: inherit; }
   align-content: flex-start;
   justify-content: center;
   gap: 24px 32px;
-  padding: 80px 0;
+  /* 120 nahoře i dole (zadáno; návrh má 80). Spodní odsazení zároveň
+     dělá mezeru nad kartami — ty samy nahoře nic nemají. */
+  padding: 120px 0;
   background: #ffffff;
 }
 
@@ -3769,10 +3771,11 @@ a { text-decoration: none; color: inherit; }
   .hero__nav,
   .scrollHint { display: none; }
 
-  /* ---- USP · 385:3541 — px 16 · py 40 · 2 × 2 ------------------- */
+  /* ---- USP · 385:3541 — px 16 · py 64 · 2 × 2 ------------------- */
   .usp {
     gap: 24px;
-    padding: 40px 16px;
+    /* 64 nahoře i dole (zadáno; návrh má 40) */
+    padding: 64px 16px;
   }
   .usp__item {
     flex: 0 0 calc(50% - 12px);

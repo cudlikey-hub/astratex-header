@@ -95,8 +95,9 @@ Inter se načítá z Google Fonts CDN (váhy 400/500/600).
 - **Hero** = `100dvh − hero-inset` — node `342:2097` je anotovaný „full viewport".
   USP lišta je tedy nově **pod foldem**; že jde scrollovat, říká šipka dole.
   (Dřív bylo `100dvh − usp`, aby byla lišta vždy vidět — přebito zadáním.)
-- **USP** (node `375:3177`) je 319 vysoká: py 80, bez bočního odsazení,
-  čtyři sloupce po 456 s rozestupem 32.
+- **USP** (node `375:3177`) je v návrhu 319 vysoká: py 80, bez bočního
+  odsazení, čtyři sloupce po 456 s rozestupem 32. Na webu má **py 120**
+  (zadáno), tedy 399 — spodní odsazení zároveň dělá mezeru nad kartami.
 - `--canvas-min-fit` řeší, že „1280" je šířka okna včetně scrollbaru. Bez toho
   se při okně 1280 px a trvale zobrazeném posuvníku objevil vodorovný posuvník.
 
@@ -368,7 +369,8 @@ stejně jako na desktopu.
   čitelný; `.hero__left` tu musí mít `border-radius: 0` — desktopových r16
   by se jinak chytil i ten přechod.
   Titulek 48/52, podtitul 17/21, tlačítko a tečky vedle sebe.
-- **USP** 2 × 2, px 16 · py 40 · rozestupy 24, kruh 64 s ikonou 28 (stejný
+- **USP** 2 × 2, px 16 · **py 64** (návrh 40, zadáno) · rozestupy 24,
+  kruh 64 s ikonou 28 (stejný
   poměr jako 72/31,5 na desktopu), titulek 17/21, podtitul **14/18** N700
   (`385:3549`), mezi nimi 2.
 - **Karty pod USP** (`510:5849`) 240 × 360, r 19,2, gap 16, levé odsazení 16,
@@ -647,6 +649,7 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Šipky mají od kraje 40 px, návrh pravou 41 | Levé odsazení pásku je 40; jeden pixel navíc vypadá na posun myší |
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
+| USP má svisle 120 na desktopu a 64 na mobilu, návrh 80 a 40 | Zadáno. Spodní odsazení zároveň určuje mezeru nad kartami, ty samy nahoře nic nemají |
 | Štítky nad nadpisem i odpočet mají 19/23, ikony 22 a mezeru k textu 4; návrh má 21/25, 24 a 8 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4, mezera 4,8) |
 | Odpočet běží do nejbližší půlnoci, ne do neděle podle štítku | Formát HH:MM:SS z návrhu pojme jen necelý den; do neděle by hodiny měly tři číslice a prvek by se roztáhl. Konkrétní termín jde nastavit `data-deadline` |
 | Tmavé kolečko na kartách se sbaleným tlačítkem nemá prstenec a šipka se v něm na najetí nehýbe; ostatní karty obojí mají | Prstenec se na 1 px roztřepil; posun šipky by se tu bil s rozbalováním (zadáno) |
