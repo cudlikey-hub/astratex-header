@@ -520,6 +520,11 @@ Nadpis je 32 místo 36 a tlačítko menší: 44 místo 56, kolečko 32, šipka
 16, popisek 17/21. Kresba, nájezd i lesk se nemění — jen se nájezd textu
 pověsil na `.story__copy`, protože text už není v hlavičce.
 
+Ikona hodin má **dvě barevné verze**: `icon-clock-24.svg` je bílá pro
+tmavý štítek na starší kartě, `icon-clock-dark.svg` tmavá pro bílý
+štítek na nové. Jsou to tytéž kresby, liší se jen výplní — při sdílení
+jednoho souboru ikona z bílého štítku zmizí.
+
 Mobil má rám **278,26 × 417,39 · r 22,26** (0,696 desktopu), ale sazba,
 odsazení ani tlačítko na to měřítko nejedou — návrh je má v pevných
 hodnotách (štítek p4/r4 14/18 s ikonou 16, nadpis 21/25, podtitul 14/18,
@@ -670,7 +675,6 @@ s tmavou šipkou; fotka se přiblíží na 1,04 a přes kartu znovu přejede les
 | Pásek má i levou šipku a obě se ukazují až pod kurzorem | Návrh kreslí jen pravou a napevno; bez levé se nedalo vrátit (zadáno) |
 | Rozbalené tlačítko kupónové karty je bílé jako na ostatních kartách, návrh `522:2700` ho má tmavý skleněný | Zadáno |
 | Nové karty jsou na mobilu 278 × 417, starší zůstaly 240 × 360 — pás má dvě velikosti | Nové karty jsou podle `542:3492`, starší podle `510:5849`; zadáno bylo přidat je před stávající, ne stávající předělat |
-| Druhá nová karta má odpočet a velké „70 %", ale nadpis „Diva by Iva" jako třetí | Takhle je to v návrhu (`542:3743`); vypadá to na přetažený text, ale `přesně podle návrhu` bylo zadání |
 | Tmavá karta nové sady má tmavé pozadí, návrh ji nevybarvuje | Fotka ji překryje; bez výplně by při načítání prosvítala bílá |
 | USP má svisle 120 na desktopu a 64 na mobilu, návrh 80 a 40 | Zadáno. Spodní odsazení zároveň určuje mezeru nad kartami, ty samy nahoře nic nemají |
 | Štítky nad nadpisem i odpočet mají 19/23, ikony 22 a mezeru k textu 4; návrh má 21/25, 24 a 8 | Zadáno. Štítek tím klesl ze 37 na 35; mobil zůstal beze změny (14/18, ikony 14,4, mezera 4,8) |

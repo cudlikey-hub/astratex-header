@@ -3592,6 +3592,10 @@ a { text-decoration: none; color: inherit; }
   margin-top: -4cqw;
 }
 
+/* Odpočet ve štítku drží číslice ve stejné šířce, jinak by se štítek
+   každou vteřinu cukal podle toho, jaká čísla zrovna padnou. */
+.story__badge time { font-variant-numeric: tabular-nums; }
+
 /* 542:3838, 542:3752 — světlý štítek na tmavé fotce */
 .story__badge--light {
   background: var(--white);
